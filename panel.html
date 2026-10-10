@@ -2,198 +2,316 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panel - 3A VENDE</title>
+<title>Panel Emprendedor - 3A VENDE</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Proxima Nova,Arial,sans-serif}
-body{background:#f5f5f5;color:#333}
-header{background:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,.08);position:sticky;top:0;z-index:10}
-.logo{font-weight:900;font-size:18px}.logo b{color:#00a650}
-.btn{border:none;padding:9px 16px;border-radius:6px;font-weight:700;font-size:12px;cursor:pointer}
-.btn-green{background:#00a650;color:#fff}.btn-gray{background:#f5f5f5;border:1px solid #e5e5e5}
-.wrap{max-width:1100px;margin:16px auto;padding:0 16px;display:grid;grid-template-columns:320px 1fr;gap:14px}
-.card{background:#fff;border-radius:10px;box-shadow:0 1px 2px rgba(0,0,0,.06);padding:14px}
-h2{font-size:14px;font-weight:800;margin-bottom:10px}
-label{font-size:11px;font-weight:700;display:block;margin-top:10px;margin-bottom:4px}
-input,select,textarea{width:100%;padding:9px 10px;border:1px solid #e5e5e5;border-radius:6px;font-size:12px;outline:none}
-textarea{height:60px;resize:none}
-.editor{border:1px solid #e5e5e5;border-radius:10px;overflow:hidden;background:#fff}
-.editor-top{display:flex;gap:6px;padding:8px;background:#fafafa;border-bottom:1px solid #eee}
-.editor-top input{flex:1}
-.preview-pub{padding:10px}
-.pub-card{background:#fff;border:1px solid #eee;border-radius:10px;overflow:hidden}
-.pub-header{display:flex;gap:8px;align-items:center;padding:10px}
-.pub-header img{width:32px;height:32px;border-radius:50%}
-.pub-imgs{display:flex;gap:6px;overflow-x:auto;padding:6px}
-.thumb{position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:1px solid #eee;flex-shrink:0;background:#000}
+body{background:#f0f1f3;color:#333}
+header{background:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,.06);position:sticky;top:0;z-index:10}
+.logo{font-weight:900;font-size:19px;cursor:pointer}.logo b{color:#00a650}
+.btn{border:none;padding:10px 18px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer}
+.btn-green{background:#00a650;color:#fff}.btn-blue{background:#009ee3;color:#fff}.btn-gray{background:#fff;border:1px solid #e5e5e5}
+.wrap{max-width:1120px;margin:20px auto;padding:0 20px;display:grid;grid-template-columns:1fr 400px;gap:24px}
+.card{background:#fff;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.04);padding:22px;margin-bottom:20px}
+h2{font-size:15px;font-weight:800;margin-bottom:16px}
+label{font-size:11px;font-weight:700;display:block;margin-top:18px;margin-bottom:6px;color:#444;letter-spacing:.3px}
+input,select,textarea{width:100%;padding:12px 14px;border:1px solid #e9e9e9;border-radius:10px;font-size:13px;outline:none;background:#fafafa;transition:.2s}
+input:focus,select:focus,textarea:focus{background:#fff;border-color:#00a650}
+textarea{height:80px;resize:none}
+.pub-imgs{display:flex;gap:8px;overflow-x:auto;padding:12px 0}
+.thumb{position:relative;width:84px;height:84px;border-radius:10px;overflow:hidden;border:1px solid #eee;flex-shrink:0;background:#000}
 .thumb img,.thumb video{width:100%;height:100%;object-fit:cover}
-.thumb.del{position:absolute;top:2px;right:2px;background:#111;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;z-index:2}
-.thumb.type{position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,.6);color:#fff;font-size:8px;padding:2px 4px;border-radius:4px}
-.grid-prod{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:10px}
-.prod{border:1px solid #eee;border-radius:8px;overflow:hidden;position:relative;background:#fff}
-.prod img,.prod video{width:100%;height:80px;object-fit:cover}
-.prod-body{padding:6px}.prod-price{font-size:11px;font-weight:800}.prod-name{font-size:10px}
+.del{position:absolute;top:4px;right:4px;background:#111;color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;z-index:2}
+.preview{border:1px solid #eee;border-radius:12px;overflow:hidden;margin-top:18px;background:#fff}
+.preview-head{display:flex;gap:10px;padding:12px 14px;align-items:center}
+.preview-head img{width:32px;height:32px;border-radius:50%}
+.preview-media{background:#000;min-height:260px;display:flex;align-items:center;justify-content:center}
+.preview-media img,.preview-media video{width:100%;max-height:340px;object-fit:contain}
+.preview-body{padding:14px}
+.grid-prod{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.prod{border:1px solid #eee;border-radius:12px;overflow:hidden;background:#fff;display:flex;gap:12px;padding:12px;align-items:center;transition:.2s}
+.prod:hover{box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.prod img,.prod video{width:76px;height:76px;border-radius:10px;object-fit:cover;flex-shrink:0}
+.prod-info{flex:1;min-width:0}
+.prod-price{font-size:14px;font-weight:800}.prod-name{font-size:12px;font-weight:600;margin-top:2px}.prod-desc{font-size:11px;color:#888;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prod-actions{display:flex;flex-direction:column;gap:6px}
+.prod-actions button{padding:7px 12px;border-radius:8px;border:1px solid #eee;background:#fff;font-size:11px;font-weight:700;cursor:pointer;min-width:74px}
+.prod-actions button.edit{background:#111;color:#fff;border-color:#111}
+.prod-actions button.resub{background:#00a650;color:#fff;border-color:#00a650}
+.pay-card{border:2px solid #111;border-radius:14px;padding:16px;margin-top:12px;background:#fff}
+.pay-option{border:1px solid #eee;border-radius:12px;padding:14px;margin-top:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pay-option.active{border-color:#00a650;background:#f6fdf8}
+.sales-table{width:100%;border-collapse:collapse;margin-top:10px}
+.sales-table th{font-size:10px;color:#888;text-align:left;padding:8px 6px;border-bottom:1px solid #eee}
+.sales-table td{font-size:12px;padding:8px 6px;border-bottom:1px solid #f5f5f5}
 .hidden{display:none}
-.auth-wrap{max-width:400px;margin:50px auto;background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
-@media(max-width:900px){.wrap{grid-template-columns:1fr}}
+.auth-wrap{max-width:420px;margin:60px auto;background:#fff;padding:28px;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.06)}
+@media(max-width:900px){.wrap{grid-template-columns:1fr;gap:16px;padding:0 16px}}
 </style>
 </head>
 <body>
 <header>
 <div class="logo" onclick="location.href='index.html'"><b>3A</b> VENDE</div>
-<div style="display:flex;gap:6px"><button class="btn btn-gray" onclick="location.href='index.html'">Ver marketplace</button><button class="btn btn-gray hidden" id="btnLogout" onclick="logout()">Salir</button></div>
+<div style="display:flex;gap:8px"><button class="btn btn-gray" onclick="location.href='index.html'">Marketplace</button><button class="btn btn-green" onclick="verMiTienda()">Mi tienda</button><button class="btn btn-gray hidden" id="btnLogout" onclick="logout()">Salir</button></div>
 </header>
 
+<div id="trialBar" style="max-width:1120px;margin:16px auto 0;padding:0 20px"></div>
+
 <div id="auth" class="auth-wrap">
-<h1 style="font-size:18px;text-align:center">Vender en 3A VENDE</h1>
-<div id="formLogin" style="margin-top:12px">
+<h1 style="font-size:22px;text-align:center;font-weight:900">Vender en <b style="color:#00a650">3A</b> VENDE</h1>
+<p style="text-align:center;font-size:12px;color:#666;margin-top:6px">10 días gratis • Después $4.500/mes o 10% por venta</p>
+<div id="formLogin" style="margin-top:22px">
 <label>WhatsApp</label><input id="loginWsp" placeholder="2983401234">
 <label>Contraseña</label><input id="loginPass" type="password">
-<button class="btn btn-green" style="width:100%;margin-top:12px" onclick="login()">Ingresar</button>
-<p style="font-size:11px;text-align:center;margin-top:8px">¿No tenés cuenta? <b style="cursor:pointer;color:#00a650" onclick="setTab('reg')">Crear</b></p>
+<button class="btn btn-green" style="width:100%;margin-top:20px;padding:13px" onclick="login()">Ingresar</button>
+<p style="font-size:12px;text-align:center;margin-top:16px">¿No tenés cuenta? <b style="cursor:pointer;color:#00a650" onclick="setTab('reg')">Crear cuenta - 10 días gratis</b></p>
 </div>
-<div id="formReg" class="hidden" style="margin-top:12px">
-<label>Nombre tienda</label><input id="regStore">
-<label>WhatsApp</label><input id="regWsp">
-<label>Contraseña</label><input id="regPass" type="password">
-<label>Dirección</label><input id="regDir">
-<button class="btn btn-green" style="width:100%;margin-top:12px" onclick="register()">Crear cuenta</button>
-<p style="font-size:11px;text-align:center;margin-top:8px"><b style="cursor:pointer;color:#00a650" onclick="setTab('login')">Ya tengo cuenta</b></p>
+<div id="formReg" class="hidden" style="margin-top:22px">
+<label>Nombre de tu tienda</label><input id="regStore" placeholder="Ej: Makeup Tres Arroyos">
+<label>WhatsApp</label><input id="regWsp" placeholder="2983...">
+<label>Contraseña</label><input id="regPass" type="password" placeholder="Mínimo 6 caracteres">
+<label>Dirección</label><input id="regDir" placeholder="Moreno 456">
+<button class="btn btn-green" style="width:100%;margin-top:20px;padding:13px" onclick="register()">Crear cuenta - 10 días gratis</button>
+<p style="font-size:12px;text-align:center;margin-top:16px"><b style="cursor:pointer;color:#00a650" onclick="setTab('login')">Ya tengo cuenta</b></p>
 </div>
 </div>
 
 <div id="panel" class="hidden">
 <div class="wrap">
-<div>
-<div class="card">
-<h2>Mi tienda</h2>
-<label>Nombre</label><input id="editName">
-<label>Dirección</label><input id="editDir">
-<label>WhatsApp</label><input id="editWsp">
-<button class="btn btn-green" style="width:100%;margin-top:10px" onclick="saveStore()">Guardar</button>
-<button class="btn btn-gray" style="width:100%;margin-top:6px" onclick="verMiTienda()">Ver mi tienda →</button>
-</div>
-<div class="card" style="margin-top:12px"><h2>Mis publicaciones (<span id="prodCount">0</span>)</h2><div class="grid-prod" id="gridProd"></div></div>
-</div>
 
 <div>
 <div class="card">
-<h2>Crear publicación - Fotos y Videos</h2>
-<div class="editor">
-<div class="editor-top"><input id="pName" placeholder="Nombre del producto"><input id="pPrice" type="number" placeholder="Precio" style="max-width:110px"></div>
-<div style="padding:10px">
-<label style="margin-top:0">Categoría</label>
-<select id="pCat"><option value="maquillaje">Maquillaje</option><option value="limpieza">Artículos de limpieza</option><option value="comida">Comida</option><option value="clothing">Ropa</option><option value="verduleria">Verdulería</option><option value="carniceria">Carnicería</option></select>
-<label>Descripción</label><textarea id="pDesc" placeholder="Escribí como va a verse en la publicación..."></textarea>
-<label>Fotos y Videos - podés seleccionar varias</label>
+<h2>Crear publicación</h2>
+<label>Título del producto</label>
+<input id="pName" placeholder="Ej: Labial mate rojo">
+<label>Precio</label>
+<input id="pPrice" type="number" placeholder="Ej: 12500">
+<label>Categoría</label>
+<select id="pCat">
+<option value="maquillaje">Maquillaje</option>
+<option value="limpieza">Artículos de limpieza</option>
+<option value="comida">Comida</option>
+<option value="clothing">Ropa</option>
+<option value="verduleria">Verdulería</option>
+<option value="carniceria">Carnicería</option>
+</select>
+<label>Descripción</label>
+<textarea id="pDesc" placeholder="Detalles del producto"></textarea>
+<label style="margin-top:22px">Fotos y Videos - podés seleccionar varias</label>
 <input type="file" id="pFiles" accept="image/*,video/*" multiple>
 <div class="pub-imgs" id="pubImgs"></div>
-<div style="font-size:10px;color:#888;margin-top:4px">Primera es portada • Video hasta 30MB • Tocá ✕ para borrar</div>
+
+<div class="preview">
+<div class="preview-head"><img id="prevStoreImg" src="https://via.placeholder.com/100"><div><b id="prevStoreName" style="font-size:12px">Mi tienda</b><div style="font-size:10px;color:#888">Vista previa - así se ve publicado</div></div></div>
+<div class="preview-media" id="prevMain"><span style="color:#555;font-size:12px">Foto / Video acá</span></div>
+<div class="preview-body"><div id="prevPrice" style="font-weight:800;font-size:16px">$0</div><div id="prevName" style="font-size:13px;font-weight:700;margin-top:4px">Título</div><div id="prevDesc" style="font-size:12px;color:#666;margin-top:6px;line-height:1.4">Descripción...</div></div>
 </div>
-<div class="preview-pub">
-<div style="font-size:10px;color:#888;margin-bottom:6px">VISTA PREVIA ESTILO PUBLICACIÓN</div>
-<div class="pub-card">
-<div class="pub-header"><img id="prevStoreImg" src="https://via.placeholder.com/100"><div><b id="prevStoreName" style="font-size:12px">Mi tienda</b><div style="font-size:10px;color:#888">Tres Arroyos • Ahora</div></div><div style="margin-left:auto;font-size:11px">⋮</div></div>
-<div id="prevMain" style="background:#000;min-height:260px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden"><span style="color:#666;font-size:12px">Foto / Video acá</span></div>
-<div style="padding:10px"><div id="prevPrice" style="font-weight:800;font-size:16px">$0</div><div id="prevName" style="font-size:13px;margin-top:2px">Nombre del producto</div><div id="prevDesc" style="font-size:12px;color:#666;margin-top:4px;line-height:1.3">Descripción...</div></div>
+
+<button class="btn btn-green" id="btnPublicar" style="width:100%;margin-top:22px;padding:14px;font-size:13px" onclick="addProduct()">Publicar</button>
+<button class="btn btn-gray hidden" id="btnCancelEdit" style="width:100%;margin-top:10px" onclick="cancelEdit()">Cancelar edición</button>
+</div>
+
+<div class="card">
+<h2>Mis publicaciones (<span id="prodCount">0</span>)</h2>
+<div class="grid-prod" id="gridProd"></div>
 </div>
 </div>
+
+<div>
+<div class="card pay-card" id="payCard">
+<h2>💳 Tenés 2 opciones de pago - 10 días gratis!</h2>
+<p style="font-size:12px;color:#666;margin-top:4px">Probá 10 días sin pagar. Después elegí como seguir.</p>
+
+<div class="pay-option active" id="optMensual">
+<div><div style="font-weight:800;font-size:13px">Opción 1: $4.500 por mes</div><div style="font-size:11px;color:#666;margin-top:2px">Publicaciones ilimitadas • Sin comisión</div></div>
+<a href="https://mpago.la/1UShvFr" target="_blank" class="btn btn-blue" style="text-decoration:none;white-space:nowrap" onclick="logMov('PANEL','click_pago_mensual','Click $4500')">Pagar $4.500</a>
 </div>
-<button class="btn btn-green" style="width:100%;margin-top:10px;padding:12px" onclick="addProduct()">Publicar con fotos y videos</button>
+
+<div class="pay-option" id="optComision">
+<div><div style="font-weight:800;font-size:13px">Opción 2: 10% de cada venta</div><div style="font-size:11px;color:#666;margin-top:2px">No pagás mes • Solo 10% cuando vendés</div></div>
+<button class="btn btn-gray" onclick="elegirComision()">Elegir 10%</button>
 </div>
+
+<div id="estadoPago" style="margin-top:14px;font-size:11px;color:#888;background:#f5f5f5;padding:8px 10px;border-radius:8px"></div>
 </div>
+
+<div class="card">
+<h2>📊 Registro de ventas</h2>
+<p style="font-size:11px;color:#888">Llevá control de tus ventas acá</p>
+<div style="display:flex;gap:8px;margin-top:12px">
+<input id="saleProd" placeholder="Producto vendido" style="flex:1">
+<input id="salePrice" type="number" placeholder="$" style="width:100px">
+</div>
+<button class="btn btn-green" style="width:100%;margin-top:10px" onclick="addSale()">Registrar venta</button>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
+<div style="background:#f5f5f5;padding:10px;border-radius:10px;text-align:center"><div style="font-size:11px;color:#888">Ventas totales</div><div id="statVentas" style="font-weight:800;font-size:16px">0</div></div>
+<div style="background:#f5f5f5;padding:10px;border-radius:10px;text-align:center"><div style="font-size:11px;color:#888">Total vendido</div><div id="statTotal" style="font-weight:800;font-size:16px">$0</div></div>
+</div>
+
+<table class="sales-table" id="salesTable"><thead><tr><th>Fecha</th><th>Producto</th><th>Precio</th><th></th></tr></thead><tbody id="salesBody"></tbody></table>
+<p id="noSales" style="font-size:11px;color:#999;text-align:center;margin-top:12px">Aún no registraste ventas</p>
+</div>
+
+</div>
+
 </div>
 </div>
 
 <script>
-let currentUser=null, media=[]; // {type:'img'|'video', src:base64}
+// LOG SYSTEM PARA ADMIN
+function logMov(tipo, accion, detalle){
+try{
+let logs=JSON.parse(localStorage.getItem('adminLogs')||'[]');
+logs.push({id:Date.now(),fecha:new Date().toLocaleString('es-AR'),tipo,accion,detalle,store:localStorage.getItem('currentUser')||'visitante',url:location.pathname});
+if(logs.length>5000) logs=logs.slice(-5000);
+localStorage.setItem('adminLogs',JSON.stringify(logs));
+}catch(e){}
+}
+
+let currentUser=null, media=[], editingId=null;
 function getStores(){return JSON.parse(localStorage.getItem('marketStores')||'{}')}
 function setStores(s){localStorage.setItem('marketStores',JSON.stringify(s))}
 function getUsers(){return JSON.parse(localStorage.getItem('marketUsers')||'{}')}
 function setUsers(u){localStorage.setItem('marketUsers',JSON.stringify(u))}
 function getProds(){return JSON.parse(localStorage.getItem('marketProductsAR')||'[]')}
 function setProds(p){localStorage.setItem('marketProductsAR',JSON.stringify(p))}
+function getSales(){return JSON.parse(localStorage.getItem('marketSales')||'{}')}
+function setSales(s){localStorage.setItem('marketSales',JSON.stringify(s))}
 function setTab(t){document.getElementById('formLogin').classList.toggle('hidden',t!=='reg');document.getElementById('formReg').classList.toggle('hidden',t!=='login')}
-function toBase64(file,cb){let r=new FileReader();r.onload=e=>cb(e.target.result);r.readAsDataURL(file)}
+function toBase64(f,cb){let r=new FileReader();r.onload=e=>cb(e.target.result);r.readAsDataURL(f)}
 
 document.getElementById('pFiles').addEventListener('change',e=>{
-let files=[...e.target.files];
-files.forEach(f=>{
-if(f.size>30*1024*1024){alert('Video muy grande: '+f.name+' (max 30MB)');return}
-toBase64(f,b64=>{
-let type=f.type.startsWith('video')?'video':'img';
-media.push({type,src:b64});
-renderThumbs();renderPrev();
+[...e.target.files].forEach(f=>{
+if(f.size>30*1024*1024){alert('Muy grande: '+f.name+' max 30MB');return}
+toBase64(f,b64=>{media.push({type:f.type.startsWith('video')?'video':'img',src:b64});renderThumbs();renderPrev();});
+});e.target.value='';
 });
-});
-e.target.value='';
-});
-function renderThumbs(){
-document.getElementById('pubImgs').innerHTML=media.map((m,i)=>`
-<div class="thumb">
-${m.type==='video'?`<video src="${m.src}" muted></video>`:`<img src="${m.src}">`}
-<div class="del" onclick="removeMedia(${i})">✕</div>
-<div class="type">${m.type==='video'?'VIDEO':'FOTO'}</div>
-</div>`).join('');
-}
+function renderThumbs(){document.getElementById('pubImgs').innerHTML=media.map((m,i)=>`<div class="thumb">${m.type==='video'?`<video src="${m.src}" muted></video>`:`<img src="${m.src}">`}<div class="del" onclick="removeMedia(${i})">✕</div></div>`).join('')}
 function removeMedia(i){media.splice(i,1);renderThumbs();renderPrev();}
-function renderPrev(){
-let box=document.getElementById('prevMain');
-if(media.length===0){box.innerHTML='<span style="color:#666;font-size:12px">Foto / Video acá</span>';return}
-let m=media[0];
-if(m.type==='video'){
-box.innerHTML=`<video src="${m.src}" style="width:100%;height:260px;object-fit:contain;background:#000" controls autoplay muted loop></video><div style="position:absolute;top:8px;left:8px;background:#00a650;color:#fff;padding:3px 6px;border-radius:4px;font-size:9px;font-weight:800">VIDEO</div><div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:4px">${media.map((_,i)=>`<div style="width:6px;height:6px;border-radius:50%;background:${i===0?'#00a650':'rgba(255,255,255,.4)'}"></div>`).join('')}</div>`;
+function renderPrev(){let b=document.getElementById('prevMain');if(media.length===0){b.innerHTML='<span style="color:#555;font-size:12px">Foto / Video acá</span>';return}let m=media[0];b.innerHTML=m.type==='video'?`<video src="${m.src}" style="width:100%;max-height:340px" controls autoplay muted loop></video>`:`<img src="${m.src}" style="width:100%;max-height:340px;object-fit:contain">`}
+document.getElementById('pName').addEventListener('input',e=>document.getElementById('prevName').textContent=e.target.value||'Título');
+document.getElementById('pPrice').addEventListener('input',e=>document.getElementById('prevPrice').textContent='$'+(parseInt(e.target.value)||0).toLocaleString('es-AR'));
+document.getElementById('pDesc').addEventListener('input',e=>document.getElementById('prevDesc').textContent=e.target.value||'Descripción...');
+
+function checkTrial(){
+let stores=getStores();let s=stores[currentUser.storeId];if(!s) return false;
+let now=Date.now();let start=s.trialStart||now;
+let diff=Math.floor((now-start)/(1000*60*60*24));let left=10-diff;
+let bar=document.getElementById('trialBar');let estado=document.getElementById('estadoPago');
+if(s.paid && s.paidUntil && now < s.paidUntil){
+bar.innerHTML=`<div style="background:#e6f7ed;border:1px solid #00a650;color:#006b30;padding:12px 16px;border-radius:10px;font-size:12px;font-weight:700">✓ Activo mensual hasta ${new Date(s.paidUntil).toLocaleDateString('es-AR')} • $4.500/mes • <a href="https://mpago.la/1UShvFr" target="_blank" style="color:#006b30">Renovar</a></div>`;
+estado.textContent='Plan activo: $4.500/mes hasta '+new Date(s.paidUntil).toLocaleDateString('es-AR');
+return true;
+}
+if(s.plan==='comision'){
+bar.innerHTML=`<div style="background:#fff3e0;border:1px solid #ff9800;color:#e65100;padding:12px 16px;border-radius:10px;font-size:12px;font-weight:700">✓ Plan 10% por venta activo • Registrá tus ventas abajo</div>`;
+estado.textContent='Plan activo: 10% por venta';
+return true;
+}
+if(left>=0){
+bar.innerHTML=`<div style="background:#111;color:#fff;padding:12px 16px;border-radius:10px;font-size:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px"><div><b style="color:#00a650">${left===0?'Último día':left+' días'} gratis</b> restantes • Después: $4.500/mes o 10% por venta</div><div style="font-size:10px;color:#888">ID ${currentUser.storeId.slice(-4)}</div></div>`;
+estado.textContent=`Prueba gratis: quedan ${left} días • Después elegí plan`;
+return true;
 }else{
-box.innerHTML=`<img src="${m.src}" style="width:100%;height:260px;object-fit:contain;background:#000"><div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:4px">${media.map((_,i)=>`<div style="width:6px;height:6px;border-radius:50%;background:${i===0?'#00a650':'rgba(255,255,255,.4)'}"></div>`).join('')}</div><div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:#fff;padding:4px 8px;border-radius:12px;font-size:10px">1/${media.length}</div>`;
+bar.innerHTML=`<div style="background:#fff;border:2px solid #ff3b30;border-radius:14px;padding:20px;text-align:center"><div style="font-size:18px;font-weight:800">Tu prueba de 10 días terminó</div><div style="font-size:13px;color:#666;margin-top:6px">Elegí una opción para seguir vendiendo en 3A VENDE</div><div style="display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap"><a href="https://mpago.la/1UShvFr" target="_blank" style="background:#009ee3;color:#fff;padding:12px 20px;border-radius:999px;font-weight:800;font-size:13px;text-decoration:none">Opción 1: Pagar $4.500/mes</a><button onclick="elegirComision()" style="background:#111;color:#fff;padding:12px 20px;border-radius:999px;font-weight:800;font-size:13px;border:none;cursor:pointer">Opción 2: 10% por venta</button></div></div>`;
+estado.textContent='Prueba vencida - elegí plan para seguir';
+return false;
 }
 }
-document.getElementById('pName').addEventListener('input',e=>{document.getElementById('prevName').textContent=e.target.value||'Nombre del producto'});
-document.getElementById('pPrice').addEventListener('input',e=>{document.getElementById('prevPrice').textContent='$'+(parseInt(e.target.value)||0).toLocaleString('es-AR')});
-document.getElementById('pDesc').addEventListener('input',e=>{document.getElementById('prevDesc').textContent=e.target.value||'Descripción...'});
-document.getElementById('editName')?.addEventListener('input',e=>{document.getElementById('prevStoreName').textContent=e.target.value||'Mi tienda'});
+
+function elegirComision(){
+if(!confirm('¿Confirmás plan 10% por venta? Vas a pagar solo 10% de cada venta que registres.')) return;
+let stores=getStores();stores[currentUser.storeId].plan='comision';setStores(stores);
+logMov('PANEL','elegir_plan','Eligió 10% por venta');
+checkTrial();
+}
 
 function register(){
-let store=document.getElementById('regStore').value.trim(), wsp=document.getElementById('regWsp').value.trim(), pass=document.getElementById('regPass').value.trim(), dir=document.getElementById('regDir').value.trim()||'Tres Arroyos';
-if(!store||!wsp||pass.length<6) return alert('Completa datos');
-let users=getUsers();if(users[wsp]) return alert('Ya existe');
+let store=document.getElementById('regStore').value.trim(),wsp=document.getElementById('regWsp').value.trim(),pass=document.getElementById('regPass').value.trim(),dir=document.getElementById('regDir').value.trim()||'Tres Arroyos';
+if(!store||!wsp||pass.length<6) return alert('Completa todos los datos');
+let users=getUsers();if(users[wsp]) return alert('Ya existe ese WhatsApp');
 let storeId=store.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-'+Date.now().toString().slice(-4);
 users[wsp]={wsp,pass,storeId,storeName:store};setUsers(users);
-let stores=getStores();stores[storeId]={name:store,dir,wsp,profile:'https://via.placeholder.com/200',cover:'https://via.placeholder.com/800x300',city:'Tres Arroyos'};setStores(stores);
-localStorage.setItem('currentUser',wsp);load();
+let stores=getStores();stores[storeId]={name:store,dir,wsp,profile:'https://via.placeholder.com/200?text='+encodeURIComponent(store.slice(0,2)),cover:'https://via.placeholder.com/800x300?text='+encodeURIComponent(store),trialStart:Date.now(),paid:false,paidUntil:null,plan:null};setStores(stores);
+localStorage.setItem('currentUser',wsp);
+logMov('PANEL','registro_tienda','Nueva tienda: '+store+' - '+wsp);
+load();
 }
 function login(){
-let wsp=document.getElementById('loginWsp').value.trim(), pass=document.getElementById('loginPass').value.trim();
+let wsp=document.getElementById('loginWsp').value.trim(),pass=document.getElementById('loginPass').value.trim();
 let users=getUsers();if(!users[wsp]||users[wsp].pass!==pass) return alert('Datos incorrectos');
-localStorage.setItem('currentUser',wsp);load();
+localStorage.setItem('currentUser',wsp);
+logMov('PANEL','login','Login '+wsp);
+load();
 }
 function load(){
-let wsp=localStorage.getItem('currentUser');if(!wsp){document.getElementById('auth').classList.remove('hidden');document.getElementById('panel').classList.add('hidden');return}
+let wsp=localStorage.getItem('currentUser');if(!wsp){document.getElementById('auth').classList.remove('hidden');document.getElementById('panel').classList.add('hidden');document.getElementById('trialBar').innerHTML='';return}
 let users=getUsers();if(!users[wsp]){localStorage.removeItem('currentUser');load();return}
 currentUser=users[wsp];document.getElementById('auth').classList.add('hidden');document.getElementById('panel').classList.remove('hidden');document.getElementById('btnLogout').classList.remove('hidden');
-let stores=getStores();let s=stores[currentUser.storeId];
-if(s){document.getElementById('editName').value=s.name;document.getElementById('editDir').value=s.dir;document.getElementById('editWsp').value=s.wsp;document.getElementById('prevStoreName').textContent=s.name;document.getElementById('prevStoreImg').src=s.profile;}
-renderMyProds();
-}
-function saveStore(){
-let stores=getStores();let s=stores[currentUser.storeId];
-s.name=document.getElementById('editName').value.trim();s.dir=document.getElementById('editDir').value.trim();s.wsp=document.getElementById('editWsp').value.trim();setStores(stores);
-let users=getUsers();users[currentUser.wsp].storeName=s.name;setUsers(users);alert('Guardado');
+let stores=getStores();let s=stores[currentUser.storeId];if(s){document.getElementById('prevStoreName').textContent=s.name;document.getElementById('prevStoreImg').src=s.profile;}
+checkTrial();renderMyProds();renderSales();
 }
 function addProduct(){
-let name=document.getElementById('pName').value.trim(), price=parseInt(document.getElementById('pPrice').value), cat=document.getElementById('pCat').value, desc=document.getElementById('pDesc').value.trim();
-if(!name||!price||media.length===0) return alert('Nombre, precio y al menos 1 foto o video');
+if(!checkTrial()) return alert('Tu prueba terminó, elegí un plan para seguir publicando');
+let name=document.getElementById('pName').value.trim(),price=parseInt(document.getElementById('pPrice').value),cat=document.getElementById('pCat').value,desc=document.getElementById('pDesc').value.trim();
+if(!name||!price||media.length===0) return alert('Falta título, precio y foto/video');
 let prods=getProds();
+if(editingId){
+let idx=prods.findIndex(p=>p.id===editingId);
+if(idx>-1){prods[idx].name=name;prods[idx].price=price;prods[idx].category=cat;prods[idx].desc=desc;prods[idx].img=media[0].src;prods[idx].imgs=media.map(m=>m.src);prods[idx].media=media;}
+logMov('PANEL','editar_publicacion','Editó: '+name+' $'+price);
+editingId=null;document.getElementById('btnPublicar').textContent='Publicar';document.getElementById('btnCancelEdit').classList.add('hidden');
+}else{
 prods.push({id:Date.now(),store:currentUser.storeName,storeId:currentUser.storeId,name,price,category:cat,img:media[0].src,imgs:media.map(m=>m.src),media:media,desc});
+logMov('PANEL','crear_publicacion','Creó: '+name+' $'+price+' - '+cat);
+}
 setProds(prods);
 document.getElementById('pName').value='';document.getElementById('pPrice').value='';document.getElementById('pDesc').value='';media=[];renderThumbs();renderPrev();renderMyProds();
 }
 function renderMyProds(){
-let all=getProds().filter(p=>p.storeId===currentUser.storeId);document.getElementById('prodCount').textContent=all.length;
-document.getElementById('gridProd').innerHTML=all.map(p=>`<div class="prod"><div style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,.6);color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;z-index:2" onclick="delProd(${p.id})">✕</div>${p.media&&p.media[0]?.type==='video'?`<video src="${p.media[0].src}" muted></video>`:`<img src="${p.imgs?p.imgs[0]:p.img}">`}<div class="prod-body"><div class="prod-price">$${p.price.toLocaleString('es-AR')}</div><div class="prod-name">${p.name}</div><div style="font-size:9px;color:#888">${p.media?p.media.length:(p.imgs?p.imgs.length:1)} archivos • ${p.media&&p.media.some(m=>m.type==='video')?'📹 video':''}</div></div></div>`).join('')||'<p style="color:#999;font-size:11px">Sin publicaciones</p>';
+let all=getProds().filter(p=>p.storeId===currentUser.storeId).sort((a,b)=>b.id-a.id);
+document.getElementById('prodCount').textContent=all.length;
+document.getElementById('gridProd').innerHTML=all.map(p=>`
+<div class="prod">
+${p.media&&p.media[0]?.type==='video'?`<video src="${p.media[0].src}" muted></video>`:`<img src="${p.imgs?p.imgs[0]:p.img}">`}
+<div class="prod-info"><div class="prod-price">$${p.price.toLocaleString('es-AR')}</div><div class="prod-name">${p.name}</div><div class="prod-desc">${p.desc||''}</div></div>
+<div class="prod-actions"><button class="edit" onclick="editProd(${p.id})">Editar</button><button class="resub" onclick="resubir(${p.id})">Resubir ↑</button><button onclick="delProd(${p.id})">Borrar</button></div>
+</div>`).join('')||'<p style="font-size:11px;color:#999">Sin publicaciones aún</p>';
 }
-function delProd(id){if(!confirm('Borrar?')) return;setProds(getProds().filter(p=>p.id!==id));renderMyProds();}
-function verMiTienda(){location.href='store.html?store='+currentUser.storeId}
-function logout(){localStorage.removeItem('currentUser');location.reload()}
+function editProd(id){if(!checkTrial()) return;let p=getProds().find(x=>x.id===id);if(!p) return;document.getElementById('pName').value=p.name;document.getElementById('pPrice').value=p.price;document.getElementById('pCat').value=p.category;document.getElementById('pDesc').value=p.desc||'';media=p.media|| (p.imgs?p.imgs.map(src=>({type:'img',src})): [{type:'img',src:p.img}]);renderThumbs();renderPrev();editingId=id;document.getElementById('btnPublicar').textContent='Guardar cambios';document.getElementById('btnCancelEdit').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}
+function cancelEdit(){editingId=null;document.getElementById('pName').value='';document.getElementById('pPrice').value='';document.getElementById('pDesc').value='';media=[];renderThumbs();renderPrev();document.getElementById('btnPublicar').textContent='Publicar';document.getElementById('btnCancelEdit').classList.add('hidden');}
+function delProd(id){if(!confirm('¿Borrar publicación?')) return;let p=getProds().find(x=>x.id===id);setProds(getProds().filter(x=>x.id!==id));logMov('PANEL','borrar_publicacion','Borró: '+(p?p.name:id));renderMyProds();}
+function resubir(id){if(!checkTrial()) return;let prods=getProds();let p=prods.find(x=>x.id===id);if(!p) return;let others=prods.filter(x=>x.id!==id);p.id=Date.now();others.push(p);setProds(others);logMov('PANEL','resubir','Resubió: '+p.name);renderMyProds();}
+
+function addSale(){
+let prod=document.getElementById('saleProd').value.trim(), price=parseInt(document.getElementById('salePrice').value);
+if(!prod||!price) return alert('Producto y precio');
+let sales=getSales();let storeSales=sales[currentUser.storeId]||[];
+storeSales.push({id:Date.now(),date:new Date().toLocaleDateString('es-AR')+' '+new Date().toLocaleTimeString('es-AR'),prod,price});
+sales[currentUser.storeId]=storeSales;setSales(sales);
+logMov('PANEL','VENTA','Venta registrada: '+prod+' $'+price);
+document.getElementById('saleProd').value='';document.getElementById('salePrice').value='';
+renderSales();
+}
+function delSale(id){let sales=getSales();sales[currentUser.storeId]=sales[currentUser.storeId].filter(s=>s.id!==id);setSales(sales);renderSales();}
+function renderSales(){
+let sales=getSales()[currentUser.storeId]||[];
+document.getElementById('salesBody').innerHTML=sales.slice().reverse().map(s=>`<tr><td>${s.date}</td><td>${s.prod}</td><td>$${s.price.toLocaleString('es-AR')}</td><td><span style="cursor:pointer" onclick="delSale(${s.id})">✕</span></td></tr>`).join('');
+document.getElementById('noSales').style.display=sales.length?'none':'block';
+let total=sales.reduce((a,b)=>a+b.price,0);
+document.getElementById('statVentas').textContent=sales.length;
+document.getElementById('statTotal').textContent='$'+total.toLocaleString('es-AR');
+}
+
+function verMiTienda(){logMov('PANEL','ver_mi_tienda','Fue a su tienda');location.href='store.html?store='+currentUser.storeId}
+function logout(){logMov('PANEL','logout','Salió');localStorage.removeItem('currentUser');location.reload()}
 load();
+
+window.activarMensual=function(storeId){
+let stores=getStores();if(!stores[storeId]) return alert('No existe');
+stores[storeId].paid=true;stores[storeId].paidUntil=Date.now()+30*24*60*60*1000;stores[storeId].plan='mensual';
+setStores(stores);alert('Mensual activado 30 días');location.reload();
+}
 </script>
 </body>
-</html>
+  </html>
