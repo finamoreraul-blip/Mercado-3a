@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recuperar clave - 3A VENDE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f5f5f5;padding:16px}
+.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+h1{font-size:18px;font-weight:900}h1 b{color:#00a650}
+input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-top:8px;font-size:14px}
+.btn{border:none;padding:12px;border-radius:10px;font-weight:800;font-size:13px;width:100%;margin-top:10px;cursor:pointer}
+.btn-g{background:#00a650;color:#fff}.btn-b{background:#111;color:#fff}.btn-gray{background:#eee}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;border-bottom:1px solid #eee}
+small{color:#888;font-size:11px}
+</style>
+</head>
+<body>
+<h1><b>3A</b> Recuperar clave de tienda</h1>
+<p style="font-size:12px;color:#666;margin-top:4px">Estás desde el celu - acá ves todas</p>
+
+<div class="card">
+<label style="font-size:12px;font-weight:700">Buscar por WhatsApp</label>
+<input id="buscar" placeholder="Ej: 2983..." oninput="render()">
+</div>
+
+<div id="lista"></div>
+
+<div class="card">
+<h3 style="font-size:13px">Cambiar clave</h3>
+<input id="wspEdit" placeholder="WhatsApp de la tienda">
+<input id="passEdit" placeholder="Nueva clave">
+<button class="btn btn-g" onclick="cambiar()">Cambiar clave y entrar</button>
+<button class="btn btn-b" onclick="location.href='panel.html'">Ir al panel</button>
+</div>
+
+<script>
+function getUsers(){return JSON.parse(localStorage.getItem('marketUsers')||'{}')}
+function setUsers(u){localStorage.setItem('marketUsers',JSON.stringify(u))}
+function getStores(){return JSON.parse(localStorage.getItem('marketStores')||'{}')}
+
+function render(){
+let users=getUsers();
+let stores=getStores();
+let q=document.getElementById('buscar').value.toLowerCase();
+let html=Object.entries(users).filter(([wsp,u])=>!q||wsp.includes(q)||u.storeName.toLowerCase().includes(q)).map(([wsp,u])=>{
+let s=stores[u.storeId];
+return `<div class="card"><div class="row" style="border:none;padding:0">
+<div><b>${u.storeName}</b><br><small>WSP: ${wsp}<br>Clave actual: <b style="color:#00a650;font-size:14px">${u.pass}</b><br>ID: ${u.storeId}</small></div>
+<button class="btn-gray" style="padding:8px 12px;border-radius:8px;border:1px solid #ddd;font-size:11px;width:auto" onclick="document.getElementById('wspEdit').value='${wsp}';document.getElementById('passEdit').focus();window.scrollTo(0,document.body.scrollHeight)">Cambiar</button>
+</div></div>`;
+}).join('');
+document.getElementById('lista').innerHTML=html||'<div class="card">No hay tiendas creadas en este celular</div>';
+}
+
+function cambiar(){
+let wsp=document.getElementById('wspEdit').value.trim();
+let pass=document.getElementById('passEdit').value.trim();
+if(!wsp||!pass) return alert('Completa los 2');
+let users=getUsers();
+if(!users[wsp]) return alert('No existe ese WhatsApp');
+users[wsp].pass=pass;
+setUsers(users);
+alert('Clave cambiada a: '+pass+'\nAhora podés entrar');
+localStorage.setItem('currentUser',wsp);
+location.href='panel.html';
+}
+render();
+</script>
+</body>
+</html>
