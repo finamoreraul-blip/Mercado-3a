@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel - 3A VENDE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Proxima Nova,Arial,sans-serif}
+body{background:#f5f5f5;color:#333}
+header{background:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,.08);position:sticky;top:0;z-index:10}
+.logo{font-weight:900;font-size:20px}.logo b{color:#00a650}
+.btn{border:none;padding:10px 18px;border-radius:6px;font-weight:700;cursor:pointer;font-size:13px}
+.btn-green{background:#00a650;color:#fff}.btn-green:hover{background:#008f45}
+.btn-gray{background:#f5f5f5;border:1px solid #e5e5e5}
+.wrap{max-width:1000px;margin:20px auto;padding:0 16px;display:grid;grid-template-columns:340px 1fr;gap:16px}
+.card{background:#fff;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.06);padding:16px}
+h2{font-size:16px;font-weight:700;margin-bottom:12px}
+label{font-size:12px;font-weight:600;display:block;margin-top:10px;margin-bottom:4px}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid #e5e5e5;border-radius:6px;font-size:13px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:#00a650}
+textarea{resize:none;height:70px}
+.preview-box{width:100%;height:180px;background:#f5f5f5;border-radius:8px;border:1px dashed #ddd;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-top:8px;position:relative}
+.preview-box img{width:100%;height:100%;object-fit:cover}
+.preview-box span{font-size:12px;color:#999}
+.grid-prod{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:12px}
+.prod{background:#fff;border:1px solid #e5e5e5;border-radius:8px;overflow:hidden;position:relative}
+.prod img{width:100%;height:100px;object-fit:cover}
+.prod-body{padding:8px}
+.prod-name{font-size:11px;font-weight:600;line-height:1.2;min-height:28px}
+.prod-price{font-size:12px;font-weight:800;margin-top:4px}
+.del{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.6);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+.divider{height:1px;background:#eee;margin:16px 0}
+.hidden{display:none}
+.auth-wrap{max-width:420px;margin:60px auto;background:#fff;padding:24px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.auth-wrap h1{font-size:22px;text-align:center}.auth-wrap p{font-size:13px;color:#888;text-align:center;margin-top:6px}
+.tab{display:flex;gap:8px;margin-top:16px}
+.tab button{flex:1;padding:10px;border-radius:999px;border:1px solid #e5e5e5;background:#fff;font-weight:700;font-size:12px;cursor:pointer}
+.tab button.active{background:#111;color:#fff;border-color:#111}
+.preview-store{display:flex;gap:10px;align-items:center;background:#f5f5f5;padding:10px;border-radius:8px;margin-top:10px}
+.preview-store img{width:48px;height:48px;border-radius:50%;object-fit:cover}
+.cover-preview{width:100%;height:90px;background:#eee;border-radius:8px;overflow:hidden;margin-top:8px}
+.cover-preview img{width:100%;height:100%;object-fit:cover}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo" onclick="location.href='index.html'" style="cursor:pointer"><b>3A</b> VENDE</div>
+<div style="display:flex;gap:8px"><button class="btn btn-gray" onclick="location.href='index.html'">Ver marketplace</button><button class="btn btn-gray hidden" id="btnLogout" onclick="logout()">Salir</button></div>
+</header>
+
+<!-- AUTH -->
+<div id="auth" class="auth-wrap">
+<h1>Vender en 3A VENDE</h1>
+<p>Registrate con tu WhatsApp y empezá a vender hoy</p>
+<div class="tab"><button id="tabLogin" class="active" onclick="setTab('login')">Ingresar</button><button id="tabReg" onclick="setTab('reg')">Crear cuenta</button></div>
+
+<div id="formLogin" style="margin-top:16px">
+<label>WhatsApp (sin 0 ni 15)</label><input id="loginWsp" placeholder="2983401234">
+<label>Contraseña</label><input id="loginPass" type="password" placeholder="••••••">
+<button class="btn btn-green" style="width:100%;margin-top:14px" onclick="login()">Ingresar</button>
+</div>
+
+<div id="formReg" class="hidden" style="margin-top:16px">
+<label>Nombre de tu tienda</label><input id="regStore" placeholder="Ej: Zapatería Centro">
+<label>WhatsApp</label><input id="regWsp" placeholder="2983401234">
+<label>Contraseña</label><input id="regPass" type="password" placeholder="Mínimo 6 caracteres">
+<label>Dirección</label><input id="regDir" placeholder="Moreno 456 - Tres Arroyos">
+<label>Foto de perfil de tienda</label><input type="file" id="regProfileFile" accept="image/*">
+<div class="preview-store"><img id="regProfilePrev" src="https://via.placeholder.com/100"><div><b id="regStorePrev" style="font-size:13px">Tu tienda</b><div style="font-size:11px;color:#888">Vista previa</div></div></div>
+<button class="btn btn-green" style="width:100%;margin-top:14px" onclick="register()">Crear cuenta y empezar a vender</button>
+</div>
+</div>
+
+<!-- PANEL -->
+<div id="panel" class="hidden">
+<div class="wrap">
+<div>
+<div class="card">
+<h2>Mi tienda</h2>
+<label>Nombre</label><input id="editName">
+<label>Dirección</label><input id="editDir">
+<label>WhatsApp</label><input id="editWsp">
+<label>Foto perfil (vista previa)</label><input type="file" id="editProfileFile" accept="image/*">
+<div class="preview-store"><img id="editProfilePrev" src=""><div><b id="editNamePrev" style="font-size:13px"></b><div style="font-size:11px;color:#888">Perfil</div></div></div>
+<label>Portada tienda</label><input type="file" id="editCoverFile" accept="image/*">
+<div class="cover-preview"><img id="editCoverPrev" src=""></div>
+<button class="btn btn-green" style="width:100%;margin-top:12px" onclick="saveStore()">Guardar tienda</button>
+<button class="btn btn-gray" style="width:100%;margin-top:8px" onclick="verMiTienda()">Ver mi tienda →</button>
+</div>
+</div>
+
+<div>
+<div class="card">
+<h2>Cargar producto con foto y vista previa</h2>
+<label>Nombre del producto</label><input id="pName" placeholder="Ej: Zapatillas blancas">
+<label>Precio</label><input id="pPrice" type="number" placeholder="58900">
+<label>Categoría</label>
+<select id="pCat"><option value="clothing">Ropa y calzado</option><option value="verduleria">Verdulería</option><option value="carniceria">Carnicería</option><option value="panaderia">Panadería</option><option value="bar">Bares</option><option value="kiosco">Kioscos</option><option value="parrilla">Parrillas</option><option value="pizzeria">Pizzerías</option><option value="heladeria">Heladerías</option><option value="cafeteria">Cafeterías</option><option value="services">Servicios</option></select>
+<label>Descripción</label><textarea id="pDesc" placeholder="Talles, detalles, envío..."></textarea>
+<label>Foto del producto</label><input type="file" id="pFile" accept="image/*">
+<div class="preview-box" id="pPreviewBox"><span>Vista previa de la foto</span><img id="pPreview" class="hidden"></div>
+<div style="margin-top:12px;background:#f5f5f5;padding:10px;border-radius:8px">
+<div style="font-size:11px;color:#888">VISTA PREVIA CARD</div>
+<div style="display:flex;gap:10px;margin-top:6px"><img id="cardPrevImg" style="width:60px;height:60px;border-radius:8px;object-fit:cover;background:#eee"><div><div id="cardPrevPrice" style="font-weight:800">$0</div><div id="cardPrevName" style="font-size:12px">Nombre</div></div></div>
+</div>
+<button class="btn btn-green" style="width:100%;margin-top:12px" onclick="addProduct()">Publicar producto</button>
+</div>
+
+<div class="card" style="margin-top:16px">
+<h2>Mis productos (<span id="prodCount">0</span>)</h2>
+<div class="grid-prod" id="gridProd"></div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+let currentUser=null, tempProfile='', tempCover='', tempProdImg='';
+function getStores(){return JSON.parse(localStorage.getItem('marketStores')||'{}')}
+function setStores(s){localStorage.setItem('marketStores',JSON.stringify(s))}
+function getUsers(){return JSON.parse(localStorage.getItem('marketUsers')||'{}')}
+function setUsers(u){localStorage.setItem('marketUsers',JSON.stringify(u))}
+function getProds(){return JSON.parse(localStorage.getItem('marketProductsAR')||'[]')}
+function setProds(p){localStorage.setItem('marketProductsAR',JSON.stringify(p))}
+
+function setTab(t){
+document.getElementById('formLogin').classList.toggle('hidden',t!=='login');
+document.getElementById('formReg').classList.toggle('hidden',t!=='reg');
+document.getElementById('tabLogin').classList.toggle('active',t==='login');
+document.getElementById('tabReg').classList.toggle('active',t==='reg');
+}
+
+function toBase64(file, cb){
+let r=new FileReader();r.onload=e=>cb(e.target.result);r.readAsDataURL(file);
+}
+
+// previews registro
+document.getElementById('regProfileFile')?.addEventListener('change',e=>{
+let f=e.target.files[0];if(!f) return;toBase64(f,b64=>{tempProfile=b64;document.getElementById('regProfilePrev').src=b64;});
+});
+document.getElementById('regStore')?.addEventListener('input',e=>{document.getElementById('regStorePrev').textContent=e.target.value||'Tu tienda'});
+
+// previews edit
+document.getElementById('editProfileFile')?.addEventListener('change',e=>{
+let f=e.target.files[0];if(!f) return;toBase64(f,b64=>{tempProfile=b64;document.getElementById('editProfilePrev').src=b64;});
+});
+document.getElementById('editCoverFile')?.addEventListener('change',e=>{
+let f=e.target.files[0];if(!f) return;toBase64(f,b64=>{tempCover=b64;document.getElementById('editCoverPrev').src=b64;});
+});
+document.getElementById('editName')?.addEventListener('input',e=>{document.getElementById('editNamePrev').textContent=e.target.value;});
+
+// producto preview
+document.getElementById('pFile').addEventListener('change',e=>{
+let f=e.target.files[0];if(!f) return;toBase64(f,b64=>{
+tempProdImg=b64;
+document.getElementById('pPreview').src=b64;document.getElementById('pPreview').classList.remove('hidden');
+document.getElementById('pPreviewBox').querySelector('span').classList.add('hidden');
+document.getElementById('cardPrevImg').src=b64;
+});
+});
+document.getElementById('pName').addEventListener('input',e=>{document.getElementById('cardPrevName').textContent=e.target.value||'Nombre'});
+document.getElementById('pPrice').addEventListener('input',e=>{document.getElementById('cardPrevPrice').textContent='$'+(parseInt(e.target.value)||0).toLocaleString('es-AR')});
+
+function register(){
+let store=document.getElementById('regStore').value.trim();
+let wsp=document.getElementById('regWsp').value.trim();
+let pass=document.getElementById('regPass').value.trim();
+let dir=document.getElementById('regDir').value.trim()||'Tres Arroyos';
+if(!store||!wsp||pass.length<6) return alert('Completa nombre tienda, WhatsApp y contraseña de 6+ caracteres');
+let users=getUsers();if(users[wsp]) return alert('Ese WhatsApp ya está registrado, ingresá');
+let storeId=store.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-'+Date.now().toString().slice(-4);
+users[wsp]={wsp,pass,storeId,storeName:store};
+setUsers(users);
+let stores=getStores();
+stores[storeId]={name:store,dir,wsp,profile:tempProfile||'https://via.placeholder.com/200',cover:tempCover||'https://via.placeholder.com/800x300',city:'Tres Arroyos'};
+setStores(stores);
+localStorage.setItem('currentUser',wsp);
+alert('Cuenta creada');load();
+}
+
+function login(){
+let wsp=document.getElementById('loginWsp').value.trim();
+let pass=document.getElementById('loginPass').value.trim();
+let users=getUsers();
+if(!users[wsp]||users[wsp].pass!==pass) return alert('WhatsApp o contraseña incorrectos');
+localStorage.setItem('currentUser',wsp);
+load();
+}
+
+function load(){
+let wsp=localStorage.getItem('currentUser');
+if(!wsp){document.getElementById('auth').classList.remove('hidden');document.getElementById('panel').classList.add('hidden');return}
+let users=getUsers();if(!users[wsp]){localStorage.removeItem('currentUser');load();return}
+currentUser=users[wsp];
+document.getElementById('auth').classList.add('hidden');
+document.getElementById('panel').classList.remove('hidden');
+document.getElementById('btnLogout').classList.remove('hidden');
+let stores=getStores();let s=stores[currentUser.storeId];
+if(s){
+document.getElementById('editName').value=s.name;
+document.getElementById('editDir').value=s.dir;
+document.getElementById('editWsp').value=s.wsp;
+document.getElementById('editProfilePrev').src=s.profile;
+document.getElementById('editCoverPrev').src=s.cover;
+document.getElementById('editNamePrev').textContent=s.name;
+tempProfile=s.profile;tempCover=s.cover;
+}
+renderMyProds();
+}
+
+function saveStore(){
+let stores=getStores();let s=stores[currentUser.storeId];
+s.name=document.getElementById('editName').value.trim();
+s.dir=document.getElementById('editDir').value.trim();
+s.wsp=document.getElementById('editWsp').value.trim();
+s.profile=tempProfile||s.profile;
+s.cover=tempCover||s.cover;
+setStores(stores);
+let users=getUsers();users[currentUser.wsp].storeName=s.name;setUsers(users);
+alert('Tienda guardada');
+}
+
+function addProduct(){
+let name=document.getElementById('pName').value.trim();
+let price=parseInt(document.getElementById('pPrice').value);
+let cat=document.getElementById('pCat').value;
+let desc=document.getElementById('pDesc').value.trim();
+if(!name||!price||!tempProdImg) return alert('Nombre, precio y foto son obligatorios');
+let prods=getProds();
+let id=Date.now();
+prods.push({id,store:currentUser.storeName,storeId:currentUser.storeId,name,price,category:cat,img:tempProdImg,desc});
+setProds(prods);
+document.getElementById('pName').value='';document.getElementById('pPrice').value='';document.getElementById('pDesc').value='';
+document.getElementById('pPreview').classList.add('hidden');document.getElementById('pPreviewBox').querySelector('span').classList.remove('hidden');
+tempProdImg='';renderMyProds();
+}
+
+function renderMyProds(){
+let all=getProds().filter(p=>p.storeId===currentUser.storeId);
+document.getElementById('prodCount').textContent=all.length;
+document.getElementById('gridProd').innerHTML=all.map(p=>`<div class="prod"><div class="del" onclick="delProd(${p.id})">✕</div><img src="${p.img}"><div class="prod-body"><div class="prod-price">$${p.price.toLocaleString('es-AR')}</div><div class="prod-name">${p.name}</div></div></div>`).join('')||'<p style="color:#999;font-size:12px">Aún no cargaste productos</p>';
+}
+
+function delProd(id){
+if(!confirm('¿Borrar producto?')) return;
+let prods=getProds().filter(p=>p.id!==id);setProds(prods);renderMyProds();
+}
+
+function verMiTienda(){location.href='store.html?store='+currentUser.storeId}
+function logout(){localStorage.removeItem('currentUser');location.reload()}
+
+load();
+</script>
+</body>
+  </html>
