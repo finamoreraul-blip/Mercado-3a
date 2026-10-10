@@ -2,70 +2,64 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3A VENDE - Mercado Tres Arroyos</title>
+<title>3A VENDE</title>
 <style>
-:root{--ml:#ffe600;--ml2:#fff159;--bg:#ebebeb;--text:#333;--link:#3483fa}
-*{margin:0;padding:0;box-sizing:border-box;font-family:Proxima Nova,-apple-system,Helvetica,Arial,sans-serif}
-body{background:var(--bg);color:var(--text)}
-header{background:var(--ml);padding:10px 0;position:sticky;top:0;z-index:100;box-shadow:0 1px 2px rgba(0,0,0,.1)}
-.header-inner{max-width:1220px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:20px}
-.logo{font-size:26px;font-weight:900;letter-spacing:-1px;line-height:1}.logo b{font-weight:900}.logo span{font-weight:400;font-size:13px;display:block;letter-spacing:0}
-.search{flex:1;max-width:600px;background:#fff;border-radius:2px;display:flex;box-shadow:0 1px 2px rgba(0,0,0,.2);overflow:hidden}
-.search input{border:none;outline:none;flex:1;padding:10px 14px;font-size:15px;color:#333}
-.search button{border:none;background:#fff;padding:0 14px;cursor:pointer;color:#999;border-left:1px solid #eee}
-.nav{display:flex;gap:12px;align-items:center;margin-left:auto}
-.btn-nav{font-size:13px;color:#333;text-decoration:none;cursor:pointer;background:transparent;border:none}
-.btn-vender{background:#3483fa;color:#fff;border:none;padding:8px 16px;border-radius:4px;font-weight:600;font-size:13px;cursor:pointer}
-.btn-vender:hover{background:#2968c8}
-.subheader{background:var(--ml2);padding:8px 0;border-bottom:1px solid rgba(0,0,0,.05)}
-.sub-inner{max-width:1220px;margin:0 auto;padding:0 16px;display:flex;gap:20px;align-items:center;overflow-x:auto;font-size:13px}
-.conect{color:#00a650;font-weight:600;display:flex;gap:6px;align-items:center;white-space:nowrap}
-.dot{width:8px;height:8px;background:#00a650;border-radius:50%}
-.pill{padding:4px 10px;border-radius:4px;border:1px solid transparent;cursor:pointer;white-space:nowrap;color:#333}
-.pill:hover{border-color:#333}.pill.active{background:#333;color:#fff}
-.main{max-width:1220px;margin:20px auto;padding:0 16px}
-.section-title{font-size:20px;font-weight:600;margin-bottom:12px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Proxima Nova,Arial,sans-serif}
+body{background:#f5f5f5;color:#333}
+header{background:#fff;padding:14px 16px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:22px;font-weight:900;letter-spacing:-.5px;text-align:center;flex:1}
+.logo b{color:#00a650}
+.btn-vender{background:#00a650;color:#fff;border:none;padding:10px 20px;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer}
+.btn-vender:hover{background:#008f45}
+.conect{font-size:12px;color:#00a650;font-weight:600}
+.banner{background:linear-gradient(135deg,#111 0%,#222 100%);color:#fff;text-align:center;padding:42px 16px;position:relative;overflow:hidden}
+.banner::before{content:'';position:absolute;top:-40px;left:50%;width:600px;height:600px;background:radial-gradient(circle,#00a65022,transparent 70%);transform:translateX(-50%)}
+.banner h1{font-size:32px;font-weight:800;position:relative;letter-spacing:-1px}
+.banner h1 b{color:#00a650}
+.banner p{font-size:14px;color:#aaa;margin-top:8px;position:relative}
+.banner .cta{margin-top:18px;position:relative}
+.banner .cta button{background:#00a650;color:#fff;border:none;padding:12px 28px;border-radius:999px;font-weight:800;font-size:14px;cursor:pointer}
+.filters{max-width:1220px;margin:16px auto 0;padding:0 16px;display:flex;gap:8px;overflow-x:auto}
+.pill{background:#fff;border:1px solid #e5e5e5;padding:7px 14px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.pill.active{background:#111;color:#fff;border-color:#111}
+.main{max-width:1220px;margin:12px auto;padding:0 16px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-.card{background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 1px 1px rgba(0,0,0,.1);cursor:pointer;transition:.2s}
-.card:hover{box-shadow:0 4px 12px rgba(0,0,0,.15);transform:translateY(-2px)}
-.card img{width:100%;height:180px;object-fit:contain;background:#fff;border-bottom:1px solid #eee;padding:8px}
-.card-body{padding:12px}
-.price{font-size:22px;font-weight:400;color:#333;display:flex;gap:6px;align-items:center}
-.price sup{font-size:11px;color:#00a650;border:1px solid #00a650;padding:2px 4px;border-radius:3px}
-.name{font-size:14px;color:#333;margin-top:6px;line-height:1.2;min-height:32px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.envio{font-size:12px;color:#00a650;font-weight:600;margin-top:6px}
-.store{font-size:12px;color:#999;margin-top:4px}
+.card{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.06);cursor:pointer;transition:.2s}
+.card:hover{box-shadow:0 6px 18px rgba(0,0,0,.12);transform:translateY(-2px)}
+.card img{width:100%;height:190px;object-fit:cover}
+.card-body{padding:10px}
+.price{font-size:18px;font-weight:700}
+.name{font-size:13px;color:#555;margin-top:4px;line-height:1.2;min-height:32px}
+.store{font-size:11px;color:#999;margin-top:6px}
+.envio{font-size:11px;color:#00a650;font-weight:700;margin-top:4px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:none;align-items:center;justify-content:center;padding:16px}
 .modal.active{display:flex}
-.modal-box{background:#fff;border-radius:6px;max-width:1050px;width:100%;display:grid;grid-template-columns:1fr 350px;overflow:hidden;position:relative;max-height:92vh}
-.close{position:absolute;top:12px;right:12px;background:#f5f5f5;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10}
-.car{position:relative;background:#fff;height:520px;display:flex;align-items:center;justify-content:center;border-right:1px solid #eee}
-.car img{width:100%;height:100%;object-fit:contain;display:none;position:absolute;inset:0;padding:20px}.car img.active{display:block}
-.dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px}.d{width:8px;height:8px;border-radius:50%;background:#ddd}.d.active{background:#3483fa}
+.modal-box{background:#fff;border-radius:12px;max-width:1000px;width:100%;display:grid;grid-template-columns:1fr 340px;overflow:hidden;position:relative;max-height:90vh}
+.close{position:absolute;top:10px;right:10px;width:32px;height:32px;background:#f5f5f5;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10}
+.car{position:relative;background:#000;height:500px;display:flex;align-items:center;justify-content:center}
+.car img{width:100%;height:100%;object-fit:contain;display:none;position:absolute;inset:0}.car img.active{display:block}
+.dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px}.d{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4)}.d.active{background:#00a650}
 .info{padding:20px;overflow-y:auto}
-.btn-ml{background:#3483fa;color:#fff;border:none;padding:14px;border-radius:6px;width:100%;font-weight:600;font-size:16px;cursor:pointer;margin-top:14px}
-.btn-ml:hover{background:#2968c8}
-.btn-ml2{background:#fff;border:1px solid #3483fa;color:#3483fa;padding:12px;border-radius:6px;width:100%;font-weight:600;margin-top:8px;cursor:pointer}
+.btn-mp{background:#00a650;color:#fff;border:none;padding:14px;border-radius:999px;width:100%;font-weight:800;font-size:14px;cursor:pointer;margin-top:14px}
+.btn-mp2{background:#f5f5f5;border:1px solid #e5e5e5;padding:12px;border-radius:999px;width:100%;font-weight:700;margin-top:8px;cursor:pointer}
 .mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-@media(max-width:800px){.modal-box{grid-template-columns:1fr}.car{height:360px;border-right:none;border-bottom:1px solid #eee}.grid{grid-template-columns:repeat(2,1fr)}.header-inner{flex-wrap:wrap}.search{order:3;max-width:100%}}
+@media(max-width:800px){.modal-box{grid-template-columns:1fr}.car{height:360px}.grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 <header>
-<div class="header-inner">
-<div class="logo"><b>3A</b> VENDE <span>Tres Arroyos</span></div>
-<div class="search"><input id="search" placeholder="Buscar productos, marcas y más..."><button>🔍</button></div>
-<div class="nav">
-<span class="btn-nav" id="conect">● <span id="conectNum">24</span> conectados</span>
-<button class="btn-nav" onclick="location.href='registro.html'">Creá tu cuenta</button>
-<button class="btn-nav" onclick="location.href='panel.html'">Ingresá</button>
-<button class="btn-vender" onclick="location.href='panel.html'">Vender</button>
-</div>
-</div>
+<div class="conect">● <span id="conectNum">24</span></div>
+<div class="logo"><b>3A</b> VENDE</div>
+<button class="btn-vender" onclick="location.href='panel.html'">VENDER</button>
 </header>
-<div class="subheader">
-<div class="sub-inner">
-<span class="conect"><span class="dot"></span> Envío en el día • Tres Arroyos • 15% hasta entrega</span>
+
+<div class="banner">
+<h1>Todo Tres Arroyos en <b>3A VENDE</b></h1>
+<p>Marketplace original de todo tipo • Ropa, comida, servicios, usados • Pago directo por WhatsApp</p>
+<div class="cta"><button onclick="location.href='panel.html'">Empezar a vender →</button></div>
+</div>
+
+<div class="filters">
 <button class="pill active" onclick="setCat('todos',this)">Todo</button>
 <button class="pill" onclick="setCat('clothing',this)">Ropa</button>
 <button class="pill" onclick="setCat('verduleria',this)">Verdulería</button>
@@ -76,25 +70,21 @@ header{background:var(--ml);padding:10px 0;position:sticky;top:0;z-index:100;box
 <button class="pill" onclick="setCat('parrilla',this)">Parrillas</button>
 <button class="pill" onclick="setCat('pizzeria',this)">Pizzerías</button>
 </div>
-</div>
 
-<div class="main">
-<div class="section-title">Productos en Tres Arroyos</div>
-<div class="grid" id="grid"></div>
-</div>
+<div class="main"><div class="grid" id="grid"></div></div>
 
 <div class="modal" id="modal">
 <div class="modal-box">
 <div class="close" onclick="closeModal()">✕</div>
 <div class="car" id="car"><div class="dots" id="dots"></div></div>
 <div class="info">
-<h2 id="mName" style="font-size:20px;font-weight:600;line-height:1.2"></h2>
-<div id="mPrice" style="font-size:28px;font-weight:300;margin-top:10px"></div>
-<div id="mDesc" style="font-size:14px;color:#666;margin-top:10px;line-height:1.4"></div>
-<div style="margin-top:16px;display:flex;gap:10px;align-items:center;background:#f5f5f5;padding:10px;border-radius:6px"><img id="mStoreImg" style="width:36px;height:36px;border-radius:50%"><div><b id="mStoreName" style="font-size:13px"></b><div id="mStoreDir" style="font-size:11px;color:#999"></div></div></div>
-<button class="btn-ml" onclick="verTienda()">Ver tienda</button>
-<button class="btn-ml2" onclick="closeModal()">Cerrar</button>
-<div id="catTitle" style="font-size:14px;font-weight:600;margin-top:20px"></div>
+<h2 id="mName" style="font-size:18px;font-weight:700"></h2>
+<div id="mPrice" style="font-size:24px;font-weight:800;margin-top:8px"></div>
+<div id="mDesc" style="font-size:13px;color:#666;margin-top:8px"></div>
+<div style="margin-top:14px;display:flex;gap:10px;align-items:center;background:#f5f5f5;padding:10px;border-radius:10px"><img id="mStoreImg" style="width:36px;height:36px;border-radius:50%"><div><b id="mStoreName" style="font-size:12px"></b><div id="mStoreDir" style="font-size:11px;color:#999"></div></div></div>
+<button class="btn-mp" onclick="verTienda()">Ver tienda</button>
+<button class="btn-mp2" onclick="closeModal()">Cerrar</button>
+<div id="catTitle" style="font-size:12px;font-weight:700;margin-top:18px"></div>
 <div class="mini" id="mini"></div>
 </div>
 </div>
@@ -106,30 +96,28 @@ function getAll(){return JSON.parse(localStorage.getItem('marketProductsAR')||'[
 function getStores(){return JSON.parse(localStorage.getItem('marketStores')||'{}')}
 function setCat(c,el){cat=c;document.querySelectorAll('.pill').forEach(b=>b.classList.remove('active'));el.classList.add('active');render()}
 function render(){
-let all=getAll(),q=document.getElementById('search').value.toLowerCase();
-let f=all.filter(p=>(cat==='todos'||p.category===cat)&&(p.name.toLowerCase().includes(q)||p.store.toLowerCase().includes(q)));
-document.getElementById('grid').innerHTML=f.map(p=>`<div class="card" onclick='openModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'><img src="${p.img}"><div class="card-body"><div class="price">$${p.price.toLocaleString('es-AR')} <sup>15% OFF</sup></div><div class="name">${p.name}</div><div class="envio">Envío gratis Tres Arroyos</div><div class="store">${p.store}</div></div></div>`).join('')||'<p style="grid-column:1/-1;text-align:center;color:#999">Sin productos</p>'
+let all=getAll(),q='';let f=all.filter(p=>cat==='todos'||p.category===cat);
+document.getElementById('grid').innerHTML=f.map(p=>`<div class="card" onclick='openModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'><img src="${p.img}"><div class="card-body"><div class="price">$${p.price.toLocaleString('es-AR')}</div><div class="name">${p.name}</div><div class="envio">Envío Tres Arroyos</div><div class="store">${p.store}</div></div></div>`).join('')||'<p style="grid-column:1/-1;text-align:center;color:#999;padding:20px">Aún no hay productos</p>'
 }
 function openModal(p){
 curStore=p.storeId;let s=getStores()[p.storeId];let all=getAll().filter(x=>x.storeId===p.storeId);
-document.getElementById('mName').textContent=p.name;document.getElementById('mPrice').textContent='$ '+p.price.toLocaleString('es-AR');document.getElementById('mDesc').textContent=p.desc||'';document.getElementById('mStoreName').textContent=s?s.name:p.store;document.getElementById('mStoreDir').textContent=s?s.dir:'Tres Arroyos';document.getElementById('mStoreImg').src=s?s.profile:p.img;
+document.getElementById('mName').textContent=p.name;document.getElementById('mPrice').textContent='$ '+p.price.toLocaleString('es-AR');document.getElementById('mDesc').textContent=p.desc||'';document.getElementById('mStoreName').textContent=s?s.name:p.store;document.getElementById('mStoreDir').textContent=s?s.dir:'';document.getElementById('mStoreImg').src=s?s.profile:p.img;
 let car=document.getElementById('car');[...car.querySelectorAll('img.c')].forEach(e=>e.remove());
 all.forEach(it=>{let im=document.createElement('img');im.src=it.img;im.className='c'+(it.id===p.id?' active':'');car.insertBefore(im,document.getElementById('dots'))});
 let dots=document.getElementById('dots');dots.innerHTML=all.map((_,i)=>`<div class="d ${all.findIndex(a=>a.id===p.id)===i?'active':''}"></div>`).join('');
 let idx=all.findIndex(a=>a.id===p.id);if(idx<0) idx=0;clearInterval(interval);interval=setInterval(()=>{idx=(idx+1)%all.length;car.querySelectorAll('img.c').forEach((im,j)=>im.classList.toggle('active',j===idx));dots.querySelectorAll('.d').forEach((d,j)=>d.classList.toggle('active',j===idx))},2800);
-document.getElementById('catTitle').textContent='Más publicaciones de '+ (s?s.name:p.store);document.getElementById('mini').innerHTML=all.map(x=>`<div class="card" onclick='openModal(${JSON.stringify(x).replace(/'/g,"&#39;")})'><img src="${x.img}" style="height:80px"><div style="padding:6px"><div style="font-size:12px">$${x.price.toLocaleString('es-AR')}</div><div style="font-size:10px">${x.name}</div></div></div>`).join('');
+document.getElementById('catTitle').textContent='Más de '+ (s?s.name:p.store);document.getElementById('mini').innerHTML=all.map(x=>`<div class="card" onclick='openModal(${JSON.stringify(x).replace(/'/g,"&#39;")})'><img src="${x.img}" style="height:80px"><div style="padding:6px"><div style="font-size:11px;font-weight:700">$${x.price.toLocaleString('es-AR')}</div><div style="font-size:10px">${x.name}</div></div></div>`).join('');
 document.getElementById('modal').classList.add('active');
 }
 function closeModal(){document.getElementById('modal').classList.remove('active');clearInterval(interval)}
 function verTienda(){if(curStore) location.href='store.html?store='+curStore}
-document.getElementById('search').addEventListener('input',render);
 let base=parseInt(localStorage.getItem('visitCount3A')||'24');if(!sessionStorage.getItem('cnt')){base++;localStorage.setItem('visitCount3A',base);sessionStorage.setItem('cnt','1')}document.getElementById('conectNum').textContent=base;
 if(!localStorage.getItem('marketProductsAR')){
-const stores={'zapateria-centro':{name:'Zapatería Centro',dir:'Moreno 456',wsp:'2983401234',profile:'https://images.unsplash.com/photo-1560343090-f4df9e18b80e?w=200',cover:'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800'}};
-const prods=[{id:1,store:'Zapatería Centro',storeId:'zapateria-centro',name:'Zapatillas blancas premium cuero ecológico',price:58900,category:'clothing',img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400',desc:'Talle 38 al 44, envío en el día'}, {id:2,store:'Zapatería Centro',storeId:'zapateria-centro',name:'Botas cuero vacuno marrón',price:72000,category:'clothing',img:'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400',desc:'Cuero vacuno'}];
+const stores={'zapateria-centro':{name:'Zapatería Centro',dir:'Moreno 456',wsp:'2983401234',profile:'https://images.unsplash.com/photo-1560343090-f4df9e18b80e?w=200'}};
+const prods=[{id:1,store:'Zapatería Centro',storeId:'zapateria-centro',name:'Zapatillas blancas premium',price:58900,category:'clothing',img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400',desc:'Cuero ecológico'}];
 localStorage.setItem('marketStores',JSON.stringify(stores));localStorage.setItem('marketProductsAR',JSON.stringify(prods));localStorage.setItem('marketUsers',JSON.stringify({'2983401234':{wsp:'2983401234',pass:'123456',storeId:'zapateria-centro',storeName:'Zapatería Centro'}}));localStorage.setItem('visitCount3A','24');
 }
 render();
 </script>
 </body>
-  </html>
+</html>
