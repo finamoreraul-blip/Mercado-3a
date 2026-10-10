@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADMIN PRIVADO - 3A VENDE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Proxima Nova,Arial,sans-serif}
+body{background:#0e0e0e;color:#fff;min-height:100vh}
+header{background:#161616;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;border-bottom:1px solid #222}
+.logo{font-weight:900;font-size:18px}.logo b{color:#00a650}
+.btn{border:none;padding:8px 14px;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer}
+.btn-w{background:#fff;color:#111}.btn-g{background:#00a650;color:#fff}.btn-r{background:#ff3b30;color:#fff}.btn-b{background:#009ee3;color:#fff}
+.wrap{max-width:1300px;margin:0 auto;padding:18px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:16px}
+.stat{background:#1a1a1a;border:1px solid #222;padding:14px;border-radius:12px;text-align:center}
+.stat span{font-size:10px;color:#777;letter-spacing:.5px}.stat b{font-size:22px;display:block;margin-top:4px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.pill{background:#222;border:1px solid #333;padding:7px 14px;border-radius:999px;font-size:11px;cursor:pointer;color:#aaa;transition:.2s}
+.pill.active{background:#00a650;color:#fff;border-color:#00a650}
+input.search{background:#1a1a1a;border:1px solid #333;color:#fff;padding:8px 14px;border-radius:999px;font-size:11px;flex:1;max-width:320px;outline:none}
+table{width:100%;border-collapse:collapse;background:#161616;border-radius:12px;overflow:hidden;border:1px solid #222}
+th{font-size:10px;color:#777;text-align:left;padding:10px 8px;border-bottom:1px solid #222;background:#1a1a1a}
+td{font-size:11px;padding:10px 8px;border-bottom:1px solid #1f1f1f;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+tr:hover{background:#1e1e1e}
+.badge{padding:3px 7px;border-radius:4px;font-size:9px;font-weight:800;letter-spacing:.3px}
+.badge-INDEX{background:#2a2a2a;color:#fff}.badge-PANEL{background:#00a650;color:#fff}.badge-TIENDA{background:#009ee3;color:#fff}.badge-VENTA{background:#ff9800;color:#fff}
+.section{background:#161616;border:1px solid #222;border-radius:12px;padding:16px;margin-top:16px}
+.section h3{font-size:13px;font-weight:800;margin-bottom:12px}
+.tienda-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #222;gap:10px}
+.tienda-row b{font-size:12px}.tienda-row span{font-size:10px;color:#888}
+.login-box{max-width:380px;margin:80px auto;background:#161616;border:1px solid #222;padding:28px;border-radius:16px;text-align:center}
+.login-box input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #333;background:#0e0e0e;color:#fff;margin-top:12px;outline:none}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<div id="loginGate" class="login-box">
+<div class="logo" style="font-size:22px"><b>3A</b> ADMIN PRIVADO</div>
+<p style="font-size:11px;color:#666;margin-top:6px">Acceso solo dueño - Abrí por fuera de la página</p>
+<input id="passInput" type="password" placeholder="Clave admin">
+<button class="btn btn-g" style="width:100%;margin-top:12px;padding:12px" onclick="checkPass()">Entrar</button>
+<p style="font-size:10px;color:#444;margin-top:10px">Si no tenés la clave no entrás. Este archivo no está linkeado en la web.</p>
+</div>
+
+<div id="adminContent" class="hidden">
+<header>
+<div class="logo"><b>3A</b> ADMIN - MOVIMIENTOS TOTALES</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-b" onclick="exportLogs()">Exportar JSON</button>
+<button class="btn btn-w" onclick="location.href='index.html'">Ver web</button>
+<button class="btn btn-r" onclick="clearLogs()">Borrar logs</button>
+<button class="btn btn-w" onclick="logoutAdmin()">Salir</button>
+</div>
+</header>
+
+<div class="wrap">
+<div class="stats">
+<div class="stat"><span>VISITAS INDEX</span><b id="sIndex">0</b></div>
+<div class="stat"><span>MOV. PANEL</span><b id="sPanel">0</b></div>
+<div class="stat"><span>MOV. TIENDAS</span><b id="sTienda">0</b></div>
+<div class="stat"><span>VENTAS REGISTRADAS</span><b id="sVentas">0</b></div>
+<div class="stat"><span>TIENDAS TOTALES</span><b id="sStores">0</b></div>
+<div class="stat"><span>TOTAL MOVIMIENTOS</span><b id="sTotal">0</b></div>
+</div>
+
+<div class="filters">
+<div class="pill active" onclick="setFilter('todos',this)">Todos</div>
+<div class="pill" onclick="setFilter('INDEX',this)">INDEX</div>
+<div class="pill" onclick="setFilter('PANEL',this)">PANEL EMPRENDEDOR</div>
+<div class="pill" onclick="setFilter('TIENDA',this)">TIENDAS</div>
+<div class="pill" onclick="setFilter('VENTA',this)">VENTAS</div>
+<input id="search" class="search" placeholder="Buscar: tienda, producto, wsp, acción..." oninput="render()">
+<select id="storeFilter" class="search" style="max-width:180px" onchange="render()"><option value="">Todas las tiendas</option></select>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 360px;gap:16px">
+<div>
+<table>
+<thead><tr><th>Fecha</th><th>Tipo</th><th>Acción</th><th>Detalle</th><th>WSP/Usuario</th><th>Link</th></tr></thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+
+<div>
+<div class="section">
+<h3>🏪 Tiendas - Estado de prueba y pagos</h3>
+<div id="storesList"></div>
+</div>
+
+<div class="section">
+<h3>💰 Control mensual - Activar $4.500</h3>
+<div style="font-size:11px;color:#888;margin-bottom:8px">Cuando pagan por MP https://mpago.la/1UShvFr activá acá</div>
+<div style="display:flex;gap:6px"><input id="activarId" placeholder="ID tienda" style="flex:1;background:#0e0e0e;border:1px solid #333;color:#fff;padding:8px 10px;border-radius:8px;font-size:11px"><button class="btn btn-g" onclick="activarMensual()">Activar 30 días</button></div>
+<div id="activarMsg" style="font-size:11px;color:#00a650;margin-top:8px"></div>
+</div>
+
+<div class="section">
+<h3>📊 Ventas por tienda</h3>
+<div id="salesList"></div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+const CLAVE='3A2026'; // CAMBIA ESTO
+function checkPass(){
+let p=document.getElementById('passInput').value;
+if(p===CLAVE){localStorage.setItem('adminAuth','ok');showAdmin();}
+else alert('Clave incorrecta');
+}
+function showAdmin(){
+document.getElementById('loginGate').classList.add('hidden');
+document.getElementById('adminContent').classList.remove('hidden');
+render();renderStores();renderSalesList();
+}
+function logoutAdmin(){localStorage.removeItem('adminAuth');location.reload();}
+if(localStorage.getItem('adminAuth')==='ok'){showAdmin();}
+
+function getLogs(){try{return JSON.parse(localStorage.getItem('adminLogs')||'[]').reverse()}catch{return []}}
+function getStores(){return JSON.parse(localStorage.getItem('marketStores')||'{}')}
+function setStores(s){localStorage.setItem('marketStores',JSON.stringify(s))}
+function getSales(){return JSON.parse(localStorage.getItem('marketSales')||'{}')}
+
+let filter='todos';
+function setFilter(f,el){
+filter=f;
+document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+el.classList.add('active');
+render();
+}
+
+function render(){
+let logs=getLogs();
+let q=document.getElementById('search').value.toLowerCase();
+let storeF=document.getElementById('storeFilter').value;
+
+let filtered=logs.filter(l=>{
+if(filter!=='todos' &&!l.tipo.includes(filter) &&!l.accion.toUpperCase().includes(filter)) return false;
+if(q &&!JSON.stringify(l).toLowerCase().includes(q)) return false;
+if(storeF &&!JSON.stringify(l).toLowerCase().includes(storeF.toLowerCase())) return false;
+return true;
+});
+
+document.getElementById('sIndex').textContent=logs.filter(l=>l.tipo==='INDEX').length;
+document.getElementById('sPanel').textContent=logs.filter(l=>l.tipo==='PANEL').length;
+document.getElementById('sTienda').textContent=logs.filter(l=>l.tipo==='TIENDA').length;
+document.getElementById('sVentas').textContent=logs.filter(l=>l.accion.includes('VENTA')).length;
+document.getElementById('sStores').textContent=Object.keys(getStores()).length;
+document.getElementById('sTotal').textContent=logs.length;
+
+document.getElementById('tbody').innerHTML=filtered.slice(0,400).map(l=>`
+<tr>
+<td>${l.fecha}</td>
+<td><span class="badge badge-${l.tipo}">${l.tipo}</span></td>
+<td>${l.accion}</td>
+<td title="${l.detalle}">${l.detalle}</td>
+<td>${l.store}</td>
+<td style="color:#666">${(l.url||'').slice(0,40)}</td>
+</tr>`).join('')||'<tr><td colspan=6 style="text-align:center;color:#555;padding:20px">Sin movimientos</td></tr>';
+}
+
+function renderStores(){
+let stores=getStores();
+let now=Date.now();
+let html=Object.entries(stores).map(([id,s])=>{
+let start=s.trialStart||now;
+let diff=Math.floor((now-start)/(1000*60*60*24));
+let left=10-diff;
+let estado='';
+if(s.paid && s.paidUntil && now < s.paidUntil) estado=`<span style="color:#00a650">✓ Mensual hasta ${new Date(s.paidUntil).toLocaleDateString('es-AR')}</span>`;
+else if(s.plan==='comision') estado=`<span style="color:#ff9800">10% por venta</span>`;
+else if(left>=0) estado=`<span style="color:#888">${left} días prueba</span>`;
+else estado=`<span style="color:#ff3b30">VENCIDO</span>`;
+return `<div class="tienda-row">
+<div><b>${s.name}</b><br><span>${s.wsp} • ID: ${id.slice(-6)} • ${estado}</span></div>
+<div style="display:flex;gap:4px"><button class="btn btn-w" style="padding:4px 8px;font-size:10px" onclick="document.getElementById('activarId').value='${id}'">Activar</button><button class="btn btn-g" style="padding:4px 8px;font-size:10px" onclick="window.open('store.html?store=${id}','_blank')">Ver</button></div>
+</div>`;
+}).join('');
+document.getElementById('storesList').innerHTML=html||'<div style="color:#666;font-size:11px">No hay tiendas</div>';
+
+// fill filter
+let sel=document.getElementById('storeFilter');
+let current=sel.value;
+sel.innerHTML='<option value="">Todas las tiendas</option>'+Object.entries(stores).map(([id,s])=>`<option value="${id}">${s.name}</option>`).join('');
+sel.value=current;
+}
+
+function renderSalesList(){
+let sales=getSales();
+let stores=getStores();
+let html=Object.entries(sales).map(([storeId,list])=>{
+let s=stores[storeId];
+let total=list.reduce((a,b)=>a+b.price,0);
+return `<div style="padding:8px 0;border-bottom:1px solid #222"><b style="font-size:11px">${s?s.name:storeId}</b><span style="font-size:10px;color:#888"> - ${list.length} ventas - $${total.toLocaleString('es-AR')}</span><div style="font-size:10px;color:#666;margin-top:4px">${list.slice(-3).reverse().map(v=>`${v.date}: ${v.prod} $${v.price}`).join('<br>')}</div></div>`;
+}).join('');
+document.getElementById('salesList').innerHTML=html||'<div style="color:#666;font-size:11px">Sin ventas registradas</div>';
+}
+
+function activarMensual(){
+let id=document.getElementById('activarId').value.trim();
+if(!id) return alert('Poné ID');
+let stores=getStores();
+if(!stores[id]) return alert('No existe tienda');
+stores[id].paid=true;
+stores[id].paidUntil=Date.now()+30*24*60*60*1000;
+stores[id].plan='mensual';
+setStores(stores);
+document.getElementById('activarMsg').textContent='✓ Activado 30 días para '+stores[id].name+' hasta '+new Date(stores[id].paidUntil).toLocaleDateString('es-AR');
+renderStores();
+// log
+let logs=JSON.parse(localStorage.getItem('adminLogs')||'[]');
+logs.push({id:Date.now(),fecha:new Date().toLocaleString('es-AR'),tipo:'PANEL',accion:'ACTIVAR_MENSUAL',detalle:'Admin activó mensual $4500 para '+stores[id].name,store:'ADMIN',url:'admin.html'});
+localStorage.setItem('adminLogs',JSON.stringify(logs));
+render();
+}
+
+function clearLogs(){if(!confirm('¿Borrar TODOS los movimientos?')) return;localStorage.removeItem('adminLogs');render();}
+function exportLogs(){
+let logs=localStorage.getItem('adminLogs')||'[]';
+let blob=new Blob([logs],{type:'application/json'});
+let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='movimientos-3avende-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+}
+
+setInterval(()=>{render();renderStores();renderSalesList();},3000);
+</script>
+</body>
+</html>
