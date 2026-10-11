@@ -42,13 +42,22 @@ textarea{height:70px;resize:none}
 .badge-nuevo{background:#00a650;color:#fff}
 .filt{padding:7px 12px;border-radius:999px;border:1px solid #ddd;background:#fff;font-size:11px;font-weight:800;cursor:pointer}.filt.active{background:#111;color:#fff}
 .hidden{display:none!important}
+.store-select{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
 @media(max-width:900px){.wrap{grid-template-columns:1fr}.kpi{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
+<div id="storeSelector" class="store-select hidden">
+<div style="background:#fff;border-radius:20px;padding:20px;max-width:360px;width:100%">
+<h3 style="font-weight:900">Elegí la tienda</h3>
+<p style="font-size:12px;color:#888;margin-top:4px">Tenés varias con el mismo WhatsApp</p>
+<div id="selectorList" style="margin-top:12px"></div>
+</div>
+</div>
+
 <header>
 <div class="logo" onclick="location.href='index.html'"><b>3A</b> VENDE</div>
-<div style="display:flex;gap:8px"><button class="btn btn-gray" onclick="location.href='index.html'">Market</button><button class="btn btn-black" onclick="irTienda()">Mi tienda</button><button class="btn btn-red" onclick="logout()">Salir</button></div>
+<div style="display:flex;gap:8px"><button class="btn btn-gray" onclick="location.href='index.html'">Market</button><button class="btn btn-gray" id="btnSwitch" onclick="cambiarTienda()">Cambiar tienda</button><button class="btn btn-black" onclick="irTienda()">Mi tienda</button><button class="btn btn-red" onclick="logout()">Salir</button></div>
 </header>
 <div class="tabs">
 <div class="tab active" id="t-publi" onclick="openTab('publi')">📦 Publicar</div>
@@ -62,14 +71,14 @@ textarea{height:70px;resize:none}
 <div class="card">
 <h3 style="font-weight:900">Nueva publicación - Solo Sheet</h3>
 <div id="storeInfo" style="font-size:11px;background:#f9fafb;padding:8px;border-radius:8px;margin-top:6px">Cargando...</div>
-<div id="debug" style="font-size:10px;background:#00a650;color:#fff;padding:6px;border-radius:6px;margin-top:6px">✅ Base: Google Sheet</div>
+<div id="debug" style="font-size:10px;background:#00a650;color:#fff;padding:6px;border-radius:6px;margin-top:6px">✅ Base: Google Sheet + Carrusel</div>
 <label>Título *</label><input id="pName" placeholder="Ej: Zapatillas Nike" oninput="updatePreview()">
 <label>Precio *</label><input id="pPrice" type="number" placeholder="15000" oninput="updatePreview()">
 <label>Costo</label><input id="pCost" type="number" placeholder="Ej: 8000">
 <label>Categoría</label><select id="pCat" onchange="updatePreview()"><option>Ropa</option><option>Calzado</option><option>Makeup</option><option>Tecnología</option><option>Hogar</option><option>Otros</option></select>
 <label>Descripción</label><textarea id="pDesc" placeholder="Talle, estado..." oninput="updatePreview()"></textarea>
-<label>Fotos *</label>
-<div class="upload" onclick="document.getElementById('fileMedia').click()"><b>📸 TOCÁ PARA SUBIR FOTOS</b><div style="font-size:11px;color:#666">Hasta 10 fotos - 600px 45%</div><div id="compressInfo" style="font-size:10px;color:#00a650;margin-top:4px"></div></div>
+<label>Fotos * (hasta 5 para carrusel)</label>
+<div class="upload" onclick="document.getElementById('fileMedia').click()"><b>📸 TOCÁ PARA SUBIR FOTOS</b><div style="font-size:11px;color:#666">Tocá varias - pasan solas en el index</div><div id="compressInfo" style="font-size:10px;color:#00a650;margin-top:4px"></div></div>
 <input type="file" id="fileMedia" accept="image/*" multiple style="display:none">
 <div class="preview" id="preview"></div>
 <button class="btn btn-green" style="width:100%;margin-top:14px;padding:14px;font-size:14px" id="btnPub">📦 PUBLICAR EN SHEET</button>
@@ -105,23 +114,49 @@ function enviarASheet(d){ try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',bod
 var curStoreId=null, mediaTemp=[], DB=[], filtroPed='todos';
 function getStores(){try{return JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){return{}}}
 function getUsers(){try{return JSON.parse(localStorage.getItem('marketUsers')||'{}')}catch(e){return{}}}
-function getGastos(){try{return JSON.parse(localStorage.getItem('marketGastos')||'[]')}catch(e){return[]}}
-function setGastos(g){localStorage.setItem('marketGastos',JSON.stringify(g))}
-function getVentas(){try{return JSON.parse(localStorage.getItem('marketVentas')||'[]')}catch(e){return[]}}
-function setVentas(v){localStorage.setItem('marketVentas',JSON.stringify(v))}
 function getPedidos(){try{return JSON.parse(localStorage.getItem('marketPedidos')||'[]')}catch(e){return[]}}
 function setPedidos(p){localStorage.setItem('marketPedidos',JSON.stringify(p))}
-function logout(){ localStorage.removeItem('currentUser'); location.href='login.html'; }
+function getVentas(){try{return JSON.parse(localStorage.getItem('marketVentas')||'[]')}catch(e){return[]}}
+function setVentas(v){localStorage.setItem('marketVentas',JSON.stringify(v))}
+function logout(){ localStorage.removeItem('currentUser'); localStorage.removeItem('currentStoreId'); location.href='login.html'; }
 
 function init(){
   var wsp=localStorage.getItem('currentUser');
   var users=getUsers();
   var stores=getStores();
   if(!wsp ||!users[wsp]){ location.href='login.html'; return; }
-  curStoreId=users[wsp].storeId;
-  document.getElementById('storeInfo').innerHTML='Publicando en: <b>'+stores[curStoreId].name+'</b><br>ID:'+curStoreId+'<br><span style="color:#00a650">✅ Solo Sheet - sin local</span>';
+
+  // Buscar todas las tiendas de este wsp
+  var misTiendas = Object.entries(stores).filter(([id,s])=> String(s.wsp)===String(wsp) || String(s.ownerWsp)===String(wsp) || String(s.whatsapp)===String(wsp) );
+
+  if(misTiendas.length===0){
+    curStoreId=users[wsp].storeId;
+  } else if(misTiendas.length===1){
+    curStoreId=misTiendas[0][0];
+    localStorage.setItem('currentStoreId', curStoreId);
+  } else {
+    var saved = localStorage.getItem('currentStoreId');
+    if(saved && stores[saved]){ curStoreId=saved; }
+    else { mostrarSelector(misTiendas); return; }
+  }
+
+  if(!stores[curStoreId]){
+    // fallback por si borraron
+    curStoreId = misTiendas[0]?.[0] || users[wsp].storeId;
+  }
+  localStorage.setItem('currentStoreId', curStoreId);
+  document.getElementById('storeInfo').innerHTML='Publicando en: <b>'+stores[curStoreId].name+'</b><br>ID:'+curStoreId+'<br><span style="color:#00a650">✅ Carrusel: hasta 5 fotos</span><br><small>'+misTiendas.length+' tienda(s) con este wsp</small>';
   cargarProds(); cargarFinanzas(); cargarVentas(); cargarPedidos();
+  document.getElementById('btnSwitch').style.display = misTiendas.length>1? 'block' : 'none';
 }
+
+function mostrarSelector(lista){
+  document.getElementById('storeSelector').classList.remove('hidden');
+  document.getElementById('selectorList').innerHTML = lista.map(([id,s])=>`<div onclick="elegirTienda('${id}')" style="padding:12px;border:1px solid #eee;border-radius:12px;margin-bottom:8px;cursor:pointer;display:flex;gap:10px;align-items:center"><img src="${s.profile||'https://via.placeholder.com/40'}" style="width:40px;height:40px;border-radius:50%"><div><b>${s.name}</b><div style="font-size:11px;color:#888">${id}</div></div></div>`).join('');
+}
+function elegirTienda(id){ localStorage.setItem('currentStoreId', id); location.reload(); }
+function cambiarTienda(){ localStorage.removeItem('currentStoreId'); location.reload(); }
+
 function openTab(t){
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
   document.getElementById('t-'+t).classList.add('active');
@@ -148,28 +183,23 @@ function compressImage(file, cb){
 }
 document.getElementById('fileMedia').addEventListener('change', function(e){
   var files=e.target.files;
-  if(mediaTemp.length+files.length>10){alert('Máx 10 fotos');return;}
+  if(mediaTemp.length+files.length>5){alert('Máx 5 fotos para carrusel');return;}
   document.getElementById('compressInfo').textContent='Comprimiendo...';
   var done=0;
   for(let i=0;i<files.length;i++){
     compressImage(files[i], function(obj){
       mediaTemp.push(obj);
-      done++; renderPreview(); updatePreview();
-      document.getElementById('compressInfo').textContent='✅ '+done+'/'+files.length+' - '+obj.comp+'KB';
+      done++; renderPreview();
+      document.getElementById('compressInfo').textContent='✅ '+mediaTemp.length+' foto(s) - '+obj.comp+'KB c/u';
     });
   }
   e.target.value='';
 });
 function renderPreview(){
-  var h=''; for(let i=0;i<mediaTemp.length;i++){ h+='<div class="preview-item"><img src="'+mediaTemp[i].src+'"><span onclick="mediaTemp.splice('+i+',1);renderPreview();updatePreview()">✕</span></div>'; }
+  var h=''; for(let i=0;i<mediaTemp.length;i++){ h+='<div class="preview-item"><img src="'+mediaTemp[i].src+'"><span onclick="mediaTemp.splice('+i+',1);renderPreview()">✕</span></div>'; }
   document.getElementById('preview').innerHTML=h;
 }
-function updatePreview(){
-  var name=document.getElementById('pName').value||'Título';
-  var price=document.getElementById('pPrice').value;
-  var ptxt=price?'$'+parseInt(price).toLocaleString('es-AR'):'$0';
-  document.getElementById('msg').textContent='';
-}
+function updatePreview(){ document.getElementById('msg').textContent=''; }
 
 function publicar(){
   var name=document.getElementById('pName').value.trim();
@@ -181,8 +211,10 @@ function publicar(){
   if(mediaTemp.length===0){alert('Foto requerida');return;}
   var stores=getStores(); var s=stores[curStoreId];
   var nuevoId=Date.now();
-  enviarASheet({tipo:'producto',id:nuevoId,storeId:curStoreId,tienda:s.name,whatsapp:s.wsp,producto:name,precio:price,costo:cost,categoria:cat,descripcion:desc,imagen:mediaTemp[0].src,fecha:new Date().toLocaleString('es-AR')});
-  document.getElementById('msg').textContent='✅ Publicado en Sheet - recargando...';
+  // GUARDAMOS TODAS LAS FOTOS SEPARADAS POR ||| PARA EL CARRUSEL
+  var todasFotos = mediaTemp.map(m=>m.src).join('|||');
+  enviarASheet({tipo:'producto',id:nuevoId,storeId:curStoreId,tienda:s.name,whatsapp:s.wsp,producto:name,precio:price,costo:cost,categoria:cat,descripcion:desc,imagen:todasFotos,fecha:new Date().toLocaleString('es-AR')});
+  document.getElementById('msg').textContent='✅ Publicado con '+mediaTemp.length+' foto(s) - carrusel activo';
   document.getElementById('pName').value=''; document.getElementById('pPrice').value=''; document.getElementById('pCost').value=''; document.getElementById('pDesc').value='';
   mediaTemp=[]; renderPreview();
   setTimeout(cargarProds,1500);
@@ -201,27 +233,25 @@ async function cargarProds(){
     DB.sort((a,b)=> parseInt(b.id)-parseInt(a.id));
     document.getElementById('count').textContent=DB.length;
     document.getElementById('statusSheet').textContent='✅ '+DB.length+' en Sheet';
-    let html=''; for(let x of DB){ let p=x; html+='<div class="prod"><div class="prod-media"><img src="'+p.imagen+'"></div><div class="prod-body"><b>$'+(parseInt(p.precio)||0).toLocaleString('es-AR')+'</b><div style="font-size:12px">'+p.producto+'</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-red" style="flex:1" onclick="borrar('+p.id+')">Borrar</button><button class="btn btn-green" style="flex:1" onclick="vender('+p.id+',\''+p.producto.replace(/'/g,"")+'\','+p.precio+')">Vendido</button></div></div></div>'; }
-    document.getElementById('grid').innerHTML=html||'<div style="background:#fff;padding:20px;border-radius:12px;text-align:center;color:#888">Sin publicaciones en Sheet<br><small>Si borraste el Sheet, acá queda en 0</small></div>';
+    let html='';
+    for(let x of DB){
+      let primera = String(x.imagen).split('|||')[0];
+      let totalFotos = String(x.imagen).split('|||').length;
+      html+='<div class="prod"><div class="prod-media"><img src="'+primera+'"><div style="position:absolute;top:6px;left:6px;background:#111;color:#fff;padding:3px 7px;border-radius:999px;font-size:9px">'+totalFotos+' foto(s)</div></div><div class="prod-body"><b>$'+(parseInt(x.precio)||0).toLocaleString('es-AR')+'</b><div style="font-size:12px">'+x.producto+'</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-red" style="flex:1" onclick="borrar('+x.id+')">Borrar</button><button class="btn btn-green" style="flex:1" onclick="vender('+x.id+',\''+x.producto.replace(/'/g,"")+'\','+x.precio+')">Vendido</button></div></div></div>';
+    }
+    document.getElementById('grid').innerHTML=html||'<div style="background:#fff;padding:20px;border-radius:12px;text-align:center;color:#888">Sin publicaciones</div>';
     cargarFinanzas();
   }catch(e){
     document.getElementById('statusSheet').textContent='❌ Error';
-    document.getElementById('debug').textContent='Error: '+e.message;
   }
 }
-
 function borrar(id){
-  if(!confirm('¿Borrar del Sheet? Quedará en 0 en todos los dispositivos.'))return;
+  if(!confirm('¿Borrar del Sheet?'))return;
   enviarASheet({tipo:'borrado',id:id,storeId:curStoreId,fecha:new Date().toLocaleString('es-AR')});
-  document.getElementById('grid').innerHTML='<div style="padding:20px;text-align:center">Borrando del Sheet...</div>';
+  document.getElementById('grid').innerHTML='<div style="padding:20px;text-align:center">Borrando...</div>';
   setTimeout(cargarProds,1500);
 }
-
-function cargarFinanzas(){
-  var ing=DB.reduce((a,p)=>a+(parseInt(p.precio)||0),0);
-  var cos=DB.reduce((a,p)=>a+(parseInt(p.costo)||0),0);
-  document.getElementById('finTable').innerHTML=DB.map(p=>'<tr><td>'+p.producto+'</td><td>$'+p.precio+'</td><td>$'+(p.costo||0)+'</td><td>$'+((parseInt(p.precio)||0)-(parseInt(p.costo)||0))+'</td></tr>').join('')||'<tr><td colspan=4 style="text-align:center;color:#888">Sin productos en Sheet</td></tr>';
-}
+function cargarFinanzas(){ document.getElementById('finTable').innerHTML=DB.map(p=>'<tr><td>'+p.producto+'</td><td>$'+p.precio+'</td><td>$'+(p.costo||0)+'</td><td>$'+((parseInt(p.precio)||0)-(parseInt(p.costo)||0))+'</td></tr>').join('')||'<tr><td colspan=4 style="text-align:center;color:#888">Sin productos</td></tr>'; }
 function cargarVentas(){ var ventas=getVentas().filter(v=>String(v.storeId)===String(curStoreId)).reverse(); var html=''; for(let v of ventas){ html+='<tr><td>'+v.productName+'</td><td>'+(v.cliente||'-')+'</td><td>$'+v.price+'</td><td>'+new Date(v.created).toLocaleDateString()+'</td></tr>'; } document.getElementById('ventasTable').innerHTML=html||'<tr><td colspan=4 style="text-align:center;color:#888">Sin ventas</td></tr>'; }
 function vender(id,name,price){ var cliente=prompt('Cliente:')||''; var ventas=getVentas(); ventas.push({id:Date.now(),storeId:curStoreId,productId:id,productName:name,price:price,cliente:cliente,created:Date.now()}); setVentas(ventas); var s=getStores()[curStoreId]; enviarASheet({tipo:'venta',storeId:curStoreId,tienda:s.name,whatsapp:s.wsp,producto:name,precio:price,cliente:cliente}); cargarVentas(); alert('Venta registrada'); }
 function nuevaVenta(){ var name=prompt('Producto:'); if(!name)return; var price=parseInt(prompt('Precio:')||'0'); if(!price)return; var cliente=prompt('Cliente:')||''; var ventas=getVentas(); ventas.push({id:Date.now(),storeId:curStoreId,productName:name,price:price,cliente:cliente,created:Date.now()}); setVentas(ventas); var s=getStores()[curStoreId]; enviarASheet({tipo:'venta',storeId:curStoreId,tienda:s.name,whatsapp:s.wsp,producto:name,precio:price,cliente:cliente}); cargarVentas(); }
@@ -238,4 +268,4 @@ function exportPedidos(){var all=getPedidos().filter(p=>String(p.storeId)===Stri
 window.onload=init;
 </script>
 </body>
-</html>
+  </html>
