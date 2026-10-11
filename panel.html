@@ -250,7 +250,14 @@ function cargarProds(){
 }
 function editar(id){ var p=getProds().find(x=>x.id===id); if(!p)return; editId=id; document.getElementById('pName').value=p.name; document.getElementById('pPrice').value=p.price; document.getElementById('pCost').value=p.cost||''; document.getElementById('pCat').value=p.category||'Otros'; document.getElementById('pDesc').value=p.desc||''; mediaTemp=p.media||[]; renderPreview(); updatePreview(); document.getElementById('btnPub').textContent='💾 GUARDAR'; document.getElementById('btnCancel').classList.remove('hidden'); window.scrollTo(0,0); }
 function cancelar(){ editId=null; mediaTemp=[]; renderPreview(); updatePreview(); document.getElementById('pName').value=''; document.getElementById('pPrice').value=''; document.getElementById('pCost').value=''; document.getElementById('pDesc').value=''; document.getElementById('btnPub').textContent='📦 PUBLICAR AHORA'; document.getElementById('btnCancel').classList.add('hidden'); }
-function borrar(id){ if(!confirm('Borrar?'))return; setProds(getProds().filter(p=>p.id!==id)); cargarProds(); cargarFinanzas(); }
+function borrar(id){
+  if(!confirm('¿Borrar publicación? Se borrará en todos los celulares'))return;
+  // Borrar local
+  setProds(getProds().filter(p=>p.id!==id));
+  // Avisar al Sheet que está borrado
+  enviarASheet({tipo:'borrado', id:id, storeId:curStoreId, fecha:new Date().toLocaleString('es-AR')});
+  cargarProds(); cargarFinanzas();
+}
 function cargarFinanzas(){
   var prods=getProds().filter(p=>p.storeId===curStoreId);
   var gastos=getGastos().filter(g=>g.storeId===curStoreId);
