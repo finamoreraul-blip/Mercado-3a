@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ADMIN - 3A VENDE</title>
+<title>ADMIN - 3A VENDE - Solo Sheet</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#f5f5f5}
@@ -13,62 +13,48 @@ header{background:#111;color:#fff;padding:12px 16px;position:sticky;top:0;z-inde
 .card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #eee}
 .card-media{height:200px;background:#000}.card-media img{width:100%;height:100%;object-fit:cover}
 .card-body{padding:10px}
-.log{background:#000;color:#0f0;padding:12px;border-radius:10px;font-family:monospace;font-size:11px;white-space:pre-wrap;margin:12px auto;max-width:1200px}
+.log{background:#111;color:#0f0;padding:12px;border-radius:10px;font-family:monospace;font-size:11px;white-space:pre-wrap;margin:12px auto;max-width:1200px}
 </style>
 </head>
 <body>
 <header>
-<div style="font-weight:900"><span style="color:#00a650">3A</span> VENDE ADMIN</div>
+<div style="font-weight:900"><span style="color:#00a650">3A</span> VENDE ADMIN - SHEET</div>
 <div style="display:flex;gap:6px">
 <button class="btn btn-white" onclick="location.href='index.html'">Ver Index</button>
-<button class="btn btn-green" onclick="syncDesdeSheet()">↻ Sync Sheet</button>
-<button class="btn btn-red" onclick="vaciarTodoAdmin()">🗑️ VACIAR TODO</button>
 </div>
 </header>
-<div class="log" id="log">Iniciando...</div>
+<div class="log" id="log">Conectando solo a Sheet...</div>
 <div style="max-width:1200px;margin:0 auto;padding:0 16px;display:flex;gap:12px;flex-wrap:wrap">
-<div style="background:#fff;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:800">Local: <span id="count">0</span></div>
 <div style="background:#fff;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:800">Sheet: <span id="countSheet">0</span></div>
 <div style="background:#fff;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:800">Borrados: <span id="countBor">0</span></div>
-<button class="btn btn-white" style="border:1px solid #ddd" onclick="limpiarLocal()">Limpiar solo mi celu</button>
+<div style="background:#fff;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:800">Mostrando: <span id="count">0</span></div>
+<div style="background:#00a650;color:#fff;padding:10px 14px;border-radius:999px;font-size:11px;font-weight:800">✅ Solo Sheet - Si borrás acá, queda en 0 en index y panel</div>
 </div>
 <div class="feed" id="feed"></div>
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbyb_1T-3wAcKsBIYhW6XSissrzcs0nGbFWvY83YN6l9vuNBzNQrhBqdntvKbESh1v52aQ/exec";
 function enviarASheet(d){ fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(d)}); }
-function getProds(){try{return JSON.parse(localStorage.getItem('marketProductsAR')||'[]')}catch(e){return[]}}
-function setProds(p){localStorage.setItem('marketProductsAR',JSON.stringify(p));}
+
+// Limpieza total de cache viejo
+localStorage.removeItem('marketProductsAR');
+localStorage.removeItem('marketProducts');
+localStorage.removeItem('3a_prods_cache');
+
+let DB = [];
 
 function render(){
- let all=getProds().slice().reverse();
- document.getElementById('count').textContent=all.length;
- document.getElementById('feed').innerHTML=all.map(p=>`<div class="card"><div class="card-media"><img src="${p.img||(p.media?p.media[0].src:'')}"></div><div class="card-body"><b>$${p.price.toLocaleString('es-AR')}</b><div style="font-size:12px">${p.name}</div><div style="font-size:10px;color:#888">${p.id} - ${p.storeId}</div><button class="btn btn-red" style="width:100%;margin-top:8px" onclick="borrarUno(${p.id})">Borrar en todos</button></div></div>`).join('')||'<div style="grid-column:1/-1;padding:60px;text-align:center;color:#888;background:#fff;border-radius:12px">✅ VACÍO - No hay productos</div>';
+ document.getElementById('count').textContent=DB.length;
+ document.getElementById('feed').innerHTML=DB.map(p=>`<div class="card"><div class="card-media"><img src="${p.imagen}"></div><div class="card-body"><b>$${(parseInt(p.precio)||0).toLocaleString('es-AR')}</b><div style="font-size:12px">${p.producto}</div><div style="font-size:10px;color:#888">${p.id} - ${p.storeId}</div><div style="font-size:10px;color:#888">${p.tienda}</div><button class="btn btn-red" style="width:100%;margin-top:8px" onclick="borrarUno(${p.id})">Borrar del Sheet</button></div></div>`).join('')||'<div style="grid-column:1/-1;padding:60px;text-align:center;color:#888;background:#fff;border-radius:12px">✅ VACÍO TOTAL - 0 productos en Sheet<br><small>index.html y panel.html también están en 0 ahora</small></div>';
 }
+
 function borrarUno(id){
- if(!confirm('Borrar '+id+' en todos los dispositivos?'))return;
- setProds(getProds().filter(p=>String(p.id)!==String(id)));
+ if(!confirm('¿Borrar ID '+id+' del Sheet? Se borra en TODOS lados'))return;
  enviarASheet({tipo:'borrado',id:id,fecha:new Date().toLocaleString('es-AR')});
- render();
- document.getElementById('log').textContent='Borrado '+id+' enviado a borrados';
+ document.getElementById('log').textContent='Borrando '+id+' del Sheet...';
+ setTimeout(cargarSheet,1500);
 }
-function limpiarLocal(){
- if(!confirm('Limpiar solo este celu?'))return;
- setProds([]);
- render();
- document.getElementById('log').textContent='Local limpiado. Dale Sync para traer del Sheet de nuevo';
-}
-async function vaciarTodoAdmin(){
- if(!confirm('¿VACIAR TODO EN TODOS LADOS? Se borra Sheet + todos los celus'))return;
- let all=getProds();
- for(let p of all){
-   enviarASheet({tipo:'borrado',id:p.id,fecha:new Date().toLocaleString('es-AR')});
-   await new Promise(r=>setTimeout(r,250));
- }
- setProds([]);
- render();
- document.getElementById('log').textContent='Se mandaron '+all.length+' a borrados. Ahora vaciá a mano la pestaña producto del Sheet y quedará en 0 definitivo en index y panel';
-}
-async function syncDesdeSheet(){
+
+async function cargarSheet(){
  try{
   document.getElementById('log').textContent='Leyendo Sheet...';
   let t=Date.now();
@@ -77,17 +63,14 @@ async function syncDesdeSheet(){
   let borrados=new Set(rb.map(x=>String(x.id)));
   document.getElementById('countSheet').textContent=r.length;
   document.getElementById('countBor').textContent=borrados.size;
-  let delSheet=r.filter(x=>x.id&&x.imagen&&!borrados.has(String(x.id))).map(x=>({
-    id:parseInt(x.id),storeId:x.storeId,store:x.tienda,name:x.producto,price:parseInt(x.precio)||0,img:x.imagen,media:[{src:x.imagen}],category:x.categoria,desc:x.descripcion
-  }));
-  setProds(delSheet);
+  DB=r.filter(x=>x.id && x.imagen && !borrados.has(String(x.id)));
   render();
-  document.getElementById('log').textContent='Sync OK: Sheet='+r.length+' Borrados='+borrados.size+' Final='+delSheet.length+(delSheet.length===0?' ✅ VACIO TOTAL':'');
+  document.getElementById('log').textContent='Sheet='+r.length+' Borrados='+borrados.size+' Final='+DB.length+(DB.length===0?' ✅ VACIO TOTAL EN TODA LA APP':'');
  }catch(e){ document.getElementById('log').textContent='Error: '+e.message; }
 }
-render();
-syncDesdeSheet();
-setInterval(syncDesdeSheet,10000);
+
+cargarSheet();
+setInterval(cargarSheet,10000);
 </script>
 </body>
 </html>
