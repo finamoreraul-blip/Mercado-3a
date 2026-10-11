@@ -11,8 +11,9 @@ h1{font-weight:900;font-size:22px;text-align:center} h1 b{color:#00a650}
 input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #ddd;background:#fafafa;margin-top:10px;font-size:14px;outline:none}
 input:focus{border-color:#00a650;background:#fff}
 button{width:100%;padding:13px;border:none;border-radius:999px;font-weight:800;font-size:14px;cursor:pointer;margin-top:12px}
-.btn-green{background:#00a650;color:#fff}.btn-black{background:#111;color:#fff}.btn-gray{background:#fff;border:1px solid #ddd}
-.tab{display:flex;gap:8px;margin-top:16px;margin-bottom:8px}.tab div{flex:1;text-align:center;padding:10px;border-radius:999px;font-size:12px;font-weight:800;cursor:pointer;border:1px solid #eee;background:#f9fafb}.tab div.on{background:#111;color:#fff;border-color:#111}
+.btn-green{background:#00a650;color:#fff}.btn-black{background:#111;color:#fff}.btn-gray{background:#fff;border:1px solid #ddd;color:#111}
+.btn-client{background:#f0fdf4;border:1px dashed #00a650;color:#00a650}
+.tab{display:flex;gap:8px;margin-top:14px;margin-bottom:8px}.tab div{flex:1;text-align:center;padding:10px;border-radius:999px;font-size:12px;font-weight:800;cursor:pointer;border:1px solid #eee;background:#f9fafb}.tab div.on{background:#111;color:#fff;border-color:#111}
 small{font-size:11px;color:#888;display:block;margin-top:10px;line-height:1.4;text-align:center}
 .eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px}
 .field{position:relative;margin-top:10px}.field input{margin-top:0}
@@ -23,7 +24,11 @@ small{font-size:11px;color:#888;display:block;margin-top:10px;line-height:1.4;te
 <h1><b>3A</b> VENDE</h1>
 <p style="font-size:11px;color:#888;text-align:center;margin-top:4px">Acceso vendedores - Tres Arroyos</p>
 
-<div class="tab"><div id="tLogin" class="on" onclick="setModo('login')">Entrar</div><div id="tReg" onclick="setModo('reg')">Registrarme</div></div>
+<!-- BOTON CLIENTE NUEVO -->
+<button class="btn-client" onclick="entrarComoCliente()">👀 Quiero entrar como cliente - solo comprar</button>
+<div style="text-align:center;font-size:10px;color:#aaa;margin:8px 0">— o —</div>
+
+<div class="tab"><div id="tLogin" class="on" onclick="setModo('login')">Soy vendedor - Entrar</div><div id="tReg" onclick="setModo('reg')">Registrarme</div></div>
 
 <div id="formLogin">
 <div class="field"><input id="wspLogin" type="tel" placeholder="WhatsApp ej: 2983555123"></div>
@@ -57,6 +62,7 @@ function setStores(o){localStorage.setItem('marketStores',JSON.stringify(o))}
 let modo='login';
 function setModo(m){ modo=m; document.getElementById('tLogin').className=m==='login'?'on':''; document.getElementById('tReg').className=m==='reg'?'on':''; document.getElementById('formLogin').style.display=m==='login'?'block':'none'; document.getElementById('formReg').style.display=m==='reg'?'block':'none'; document.getElementById('msg').textContent=''; }
 function toggle(id){ let i=document.getElementById(id); i.type=i.type==='password'?'text':'password'; }
+function entrarComoCliente(){ localStorage.setItem('role','cliente'); location.href='index.html'; }
 
 function hacerLogin(){
  let wsp=document.getElementById('wspLogin').value.replace(/\D/g,'');
@@ -67,9 +73,9 @@ function hacerLogin(){
  let u=users[wsp];
  if(!u){ document.getElementById('msg').textContent='No existe. Registrate.'; setModo('reg'); document.getElementById('wsp').value=wsp; return; }
  if(u.password && u.password!==pass){ document.getElementById('msg').textContent='Contraseña incorrecta'; return; }
- // compatibilidad con cuentas viejas sin password: la guarda ahora
  if(!u.password){ u.password=pass; setUsers(users); }
  localStorage.setItem('currentUser', wsp);
+ localStorage.setItem('role','vendedor');
  let stores=getStores(); let s=stores[u.storeId];
  if(s) enviarASheet({tipo:'tienda', storeId:s.id, tienda:s.name, whatsapp:s.wsp, direccion:s.dir, descripcion:'LOGIN '+new Date().toLocaleString('es-AR')});
  location.href='panel.html';
@@ -92,6 +98,7 @@ function hacerRegistro(){
  users[wsp]={storeId:id, wsp:wsp, storeName:name, password:p1};
  setStores(stores); setUsers(users);
  localStorage.setItem('currentUser', wsp);
+ localStorage.setItem('role','vendedor');
  enviarASheet({tipo:'tienda', storeId:id, tienda:name, whatsapp:wsp, direccion:dir, descripcion:'REGISTRO NUEVO '+new Date().toLocaleString('es-AR')});
  location.href='panel.html';
 }
