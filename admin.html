@@ -21,6 +21,8 @@ header{background:#111;border-bottom:2px solid #00a650;padding:12px 16px;positio
 .kpi-b{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:12px;padding:12px;text-align:center}.kpi-b b{font-size:20px;display:block;margin-top:4px;color:#00a650}
 .log{background:#000;color:#0f0;padding:12px;border-radius:10px;font-family:monospace;font-size:11px;white-space:pre-wrap;max-height:200px;overflow:auto}
 table{width:100%;font-size:12px;border-collapse:collapse}th{color:#888;font-size:10px;text-align:left;padding:8px;background:#222}td{padding:8px;border-bottom:1px solid #2a2a2a}
+.filtro-wsp{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#000;padding:12px;border-radius:10px;border:1px solid #00a650;margin-bottom:12px}
+.filtro-wsp input{background:#222;border:1px solid #333;color:#fff;padding:10px 14px;border-radius:999px;width:220px}
 </style>
 </head>
 <body>
@@ -51,7 +53,6 @@ table{width:100%;font-size:12px;border-collapse:collapse}th{color:#888;font-size
 
 <div class="card log" id="log">Iniciando super admin...</div>
 
-<!-- PRODUCTOS -->
 <div id="wrap-prods">
 <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
 <button class="btn btn-yellow" onclick="cargarTodo()">↻ RECARGAR SHEET</button>
@@ -60,23 +61,27 @@ table{width:100%;font-size:12px;border-collapse:collapse}th{color:#888;font-size
 <div class="grid" id="gridProds"></div>
 </div>
 
-<!-- TIENDAS -->
 <div id="wrap-tiendas" style="display:none">
+<div class="filtro-wsp">
+  <span style="font-size:11px;font-weight:900;color:#00a650">FILTRAR POR WHATSAPP:</span>
+  <input id="filtroWsp" placeholder="Ej: 2983..." oninput="renderTiendas()">
+  <button class="btn btn-red" onclick="borrarTodasDeWsp()">🗑️ BORRAR LAS 4 DE ESTE WHATSAPP (tiendas+productos)</button>
+  <span id="infoWsp" style="font-size:11px;color:#888"></span>
+</div>
 <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
 <button class="btn btn-red" onclick="vaciarTiendas()">🗑️ Borrar TODAS las tiendas del Sheet</button>
 </div>
 <table><thead><tr><th>StoreID</th><th>Tienda</th><th>WhatsApp</th><th>Dir</th><th>Acción</th></tr></thead><tbody id="tablaTiendas"></tbody></table>
 </div>
 
-<!-- LOCAL -->
 <div id="wrap-local" style="display:none">
-<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-<button class="btn btn-red" onclick="vaciarLocal()">🗑️ Borrar todas las cuentas de ESTE celu</button>
+<div class="filtro-wsp">
+  <input id="filtroLocal" placeholder="Filtrar local por Wsp..." oninput="cargarLocal()">
+  <button class="btn btn-red" onclick="vaciarLocal()">🗑️ Borrar todas las cuentas de ESTE celu</button>
 </div>
 <table><thead><tr><th>WhatsApp</th><th>StoreID</th><th>Nombre</th><th>Acción</th></tr></thead><tbody id="tablaLocal"></tbody></table>
 </div>
 
-<!-- BORRADOS -->
 <div id="wrap-borrados" style="display:none">
 <div class="card">
 <p style="font-size:12px;color:#888">Esta es la lista negra. Todo ID que esté acá, no se muestra nunca más en index ni panel aunque siga en la hoja producto.</p>
@@ -85,20 +90,11 @@ table{width:100%;font-size:12px;border-collapse:collapse}th{color:#888;font-size
 </div>
 </div>
 
-<!-- SISTEMA -->
 <div id="wrap-sis" style="display:none">
 <div class="card">
 <h3>💣 Borrado Nuclear</h3>
 <p style="font-size:12px;color:#888;margin-top:8px">Hace esto: 1) Manda todos los productos a borrados 2) Manda todas las tiendas a borrados 3) Limpia localStorage de este celu 4) Te dice que vacíes a mano las hojas del Sheet</p>
 <button class="btn btn-red" style="width:100%;margin-top:12px;padding:16px;font-size:14px" onclick="vaciarTODO()">💣 VACIAR TODO AHORA - PRODUCTOS + TIENDAS + LOCAL</button>
-<div style="margin-top:16px;background:#222;padding:12px;border-radius:8px;font-size:11px">
-<b>Si no se borra del Index:</b><br>
-1. Andá a tu Google Sheet<br>
-2. Hoja <b>producto</b> → Ctrl+A → Supr<br>
-3. Hoja <b>tienda</b> → Borrá duplicados dejando 1 por número<br>
-4. Hoja <b>borrados</b> → Dejala como está (es la que bloquea)<br>
-5. Recargá index.html
-</div>
 </div>
 </div>
 
@@ -108,11 +104,10 @@ table{width:100%;font-size:12px;border-collapse:collapse}th{color:#888;font-size
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbyb_1T-3wAcKsBIYhW6XSissrzcs0nGbFWvY83YN6l9vuNBzNQrhBqdntvKbESh1v52aQ/exec";
 function enviarASheet(d){ fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(d)}); }
 function log(t){ document.getElementById('log').textContent = new Date().toLocaleTimeString()+' - '+t + '\n' + document.getElementById('log').textContent; }
-
 function getUsers(){try{return JSON.parse(localStorage.getItem('marketUsers')||'{}')}catch(e){return{}}}
 function getStores(){try{return JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){return{}}}
 
-let DB_PRODS=[], DB_TIENDAS=[], DB_BORRADOS=[];
+let DB_PRODS=[], DB_TIENDAS=[], DB_BORRADOS=[], DB_TIENDAS_FILTRADAS=[];
 
 function openTab(t){
  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
@@ -130,10 +125,12 @@ async function cargarTodo(){
   let ts=Date.now();
   let prods = await fetch(SHEET_URL+"?tipo=producto&t="+ts).then(r=>r.json()).catch(()=>[]);
   let borrados = await fetch(SHEET_URL+"?tipo=borrado&t="+ts).then(r=>r.json()).catch(()=>[]);
+  let borradasTienda = await fetch(SHEET_URL+"?tipo=borrado_tienda&t="+ts).then(r=>r.json()).catch(()=>[]);
   let tiendas = await fetch(SHEET_URL+"?tipo=tienda&t="+ts).then(r=>r.json()).catch(()=>[]);
-
-  // Si tienda devuelve HTML porque no tenés el if en Apps Script, lo ignora
   if(!Array.isArray(tiendas)) tiendas=[];
+
+  let setBorTienda=new Set(borradasTienda.map(x=>String(x.storeId||x.id)));
+  tiendas=tiendas.filter(t=>!setBorTienda.has(String(t.storeId||t.id)));
 
   DB_PRODS=prods; DB_BORRADOS=borrados; DB_TIENDAS=tiendas;
 
@@ -147,38 +144,44 @@ async function cargarTodo(){
   document.getElementById('kTienda').textContent=tiendas.length;
   document.getElementById('kBor').textContent=borrados.length;
 
-  // Productos
   document.getElementById('gridProds').innerHTML=visibles.reverse().map(p=>`
     <div class="item">
       <div class="item-media"><img src="${p.imagen||''}"></div>
       <div class="item-body">
         <b>$${(parseInt(p.precio)||0).toLocaleString('es-AR')}</b> - ${p.producto||''}<br>
-        <small style="color:#888">${p.id} | ${p.storeId||''}<br>${p.tienda||''}</small>
+        <small style="color:#888">${p.id} | ${p.storeId||''}<br>${p.tienda||''} | ${p.whatsapp||''}</small>
         <button class="btn btn-red" style="width:100%;margin-top:8px" onclick="borrarProd(${p.id})">Borrar</button>
         <button class="btn btn-gray" style="width:100%;margin-top:4px" onclick="borrarTiendaDeProd('${p.storeId}')">Borrar TODA su tienda</button>
       </div>
     </div>
-  `).join('')||'<div style="padding:40px;text-align:center;color:#888">✅ Sin productos - Index en 0</div>';
+  `).join('')||'<div style="padding:40px;text-align:center;color:#888">✅ Sin productos</div>';
 
-  // Tiendas
-  document.getElementById('tablaTiendas').innerHTML=tiendas.map(t=>`
-    <tr><td>${t.storeId||t.id||''}</td><td>${t.tienda||t.nombre||''}</td><td>${t.whatsapp||''}</td><td>${t.direccion||''}</td>
-    <td><button class="btn btn-red" onclick="borrarTiendaCompleta('${t.storeId||t.id}','${t.whatsapp}')">Borrar tienda + productos</button></td></tr>
-  `).join('')||'<tr><td colspan=5 style="text-align:center;color:#888">Sin tiendas en Sheet (agregá el código de tienda en Apps Script)</td></tr>';
-
-  // Borrados
-  document.getElementById('tablaBor').innerHTML=borrados.map(b=>`<tr><td>${b.id}</td><td>${b.fecha||''}</td></tr>`).join('');
-
+  renderTiendas();
+  document.getElementById('tablaBor').innerHTML=borrados.map(b=>`<tr><td>${b.id}</td><td>${b.fecha||''}</td></tr>`).join('') + borradasTienda.map(b=>`<tr><td style="color:#ff3b30">${b.storeId} (TIENDA)</td><td>${b.fecha||''} - ${b.whatsapp||''}</td></tr>`).join('');
   cargarLocal();
-  log(`OK: Productos=${prods.length} Visibles=${visibles.length} Tiendas=${tiendas.length} Borrados=${borrados.length}`);
+  log(`OK: Visibles=${visibles.length} Tiendas=${tiendas.length} Borrados=${borrados.length}`);
  }catch(e){ log('ERROR: '+e.message); }
 }
 
+function renderTiendas(){
+ let q=(document.getElementById('filtroWsp').value||'').replace(/\D/g,'');
+ let lista=DB_TIENDAS;
+ if(q) lista=lista.filter(t=>String(t.whatsapp||'').replace(/\D/g,'').includes(q));
+ DB_TIENDAS_FILTRADAS=lista;
+ document.getElementById('infoWsp').textContent=q? lista.length+' cuentas con wsp '+q : '';
+ document.getElementById('tablaTiendas').innerHTML=lista.map(t=>`
+    <tr><td>${t.storeId||t.id||''}</td><td>${t.tienda||t.nombre||''}</td><td>${t.whatsapp||''}</td><td>${t.direccion||''}</td>
+    <td><button class="btn btn-red" onclick="borrarTiendaCompleta('${t.storeId||t.id}','${t.whatsapp}')">Borrar tienda + productos</button></td></tr>
+  `).join('')||'<tr><td colspan=5 style="text-align:center;color:#888">Sin tiendas con ese WhatsApp</td></tr>';
+}
+
 function cargarLocal(){
- let users=getUsers(); let stores=getStores();
+ let users=getUsers();
+ let q=(document.getElementById('filtroLocal')?.value||'').replace(/\D/g,'');
  let keys=Object.keys(users);
- document.getElementById('cLocal').textContent=keys.length;
- document.getElementById('kLocal').textContent=keys.length;
+ if(q) keys=keys.filter(k=>k.replace(/\D/g,'').includes(q));
+ document.getElementById('cLocal').textContent=Object.keys(users).length;
+ document.getElementById('kLocal').textContent=Object.keys(users).length;
  document.getElementById('tablaLocal').innerHTML=keys.map(wsp=>{
    let u=users[wsp];
    return `<tr><td>${wsp}</td><td>${u.storeId||''}</td><td>${u.storeName||''}</td><td><button class="btn btn-red" onclick="borrarLocal('${wsp}')">Borrar de este celu</button></td></tr>`;
@@ -186,12 +189,11 @@ function cargarLocal(){
 }
 
 function borrarProd(id){
- if(!confirm('¿Borrar producto '+id+'? Se borra de index y panel'))return;
+ if(!confirm('¿Borrar producto '+id+'?'))return;
  enviarASheet({tipo:'borrado',id:id,fecha:new Date().toLocaleString('es-AR')});
- log('Borrado '+id+' enviado a Sheet borrados');
+ log('Borrado '+id+' enviado');
  setTimeout(cargarTodo,1500);
 }
-
 function borrarTiendaDeProd(storeId){
  if(!confirm('¿Borrar TODOS los productos de la tienda '+storeId+'?'))return;
  let prods=DB_PRODS.filter(p=>String(p.storeId)===String(storeId));
@@ -199,7 +201,6 @@ function borrarTiendaDeProd(storeId){
  log('Borrados '+prods.length+' productos de tienda '+storeId);
  setTimeout(cargarTodo,2000);
 }
-
 function borrarTiendaCompleta(storeId, wsp){
  if(!confirm('¿Borrar tienda '+storeId+' ('+wsp+') Y todos sus productos?'))return;
  let prods=DB_PRODS.filter(p=>String(p.storeId)===String(storeId));
@@ -208,26 +209,39 @@ function borrarTiendaCompleta(storeId, wsp){
  log('Tienda '+storeId+' y '+prods.length+' productos enviados a borrados');
  setTimeout(cargarTodo,2000);
 }
-
+function borrarTodasDeWsp(){
+ let q=(document.getElementById('filtroWsp').value||'').replace(/\D/g,'');
+ if(!q){ alert('Primero poné tu WhatsApp en el filtro'); return; }
+ let lista=DB_TIENDAS.filter(t=>String(t.whatsapp||'').replace(/\D/g,'').includes(q));
+ if(lista.length===0){ alert('No hay tiendas con ese wsp'); return; }
+ if(!confirm(`¿BORRAR LAS ${lista.length} TIENDAS con wsp ${q} y TODOS sus productos? Esto es irreversible.`)) return;
+ lista.forEach(t=>{
+   let sid=t.storeId||t.id;
+   DB_PRODS.filter(p=>String(p.storeId)===String(sid)).forEach(p=> enviarASheet({tipo:'borrado',id:p.id,fecha:new Date().toLocaleString('es-AR')}));
+   enviarASheet({tipo:'borrado_tienda',id:sid,storeId:sid,whatsapp:t.whatsapp,fecha:new Date().toLocaleString('es-AR')});
+ });
+ log(`BORRADO MASIVO: ${lista.length} tiendas con wsp ${q} enviadas a borrados_tienda + sus productos`);
+ // Limpia local también
+ let stores=getStores(); lista.forEach(t=>delete stores[t.storeId||t.id]); localStorage.setItem('marketStores',JSON.stringify(stores));
+ let users=getUsers(); if(users[q]) delete users[q]; localStorage.setItem('marketUsers',JSON.stringify(users));
+ setTimeout(cargarTodo,2500);
+}
 function vaciarProductos(){
- if(!confirm('¿Borrar TODOS los productos? Index quedará en 0'))return;
+ if(!confirm('¿Borrar TODOS los productos?'))return;
  DB_PRODS.forEach(p=> enviarASheet({tipo:'borrado',id:p.id,fecha:new Date().toLocaleString('es-AR')}));
  log('Enviados '+DB_PRODS.length+' productos a borrados');
  setTimeout(cargarTodo,2000);
 }
-
 function vaciarTiendas(){
- if(!confirm('¿Borrar TODAS las tiendas? Nadie podrá entrar hasta registrarse de nuevo'))return;
+ if(!confirm('¿Borrar TODAS las tiendas?'))return;
  DB_TIENDAS.forEach(t=> enviarASheet({tipo:'borrado_tienda',id:t.storeId||t.id,storeId:t.storeId||t.id,fecha:new Date().toLocaleString('es-AR')}));
  log('Enviadas '+DB_TIENDAS.length+' tiendas a borrados');
 }
-
 function borrarLocal(wsp){
  if(!confirm('¿Borrar cuenta local '+wsp+'?'))return;
  let users=getUsers(); delete users[wsp]; localStorage.setItem('marketUsers',JSON.stringify(users));
  cargarLocal(); log('Cuenta local '+wsp+' borrada');
 }
-
 function vaciarLocal(){
  if(!confirm('¿Borrar TODAS las cuentas de este celu?'))return;
  localStorage.removeItem('marketUsers');
@@ -237,19 +251,16 @@ function vaciarLocal(){
  localStorage.removeItem('marketProducts');
  cargarLocal(); log('Local vaciado total');
 }
-
-function limpiarBorradosSheet(){
- alert('Para limpiar borrados, andá al Sheet, hoja borrados, borrá todo. Eso hará que vuelvan a aparecer los productos si no borraste la hoja producto.');
-}
-
+function limpiarBorradosSheet(){ alert('Andá al Sheet, hoja borrados y borrado_tienda, borrá todo.'); }
 async function vaciarTODO(){
- if(!confirm('💣 CONFIRMAS VACIAR TODO? Productos + tiendas + local. Index y panel quedarán en 0'))return;
+ if(!confirm('💣 CONFIRMAS VACIAR TODO?'))return;
  vaciarProductos();
- setTimeout(()=>{ vaciarTiendas(); vaciarLocal(); log('VACIADO TOTAL EJECUTADO. Ahora vaciá a mano las hojas producto y tienda del Sheet para que quede 100% limpio'); },1500);
+ setTimeout(()=>{ vaciarTiendas(); vaciarLocal(); log('VACIADO TOTAL EJECUTADO'); },1500);
 }
-
+// precargar tu wsp
+document.getElementById('filtroWsp').value=localStorage.getItem('currentUser')||'';
 cargarTodo();
 setInterval(cargarTodo,15000);
 </script>
 </body>
- </html>
+</html>
