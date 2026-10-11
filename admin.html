@@ -2,172 +2,92 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ADMIN PRIVADO - 3A VENDE</title>
+<title>ADMIN - 3A VENDE</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Proxima Nova,Arial,sans-serif}
-body{background:#0e0e0e;color:#fff;min-height:100vh}
-header{background:#161616;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;border-bottom:1px solid #222}
-.logo{font-weight:900;font-size:18px}.logo b{color:#00a650}
-.btn{border:none;padding:8px 14px;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer}
-.btn-w{background:#fff;color:#111}.btn-g{background:#00a650;color:#fff}.btn-r{background:#ff3b30;color:#fff}.btn-b{background:#009ee3;color:#fff}
-.wrap{max-width:1300px;margin:0 auto;padding:18px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:16px}
-.stat{background:#1a1a1a;border:1px solid #222;padding:14px;border-radius:12px;text-align:center}
-.stat span{font-size:10px;color:#777}.stat b{font-size:22px;display:block;margin-top:4px}
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
-.pill{background:#222;border:1px solid #333;padding:7px 14px;border-radius:999px;font-size:11px;cursor:pointer;color:#aaa}
-.pill.active{background:#00a650;color:#fff;border-color:#00a650}
-input.search{background:#1a1a1a;border:1px solid #333;color:#fff;padding:8px 14px;border-radius:999px;font-size:11px;flex:1;max-width:320px;outline:none}
-table{width:100%;border-collapse:collapse;background:#161616;border-radius:12px;overflow:hidden;border:1px solid #222}
-th{font-size:10px;color:#777;text-align:left;padding:10px 8px;border-bottom:1px solid #222;background:#1a1a1a}
-td{font-size:11px;padding:10px 8px;border-bottom:1px solid #1f1f1f;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-tr:hover{background:#1e1e1e}
-.badge{padding:3px 7px;border-radius:4px;font-size:9px;font-weight:800}
-.badge-Tiendas{background:#009ee3;color:#fff}.badge-Publicaciones{background:#00a650;color:#fff}.badge-Ventas{background:#ff9800;color:#fff}.badge-Gastos{background:#555;color:#fff}
-.section{background:#161616;border:1px solid #222;border-radius:12px;padding:16px;margin-top:16px}
-.section h3{font-size:13px;font-weight:800;margin-bottom:12px}
-.login-box{max-width:380px;margin:80px auto;background:#161616;border:1px solid #222;padding:28px;border-radius:16px;text-align:center}
-.login-box input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #333;background:#0e0e0e;color:#fff;margin-top:12px;outline:none}
-.hidden{display:none}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f5f5f5}
+header{background:#111;color:#fff;padding:12px 16px;position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center}
+.btn{border:none;padding:10px 14px;border-radius:8px;font-weight:800;font-size:12px;cursor:pointer}
+.btn-green{background:#00a650;color:#fff}.btn-red{background:#ff3b30;color:#fff}.btn-white{background:#fff;color:#111}
+.feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;padding:16px;max-width:1200px;margin:0 auto}
+.card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #eee}
+.card-media{height:200px;background:#000}.card-media img{width:100%;height:100%;object-fit:cover}
+.card-body{padding:10px}
+.log{background:#000;color:#0f0;padding:12px;border-radius:10px;font-family:monospace;font-size:11px;white-space:pre-wrap;margin:12px auto;max-width:1200px}
 </style>
 </head>
 <body>
-
-<div id="loginGate" class="login-box">
-<div class="logo" style="font-size:22px"><b>3A</b> ADMIN PRIVADO</div>
-<p style="font-size:11px;color:#666;margin-top:6px">Conectado a Google Sheet</p>
-<input id="passInput" type="password" placeholder="Clave admin">
-<button class="btn btn-g" style="width:100%;margin-top:12px;padding:12px" onclick="checkPass()">Entrar</button>
-</div>
-
-<div id="adminContent" class="hidden">
 <header>
-<div class="logo"><b>3A</b> ADMIN - GOOGLE SHEET LIVE <span id="liveDot" style="font-size:10px;color:#00a650">● CONECTADO</span></div>
-<div style="display:flex;gap:8px;flex-wrap:wrap">
-<button class="btn btn-b" onclick="loadSheet()">↻ Actualizar Sheet</button>
-<button class="btn btn-w" onclick="window.open(SHEET_LINK,'_blank')">Abrir Sheet</button>
-<button class="btn btn-w" onclick="location.href='index.html'">Ver web</button>
-<button class="btn btn-r" onclick="logoutAdmin()">Salir</button>
+<div style="font-weight:900"><span style="color:#00a650">3A</span> VENDE ADMIN</div>
+<div style="display:flex;gap:6px">
+<button class="btn btn-white" onclick="location.href='index.html'">Ver Index</button>
+<button class="btn btn-green" onclick="syncDesdeSheet()">↻ Sync Sheet</button>
+<button class="btn btn-red" onclick="vaciarTodoAdmin()">🗑️ VACIAR TODO</button>
 </div>
 </header>
-
-<div class="wrap">
-<div class="stats">
-<div class="stat"><span>TIENDAS</span><b id="sTiendas">0</b></div>
-<div class="stat"><span>PUBLICACIONES</span><b id="sPubli">0</b></div>
-<div class="stat"><span>VENTAS</span><b id="sVentas">0</b></div>
-<div class="stat"><span>GASTOS</span><b id="sGastos">0</b></div>
-<div class="stat"><span>INGRESOS TOTAL</span><b id="sIngresos">$0</b></div>
-<div class="stat"><span>GANANCIA ESTIMADA</span><b id="sGanancia">$0</b></div>
+<div class="log" id="log">Iniciando...</div>
+<div style="max-width:1200px;margin:0 auto;padding:0 16px;display:flex;gap:12px;flex-wrap:wrap">
+<div style="background:#fff;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:800">Local: <span id="count">0</span></div>
+<div style="background:#fff;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:800">Sheet: <span id="countSheet">0</span></div>
+<div style="background:#fff;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:800">Borrados: <span id="countBor">0</span></div>
+<button class="btn btn-white" style="border:1px solid #ddd" onclick="limpiarLocal()">Limpiar solo mi celu</button>
 </div>
-
-<div class="filters">
-<div class="pill active" data-f="todos" onclick="setFilter('todos',this)">Todos</div>
-<div class="pill" data-f="Tiendas" onclick="setFilter('Tiendas',this)">Tiendas</div>
-<div class="pill" data-f="Publicaciones" onclick="setFilter('Publicaciones',this)">Publicaciones</div>
-<div class="pill" data-f="Ventas" onclick="setFilter('Ventas',this)">Ventas</div>
-<div class="pill" data-f="Gastos" onclick="setFilter('Gastos',this)">Gastos</div>
-<input id="search" class="search" placeholder="Buscar: tienda, producto, wsp..." oninput="render()">
-</div>
-
-<div style="display:grid;grid-template-columns:1fr 380px;gap:16px">
-<div>
-<table>
-<thead><tr><th>Fecha</th><th>Tipo</th><th>Tienda / Producto</th><th>Detalle</th><th>WSP</th><th>Precio</th></tr></thead>
-<tbody id="tbody"><tr><td colspan=6 style="text-align:center;padding:20px;color:#666">Cargando Sheet...</td></tr></tbody>
-</table>
-</div>
-<div>
-<div class="section">
-<h3>🏪 Tiendas registradas (desde Sheet)</h3>
-<div id="storesList"></div>
-</div>
-<div class="section">
-<h3>💰 Control mensual - Activar $4.500</h3>
-<div style="font-size:11px;color:#888;margin-bottom:8px">Link MP: https://mpago.la/1UShvFr</div>
-<div style="display:flex;gap:6px"><input id="activarId" placeholder="ID tienda" style="flex:1;background:#0e0e0e;border:1px solid #333;color:#fff;padding:8px 10px;border-radius:8px;font-size:11px"><button class="btn btn-g" onclick="activarMensual()">Activar 30 días</button></div>
-<div id="activarMsg" style="font-size:11px;color:#00a650;margin-top:8px"></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
+<div class="feed" id="feed"></div>
 <script>
-const CLAVE='3A2026';
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbyb_1T-3wAcKsBIYhW6XSissrzcs0nGbFWvY83YN6l9vuNBzNQrhBqdntvKbESh1v52aQ/exec";
-const SHEET_LINK = "https://docs.google.com/spreadsheets/d/1YOUR_SHEET_ID"; // podes poner tu link
-
-let allData = {Tiendas:[],Publicaciones:[],Ventas:[],Gastos:[]};
-let filter='todos';
-
-function checkPass(){
- if(document.getElementById('passInput').value===CLAVE){localStorage.setItem('adminAuth','ok');showAdmin();}
- else alert('Clave incorrecta');
-}
-function showAdmin(){
- document.getElementById('loginGate').classList.add('hidden');
- document.getElementById('adminContent').classList.remove('hidden');
- loadSheet();
-}
-function logoutAdmin(){localStorage.removeItem('adminAuth');location.reload();}
-if(localStorage.getItem('adminAuth')==='ok'){showAdmin();}
-
-async function loadSheet(){
- document.getElementById('tbody').innerHTML='<tr><td colspan=6 style="text-align:center;padding:20px;color:#666">Leyendo Google Sheet...</td></tr>';
- try{
-  let r = await fetch(SHEET_URL);
-  let j = await r.json();
-  allData = j;
-  document.getElementById('liveDot').textContent='● LIVE '+new Date().toLocaleTimeString();
-  render();
- }catch(e){
-  document.getElementById('tbody').innerHTML='<tr><td colspan=6 style="text-align:center;color:#ff3b30">Error leyendo Sheet. Revisá que publicaste nueva versión en Apps Script.</td></tr>';
- }
-}
-function setFilter(f,el){ filter=f; document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active')); el.classList.add('active'); render(); }
+function enviarASheet(d){ fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(d)}); }
+function getProds(){try{return JSON.parse(localStorage.getItem('marketProductsAR')||'[]')}catch(e){return[]}}
+function setProds(p){localStorage.setItem('marketProductsAR',JSON.stringify(p));}
 
 function render(){
- let tiendas = allData.Tiendas||[]; let publi = allData.Publicaciones||[]; let ventas = allData.Ventas||[]; let gastos = allData.Gastos||[];
- document.getElementById('sTiendas').textContent=tiendas.length;
- document.getElementById('sPubli').textContent=publi.length;
- document.getElementById('sVentas').textContent=ventas.length;
- document.getElementById('sGastos').textContent=gastos.length;
- let ingresos = publi.reduce((a,b)=>a+(parseInt(b.precio)||0),0) + ventas.reduce((a,b)=>a+(parseInt(b.precio)||0),0);
- let costos = publi.reduce((a,b)=>a+(parseInt(b.costo)||0),0) + gastos.reduce((a,b)=>a+(parseInt(b.monto)||0),0);
- document.getElementById('sIngresos').textContent='$'+ingresos.toLocaleString('es-AR');
- document.getElementById('sGanancia').textContent='$'+(ingresos-costos).toLocaleString('es-AR');
-
- let q = document.getElementById('search').value.toLowerCase();
- let rows=[];
- if(filter==='todos' || filter==='Tiendas') tiendas.forEach(t=>rows.push({fecha:t.fecha, tipo:'Tiendas', t1:t.tienda||'', t2:t.direccion||'', wsp:t.whatsapp||'', precio:''}));
- if(filter==='todos' || filter==='Publicaciones') publi.forEach(p=>rows.push({fecha:p.fecha, tipo:'Publicaciones', t1:p.producto||'', t2:(p.tienda+' - '+p.categoria)||'', wsp:p.whatsapp||'', precio:p.precio}));
- if(filter==='todos' || filter==='Ventas') ventas.forEach(v=>rows.push({fecha:v.fecha, tipo:'Ventas', t1:v.producto||'', t2:v.tienda+' cliente:'+v.cliente, wsp:v.whatsapp||'', precio:v.precio}));
- if(filter==='todos' || filter==='Gastos') gastos.forEach(g=>rows.push({fecha:g.fecha, tipo:'Gastos', t1:g.concepto||'', t2:g.tienda||'', wsp:g.whatsapp||'', precio:g.monto}));
-
- if(q) rows = rows.filter(r=> JSON.stringify(r).toLowerCase().includes(q));
-
- let html = rows.slice(0,300).map(r=>{
-  let f=''; try{ f=new Date(r.fecha).toLocaleString('es-AR')}catch(e){f=r.fecha}
-  return `<tr><td>${f}</td><td><span class="badge badge-${r.tipo}">${r.tipo}</span></td><td>${r.t1}</td><td>${r.t2}</td><td>${r.wsp}</td><td>${r.precio? '$'+r.precio : ''}</td></tr>`;
- }).join('');
- document.getElementById('tbody').innerHTML = html || '<tr><td colspan=6 style="text-align:center;color:#555;padding:20px">Sin datos con ese filtro</td></tr>';
-
- // tiendas list
- let htmlTiendas = tiendas.slice(0,50).map(t=>{
-  return `<div style="padding:10px 0;border-bottom:1px solid #222;display:flex;justify-content:space-between"><div><b style="font-size:12px">${t.tienda}</b><br><span style="font-size:10px;color:#888">${t.whatsapp} • ${t.storeId||''}</span></div><button class="btn btn-w" style="padding:4px 8px;font-size:10px" onclick="document.getElementById('activarId').value='${t.storeId}'">Activar</button></div>`;
- }).join('');
- document.getElementById('storesList').innerHTML = htmlTiendas || '<div style="color:#666;font-size:11px">Aún no hay tiendas en Sheet</div>';
+ let all=getProds().slice().reverse();
+ document.getElementById('count').textContent=all.length;
+ document.getElementById('feed').innerHTML=all.map(p=>`<div class="card"><div class="card-media"><img src="${p.img||(p.media?p.media[0].src:'')}"></div><div class="card-body"><b>$${p.price.toLocaleString('es-AR')}</b><div style="font-size:12px">${p.name}</div><div style="font-size:10px;color:#888">${p.id} - ${p.storeId}</div><button class="btn btn-red" style="width:100%;margin-top:8px" onclick="borrarUno(${p.id})">Borrar en todos</button></div></div>`).join('')||'<div style="grid-column:1/-1;padding:60px;text-align:center;color:#888;background:#fff;border-radius:12px">✅ VACÍO - No hay productos</div>';
 }
-
-function activarMensual(){
- let id=document.getElementById('activarId').value.trim();
- if(!id) return alert('Poné ID');
- let stores=JSON.parse(localStorage.getItem('marketStores')||'{}');
- if(stores[id]){ stores[id].paid=true; stores[id].paidUntil=Date.now()+30*24*60*60*1000; localStorage.setItem('marketStores',JSON.stringify(stores)); }
- document.getElementById('activarMsg').textContent='✓ Activado localmente 30 días para '+id+' (además sigue en Sheet)';
+function borrarUno(id){
+ if(!confirm('Borrar '+id+' en todos los dispositivos?'))return;
+ setProds(getProds().filter(p=>String(p.id)!==String(id)));
+ enviarASheet({tipo:'borrado',id:id,fecha:new Date().toLocaleString('es-AR')});
+ render();
+ document.getElementById('log').textContent='Borrado '+id+' enviado a borrados';
 }
-setInterval(loadSheet, 15000);
+function limpiarLocal(){
+ if(!confirm('Limpiar solo este celu?'))return;
+ setProds([]);
+ render();
+ document.getElementById('log').textContent='Local limpiado. Dale Sync para traer del Sheet de nuevo';
+}
+async function vaciarTodoAdmin(){
+ if(!confirm('¿VACIAR TODO EN TODOS LADOS? Se borra Sheet + todos los celus'))return;
+ let all=getProds();
+ for(let p of all){
+   enviarASheet({tipo:'borrado',id:p.id,fecha:new Date().toLocaleString('es-AR')});
+   await new Promise(r=>setTimeout(r,250));
+ }
+ setProds([]);
+ render();
+ document.getElementById('log').textContent='Se mandaron '+all.length+' a borrados. Ahora vaciá a mano la pestaña producto del Sheet y quedará en 0 definitivo en index y panel';
+}
+async function syncDesdeSheet(){
+ try{
+  document.getElementById('log').textContent='Leyendo Sheet...';
+  let t=Date.now();
+  let r=await fetch(SHEET_URL+"?tipo=producto&t="+t).then(x=>x.json());
+  let rb=await fetch(SHEET_URL+"?tipo=borrado&t="+t).then(x=>x.json()).catch(()=>[]);
+  let borrados=new Set(rb.map(x=>String(x.id)));
+  document.getElementById('countSheet').textContent=r.length;
+  document.getElementById('countBor').textContent=borrados.size;
+  let delSheet=r.filter(x=>x.id&&x.imagen&&!borrados.has(String(x.id))).map(x=>({
+    id:parseInt(x.id),storeId:x.storeId,store:x.tienda,name:x.producto,price:parseInt(x.precio)||0,img:x.imagen,media:[{src:x.imagen}],category:x.categoria,desc:x.descripcion
+  }));
+  setProds(delSheet);
+  render();
+  document.getElementById('log').textContent='Sync OK: Sheet='+r.length+' Borrados='+borrados.size+' Final='+delSheet.length+(delSheet.length===0?' ✅ VACIO TOTAL':'');
+ }catch(e){ document.getElementById('log').textContent='Error: '+e.message; }
+}
+render();
+syncDesdeSheet();
+setInterval(syncDesdeSheet,10000);
 </script>
 </body>
 </html>
