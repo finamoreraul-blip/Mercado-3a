@@ -11,8 +11,7 @@ h1{font-weight:900;font-size:22px;text-align:center} h1 b{color:#00a650}
 input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #ddd;background:#fafafa;margin-top:10px;font-size:14px;outline:none}
 input:focus{border-color:#00a650;background:#fff}
 button{width:100%;padding:13px;border:none;border-radius:999px;font-weight:800;font-size:14px;cursor:pointer;margin-top:12px}
-.btn-green{background:#00a650;color:#fff}.btn-black{background:#111;color:#fff}.btn-gray{background:#fff;border:1px solid #ddd;color:#111}
-.btn-client{background:#f0fdf4;border:1px dashed #00a650;color:#00a650}
+.btn-green{background:#00a650;color:#fff}.btn-black{background:#111;color:#fff}.btn-client{background:#f0fdf4;border:1px dashed #00a650;color:#00a650}
 .tab{display:flex;gap:8px;margin-top:14px;margin-bottom:8px}.tab div{flex:1;text-align:center;padding:10px;border-radius:999px;font-size:12px;font-weight:800;cursor:pointer;border:1px solid #eee;background:#f9fafb}.tab div.on{background:#111;color:#fff;border-color:#111}
 small{font-size:11px;color:#888;display:block;margin-top:10px;line-height:1.4;text-align:center}
 .eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px}
@@ -22,35 +21,27 @@ small{font-size:11px;color:#888;display:block;margin-top:10px;line-height:1.4;te
 <body>
 <div class="box">
 <h1><b>3A</b> VENDE</h1>
-<p style="font-size:11px;color:#888;text-align:center;margin-top:4px">Acceso vendedores - Tres Arroyos</p>
-
-<!-- BOTON CLIENTE NUEVO -->
-<button class="btn-client" onclick="entrarComoCliente()">👀 Quiero entrar como cliente - solo comprar</button>
+<p style="font-size:11px;color:#888;text-align:center;margin-top:4px">Acceso vendedores - Solo Sheet</p>
+<button class="btn-client" onclick="entrarComoCliente()">👀 Entrar como cliente - solo comprar</button>
 <div style="text-align:center;font-size:10px;color:#aaa;margin:8px 0">— o —</div>
-
 <div class="tab"><div id="tLogin" class="on" onclick="setModo('login')">Soy vendedor - Entrar</div><div id="tReg" onclick="setModo('reg')">Registrarme</div></div>
-
 <div id="formLogin">
 <div class="field"><input id="wspLogin" type="tel" placeholder="WhatsApp ej: 2983555123"></div>
 <div class="field"><input id="passLogin" type="password" placeholder="Contraseña"><span class="eye" onclick="toggle('passLogin')">👁️</span></div>
 <button class="btn-green" onclick="hacerLogin()">Entrar a mi panel →</button>
-<small>¿No tenés cuenta? Tocá Registrarme arriba</small>
 </div>
-
 <div id="formReg" style="display:none">
 <input id="wsp" type="tel" placeholder="WhatsApp ej: 2983555123">
 <input id="storeName" placeholder="Nombre tienda ej: Lo de Mari">
 <input id="dir" placeholder="Dirección ej: Av Moreno 123">
-<div class="field"><input id="pass" type="password" placeholder="Crear contraseña (mín 4 caracteres)"><span class="eye" onclick="toggle('pass')">👁️</span></div>
+<div class="field"><input id="pass" type="password" placeholder="Crear contraseña (mín 4)"><span class="eye" onclick="toggle('pass')">👁️</span></div>
 <div class="field"><input id="pass2" type="password" placeholder="Repetir contraseña"><span class="eye" onclick="toggle('pass2')">👁️</span></div>
 <button class="btn-black" onclick="hacerRegistro()">Crear mi tienda gratis</button>
-<small>✓ 10 días gratis ✓ Se guarda en Sheet automáticamente</small>
+<small>✓ Se guarda en Sheet automáticamente</small>
 </div>
-
 <div style="text-align:center;margin-top:14px"><a href="index.html" style="font-size:12px;color:#888;text-decoration:none">← Volver al marketplace</a></div>
 <div id="msg" style="font-size:12px;color:#ff3b30;text-align:center;margin-top:10px;font-weight:700"></div>
 </div>
-
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbyb_1T-3wAcKsBIYhW6XSissrzcs0nGbFWvY83YN6l9vuNBzNQrhBqdntvKbESh1v52aQ/exec";
 function enviarASheet(d){ try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(d)}); }catch(e){} }
@@ -58,12 +49,15 @@ function getUsers(){try{return JSON.parse(localStorage.getItem('marketUsers')||'
 function getStores(){try{return JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){return{}}}
 function setUsers(o){localStorage.setItem('marketUsers',JSON.stringify(o))}
 function setStores(o){localStorage.setItem('marketStores',JSON.stringify(o))}
+// Limpieza definitiva del cache viejo de productos
+localStorage.removeItem('marketProductsAR');
+localStorage.removeItem('marketProducts');
+localStorage.removeItem('3a_prods_cache');
 
 let modo='login';
 function setModo(m){ modo=m; document.getElementById('tLogin').className=m==='login'?'on':''; document.getElementById('tReg').className=m==='reg'?'on':''; document.getElementById('formLogin').style.display=m==='login'?'block':'none'; document.getElementById('formReg').style.display=m==='reg'?'block':'none'; document.getElementById('msg').textContent=''; }
 function toggle(id){ let i=document.getElementById(id); i.type=i.type==='password'?'text':'password'; }
 function entrarComoCliente(){ localStorage.setItem('role','cliente'); location.href='index.html'; }
-
 function hacerLogin(){
  let wsp=document.getElementById('wspLogin').value.replace(/\D/g,'');
  let pass=document.getElementById('passLogin').value;
@@ -80,7 +74,6 @@ function hacerLogin(){
  if(s) enviarASheet({tipo:'tienda', storeId:s.id, tienda:s.name, whatsapp:s.wsp, direccion:s.dir, descripcion:'LOGIN '+new Date().toLocaleString('es-AR')});
  location.href='panel.html';
 }
-
 function hacerRegistro(){
  let wsp=document.getElementById('wsp').value.replace(/\D/g,'');
  let name=document.getElementById('storeName').value.trim();
@@ -89,7 +82,7 @@ function hacerRegistro(){
  let p2=document.getElementById('pass2').value;
  if(wsp.length<10){ document.getElementById('msg').textContent='WhatsApp incompleto'; return; }
  if(!name){ document.getElementById('msg').textContent='Poné nombre de tienda'; return; }
- if(p1.length<4){ document.getElementById('msg').textContent='Contraseña mínimo 4 caracteres'; return; }
+ if(p1.length<4){ document.getElementById('msg').textContent='Contraseña mínimo 4'; return; }
  if(p1!==p2){ document.getElementById('msg').textContent='Contraseñas no coinciden'; return; }
  let users=getUsers(); let stores=getStores();
  if(users[wsp]){ document.getElementById('msg').textContent='Ya existe, entrá'; setModo('login'); return; }
