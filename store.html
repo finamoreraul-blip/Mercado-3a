@@ -10,7 +10,7 @@ header{background:#fff;padding:12px 16px;display:flex;justify-content:space-betw
 .logo{font-weight:900;font-size:19px;cursor:pointer}.logo b{color:#00a650}
 .btn{border:none;padding:8px 14px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer}
 .btn-green{background:#00a650;color:#fff}.btn-gray{background:#fff;border:1px solid #e5e5e5}.btn-black{background:#111;color:#fff}
-.cover{height:180px;background:#ddd;background-size:cover;background-position:center;position:relative}
+.cover{height:200px;background:#ddd;background-size:cover;background-position:center;position:relative;background-color:#111}
 .profile-wrap{max-width:1100px;margin:0 auto;padding:0 16px;position:relative}
 .profile-card{background:#fff;border-radius:14px;padding:16px;display:flex;gap:14px;align-items:center;margin-top:-50px;box-shadow:0 4px 20px rgba(0,0,0,.08);position:relative;z-index:2}
 .profile-card img{width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.1)}
@@ -18,7 +18,8 @@ header{background:#fff;padding:12px 16px;display:flex;justify-content:space-betw
 .p-actions{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
 .wrap{max-width:1100px;margin:16px auto;padding:0 16px;display:grid;grid-template-columns:1fr 300px;gap:16px}
 .feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
-.card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.06);cursor:pointer}
+.card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.06);cursor:pointer;transition:.2s}
+.card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
 .card-media{height:200px;background:#000;display:flex;align-items:center;justify-content:center;position:relative}
 .card-media img,.card-media video{width:100%;height:100%;object-fit:cover}
 .card-body{padding:10px}.card-price{font-weight:800;font-size:14px}.card-name{font-size:12px;margin-top:2px}
@@ -32,8 +33,9 @@ header{background:#fff;padding:12px 16px;display:flex;justify-content:space-betw
 .edit-box{background:#fff;border-radius:14px;padding:22px;max-width:420px;width:100%;max-height:90vh;overflow:auto}
 label{font-size:11px;font-weight:700;display:block;margin-top:14px;margin-bottom:4px;color:#444}
 input,textarea{width:100%;padding:10px 12px;border:1px solid #e9e9e9;border-radius:8px;font-size:12px;outline:none;background:#fafafa}
-.arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.8);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800}
-.arrow.l{left:10px}.arrow.r{right:10px}
+.arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.9);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800;z-index:2}
+.arrow.l{left:12px}.arrow.r{right:12px}
+.hidden{display:none!important}
 @media(max-width:900px){.wrap{grid-template-columns:1fr}.feed{grid-template-columns:repeat(2,1fr)}.modal-box{grid-template-columns:1fr}.p-actions{margin-left:0;margin-top:10px}.profile-card{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
@@ -47,7 +49,7 @@ input,textarea{width:100%;padding:10px 12px;border:1px solid #e9e9e9;border-radi
 <div class="profile-wrap">
 <div class="profile-card">
 <img id="pImg" src="https://via.placeholder.com/200">
-<div><div class="p-name" id="pName">Tienda</div><div class="p-dir" id="pDir">Tres Arroyos</div><div style="font-size:11px;color:#00a650;margin-top:4px" id="pStatus"></div></div>
+<div><div class="p-name" id="pName">Tienda</div><div class="p-dir" id="pDir">Tres Arroyos</div><div style="font-size:11px;color:#00a650;margin-top:4px;font-weight:700" id="pStatus"></div></div>
 <div class="p-actions">
 <button class="btn btn-green" onclick="contactStore()">WhatsApp</button>
 <button class="btn btn-black hidden" id="btnEdit" onclick="openEdit()">Editar tienda</button>
@@ -76,10 +78,10 @@ input,textarea{width:100%;padding:10px 12px;border:1px solid #e9e9e9;border-radi
 <div class="modal-box">
 <div class="modal-media" id="modalMedia"></div>
 <div class="modal-body">
-<div style="display:flex;justify-content:space-between"><b id="mName"></b><div style="cursor:pointer" onclick="closeModal()">✕</div></div>
-<div style="font-size:20px;font-weight:800;margin-top:10px" id="mPrice"></div>
-<div style="font-size:13px;color:#555;margin-top:10px;white-space:pre-wrap" id="mDesc"></div>
-<button class="btn btn-green" style="width:100%;margin-top:16px;padding:12px" onclick="contactProduct()">Consultar por WhatsApp</button>
+<div style="display:flex;justify-content:space-between;align-items:center"><b id="mName" style="font-size:14px"></b><div style="cursor:pointer;background:#f5f5f5;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center" onclick="closeModal()">✕</div></div>
+<div style="font-size:22px;font-weight:900;margin-top:10px" id="mPrice"></div>
+<div style="font-size:13px;color:#555;margin-top:10px;white-space:pre-wrap;line-height:1.5" id="mDesc"></div>
+<button class="btn btn-green" style="width:100%;margin-top:16px;padding:14px" onclick="contactProduct()">Consultar por WhatsApp</button>
 </div>
 </div>
 </div>
@@ -87,14 +89,16 @@ input,textarea{width:100%;padding:10px 12px;border:1px solid #e9e9e9;border-radi
 <div class="edit-modal" id="editModal">
 <div class="edit-box">
 <h2 style="font-size:16px;font-weight:800">Editar mi tienda</h2>
-<label>Nombre</label><input id="eName">
+<label>Nombre de la tienda</label><input id="eName">
 <label>Dirección</label><input id="eDir">
-<label>WhatsApp</label><input id="eWsp">
-<label>Foto perfil</label><input type="file" id="eProfile" accept="image/*">
-<label>Foto portada</label><input type="file" id="eCover" accept="image/*">
-<button class="btn btn-green" style="width:100%;margin-top:16px;padding:12px" onclick="saveEdit()">Guardar cambios</button>
-<button class="btn btn-gray" style="width:100%;margin-top:8px" onclick="closeEdit()">Cancelar</button>
-<p style="font-size:10px;color:#888;margin-top:10px;text-align:center">El ID de tu tienda no cambia, el link sigue funcionando</p>
+<label>WhatsApp (sin +54)</label><input id="eWsp" placeholder="2983401234">
+<label>Foto de perfil</label><input type="file" id="eProfile" accept="image/*">
+<img id="previewProfile" style="width:60px;height:60px;border-radius:50%;margin-top:8px;display:none;object-fit:cover">
+<label>Foto de portada</label><input type="file" id="eCover" accept="image/*">
+<div id="previewCover" style="height:80px;background:#eee;border-radius:8px;margin-top:8px;display:none;background-size:cover;background-position:center"></div>
+<button class="btn btn-green" style="width:100%;margin-top:16px;padding:14px" onclick="saveEdit()">Guardar cambios</button>
+<button class="btn btn-gray" style="width:100%;margin-top:8px;padding:12px" onclick="closeEdit()">Cancelar</button>
+<p style="font-size:10px;color:#888;margin-top:12px;text-align:center">El ID no cambia, tu link <br><b id="linkInfo" style="color:#333"></b><br>sigue funcionando</p>
 </div>
 </div>
 
@@ -106,44 +110,40 @@ function setProds(p){localStorage.setItem('marketProductsAR',JSON.stringify(p))}
 function getUsers(){try{return JSON.parse(localStorage.getItem('marketUsers')||'{}')}catch(e){return{}}}
 
 let curStoreId=new URLSearchParams(location.search).get('store');
-let curStore=null;
-let curProd=null, curIdx=0;
+let curStore=null, curProd=null, curIdx=0;
+let tempProfile=null, tempCover=null;
 
 function loadStore(){
 let stores=getStores();
 let s=stores[curStoreId];
-
-// FALLBACK: si no existe por ID, busca por nombre o por ID parcial
 if(!s && curStoreId){
-  s=Object.values(stores).find(x=>x.id===curStoreId);
-  if(!s) s=Object.values(stores).find(x=>x.name===curStoreId);
-  if(!s) s=Object.values(stores).find(x=>curStoreId.includes(x.id) || x.id.includes(curStoreId));
-  if(s) curStoreId=s.id; // corrige el ID
+  // Fallback por si el ID está viejo
+  s=Object.values(stores).find(x=>x.id===curStoreId || x.name===curStoreId);
+  if(s) curStoreId=s.id;
 }
-
 if(!s){
-document.body.innerHTML='<div style="padding:60px 20px;text-align:center;font-family:Arial"><div style="font-size:50px">🏪</div><h2 style="margin-top:12px">Tienda no encontrada</h2><p style="color:#888;margin-top:8px;font-size:13px">ID buscado: '+curStoreId+'</p><p style="color:#888;font-size:12px;margin-top:4px">Tiendas guardadas: '+Object.keys(stores).length+'</p><div style="margin-top:24px"><a href="index.html" style="background:#00a650;color:#fff;padding:12px 24px;border-radius:999px;text-decoration:none;font-weight:800">Volver al marketplace</a></div><div style="margin-top:16px"><a href="panel.html" style="color:#00a650;font-size:13px">Ir a mi panel</a></div></div>';
+document.body.innerHTML='<div style="padding:60px 20px;text-align:center;font-family:Arial"><div style="font-size:50px">🏪</div><h2>Tienda no encontrada</h2><p style="color:#888;margin-top:8px">ID: '+curStoreId+'</p><p style="color:#888;font-size:12px">Guardadas: '+Object.keys(stores).length+'</p><div style="margin-top:20px"><a href="index.html" style="background:#00a650;color:#fff;padding:12px 24px;border-radius:999px;text-decoration:none;font-weight:800">Volver</a></div></div>';
 return;
 }
 curStore=s;
-
-document.getElementById('cover').style.backgroundImage=s.cover?`url(${s.cover})`:'none';
+document.getElementById('cover').style.backgroundImage=s.cover?`url(${s.cover})`:'';
 document.getElementById('pImg').src=s.profile||'https://via.placeholder.com/200';
 document.getElementById('pName').textContent=s.name;
 document.getElementById('pDir').textContent=s.dir||'Tres Arroyos';
 document.getElementById('sDir').textContent=s.dir||'Tres Arroyos';
 document.getElementById('sWsp').textContent=s.wsp||'';
+document.getElementById('linkInfo').textContent='store.html?store='+curStoreId;
 
 let now=Date.now();let start=s.trialStart||s.created||now;let left=10-Math.floor((now-start)/86400000);
 if(s.paid && s.paidUntil && now < s.paidUntil){
 document.getElementById('pStatus').textContent='✓ Activa hasta '+new Date(s.paidUntil).toLocaleDateString('es-AR');
-document.getElementById('trialInfo').textContent='Activa mensual';
+document.getElementById('trialInfo').textContent='Activa';
 }else if(s.plan==='comision'){
-document.getElementById('pStatus').textContent='✓ Plan 10% por venta';
-document.getElementById('trialInfo').textContent='Plan 10%';
+document.getElementById('pStatus').textContent='✓ Plan 10%';
+document.getElementById('trialInfo').textContent='10% por venta';
 }else if(left>=0){
-document.getElementById('pStatus').textContent='Prueba: quedan '+left+' días';
-document.getElementById('trialInfo').textContent=left+' días';
+document.getElementById('pStatus').textContent='Quedan '+left+' días gratis';
+document.getElementById('trialInfo').textContent=left+' días gratis';
 }else{
 document.getElementById('pStatus').textContent='Prueba terminada';
 document.getElementById('trialInfo').textContent='Terminada';
@@ -160,44 +160,89 @@ document.getElementById('feed').innerHTML=prods.map(p=>{
 let first=p.media?p.media[0]:{type:'img',src:p.img};
 let isVideo=first.type==='video';
 let count=p.media?p.media.length:(p.imgs?p.imgs.length:1);
-return `<div class="card" onclick="openProd(${p.id})"><div class="card-media">${isVideo?`<video src="${first.src}" muted></video>`:`<img src="${p.imgs?p.imgs[0]:p.img}">`}${count>1?`<div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.6);color:#fff;padding:2px 6px;border-radius:999px;font-size:10px">${count}</div>`:''}</div><div class="card-body"><div class="card-price">$${p.price.toLocaleString('es-AR')}</div><div class="card-name">${p.name}</div></div></div>`;
-}).join('')||'<div style="text-align:center;color:#888;padding:30px">Sin publicaciones aún</div>';
+return `<div class="card" onclick="openProd(${p.id})"><div class="card-media">${isVideo?`<video src="${first.src}" muted></video>`:`<img src="${p.imgs?p.imgs[0]:p.img}" loading="lazy">`}${count>1?`<div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.6);color:#fff;padding:3px 8px;border-radius:999px;font-size:10px">${count}</div>`:''}${isVideo?`<div style="position:absolute;top:6px;left:6px;background:#00a650;color:#fff;padding:3px 6px;border-radius:4px;font-size:9px;font-weight:800">VIDEO</div>`:''}</div><div class="card-body"><div class="card-price">$${p.price.toLocaleString('es-AR')}</div><div class="card-name">${p.name}</div></div></div>`;
+}).join('')||'<div style="text-align:center;color:#888;padding:40px;background:#fff;border-radius:12px">Esta tienda aún no tiene publicaciones<br><a href="panel.html" style="color:#00a650;font-weight:700">Publicá tu primera</a></div>';
 }
 
-function openProd(id){let p=getProds().find(x=>x.id===id);if(!p) return;curProd=p;curIdx=0;document.getElementById('mName').textContent=p.name;document.getElementById('mPrice').textContent='$'+p.price.toLocaleString('es-AR');document.getElementById('mDesc').textContent=p.desc||'';showMedia();document.getElementById('modal').style.display='flex';}
-function showMedia(){let media=curProd.media||(curProd.imgs?curProd.imgs.map(src=>({type:'img',src})): [{type:'img',src:curProd.img}]);let m=media[curIdx];document.getElementById('modalMedia').innerHTML=`${m.type==='video'?`<video src="${m.src}" controls autoplay style="width:100%;height:100%;object-fit:contain"></video>`:`<img src="${m.src}" style="width:100%;height:100%;object-fit:contain">`}${media.length>1?`<div class="arrow l" onclick="event.stopPropagation();curIdx=(curIdx-1+media.length)%media.length;showMedia()">‹</div><div class="arrow r" onclick="event.stopPropagation();curIdx=(curIdx+1)%media.length;showMedia()">›</div>`:''}`;}
+function openProd(id){let p=getProds().find(x=>x.id===id);if(!p) return;curProd=p;curIdx=0;document.getElementById('mName').textContent=p.name;document.getElementById('mPrice').textContent='$'+p.price.toLocaleString('es-AR');document.getElementById('mDesc').textContent=p.desc||'Sin descripción';showMedia();document.getElementById('modal').style.display='flex';}
+function showMedia(){let media=curProd.media||(curProd.imgs?curProd.imgs.map(src=>({type:'img',src})): [{type:'img',src:curProd.img}]);let m=media[curIdx];document.getElementById('modalMedia').innerHTML=`${m.type==='video'?`<video src="${m.src}" controls autoplay style="width:100%;height:100%;object-fit:contain"></video>`:`<img src="${m.src}" style="width:100%;height:100%;object-fit:contain">`}${media.length>1?`<div class="arrow l" onclick="event.stopPropagation();curIdx=(curIdx-1+media.length)%media.length;showMedia()">‹</div><div class="arrow r" onclick="event.stopPropagation();curIdx=(curIdx+1)%media.length;showMedia()">›</div><div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;padding:4px 10px;border-radius:999px;font-size:11px">${curIdx+1}/${media.length}</div>`:''}`;}
 function closeModal(){document.getElementById('modal').style.display='none';}
 function contactStore(){let s=getStores()[curStoreId];window.open(`https://wa.me/54${(s.wsp||'').replace(/\D/g,'')}?text=${encodeURIComponent('Hola! Vi tu tienda '+s.name+' en 3A VENDE')}`,'_blank');}
 function contactProduct(){let s=getStores()[curStoreId];window.open(`https://wa.me/54${(s.wsp||'').replace(/\D/g,'')}?text=${encodeURIComponent('Hola! Vi '+curProd.name+' por $'+curProd.price+' en '+s.name)}`,'_blank');}
 function shareStore(){if(navigator.share){navigator.share({title:curStore.name,url:location.href})}else{prompt('Copiá link:',location.href)}}
-function openEdit(){let s=getStores()[curStoreId];document.getElementById('eName').value=s.name||'';document.getElementById('eDir').value=s.dir||'';document.getElementById('eWsp').value=s.wsp||'';document.getElementById('editModal').style.display='flex';}
-function closeEdit(){document.getElementById('editModal').style.display='none';}
+
+function openEdit(){
+let s=getStores()[curStoreId];
+if(!s) return alert('No se pudo cargar tienda');
+document.getElementById('eName').value=s.name||'';
+document.getElementById('eDir').value=s.dir||'';
+document.getElementById('eWsp').value=s.wsp||'';
+tempProfile=null; tempCover=null;
+document.getElementById('previewProfile').style.display='none';
+document.getElementById('previewCover').style.display='none';
+document.getElementById('editModal').style.display='flex';
+}
+function closeEdit(){document.getElementById('editModal').style.display='none';tempProfile=null;tempCover=null;}
 function toBase64(f,cb){let r=new FileReader();r.onload=e=>cb(e.target.result);r.readAsDataURL(f)}
-document.getElementById('eProfile').addEventListener('change',e=>{let f=e.target.files[0];if(!f) return;toBase64(f,b64=>{let stores=getStores();stores[curStoreId].profile=b64;setStores(stores);document.getElementById('pImg').src=b64;});});
-document.getElementById('eCover').addEventListener('change',e=>{let f=e.target.files[0];if(!f) return;toBase64(f,b64=>{let stores=getStores();stores[curStoreId].cover=b64;setStores(stores);document.getElementById('cover').style.backgroundImage=`url(${b64})`;});});
+
+document.getElementById('eProfile').addEventListener('change',e=>{
+let f=e.target.files[0];if(!f) return;
+toBase64(f,b64=>{
+tempProfile=b64;
+let img=document.getElementById('previewProfile');
+img.src=b64;img.style.display='block';
+document.getElementById('pImg').src=b64;
+});
+});
+document.getElementById('eCover').addEventListener('change',e=>{
+let f=e.target.files[0];if(!f) return;
+toBase64(f,b64=>{
+tempCover=b64;
+let div=document.getElementById('previewCover');
+div.style.backgroundImage=`url(${b64})`;div.style.display='block';
+document.getElementById('cover').style.backgroundImage=`url(${b64})`;
+});
+});
+
 function saveEdit(){
-let stores=getStores();let s=stores[curStoreId];
-if(!s) return alert('Error: tienda no cargada');
-let oldName=s.name;
+let stores=getStores();
+let s=stores[curStoreId];
+if(!s) return alert('Error: tienda no existe');
 let newName=document.getElementById('eName').value.trim();
 let newDir=document.getElementById('eDir').value.trim();
 let newWsp=document.getElementById('eWsp').value.trim().replace(/\D/g,'');
+
 if(newName) s.name=newName;
 if(newDir) s.dir=newDir;
 if(newWsp) s.wsp=newWsp;
-// NUNCA TOCAR s.id
+if(tempProfile) s.profile=tempProfile;
+if(tempCover) s.cover=tempCover;
+
 setStores(stores);
-// Actualizar users y productos con nuevo nombre
-let users=getUsers();let wspKey=localStorage.getItem('currentUser');
-if(wspKey && users[wspKey]){if(newName) users[wspKey].storeName=newName; if(newWsp && newWsp!==wspKey){users[newWsp]=users[wspKey];delete users[wspKey];localStorage.setItem('currentUser',newWsp);} localStorage.setItem('marketUsers',JSON.stringify(users));}
+
+// Actualizar marketUsers y productos
+let users=getUsers();
+let currentWsp=localStorage.getItem('currentUser');
+if(currentWsp && users[currentWsp]){
+if(newName) users[currentWsp].storeName=newName;
+if(newWsp && newWsp!==currentWsp){
+users[newWsp]=users[currentWsp];
+delete users[currentWsp];
+localStorage.setItem('currentUser',newWsp);
+}
+localStorage.setItem('marketUsers',JSON.stringify(users));
+}
+
 let prods=getProds();
 let changed=false;
 prods.forEach(p=>{if(p.storeId===curStoreId){if(newName) p.store=newName; changed=true;}});
 if(changed) setProds(prods);
+
 closeEdit();
 loadStore();
-alert('Tienda guardada. El link sigue igual: store.html?store='+curStoreId);
+alert('¡Tienda guardada! Tu link sigue igual');
 }
+
 loadStore();
 </script>
 </body>
