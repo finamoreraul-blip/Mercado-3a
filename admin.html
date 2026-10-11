@@ -2,75 +2,254 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ADMIN - 3A VENDE - Solo Sheet</title>
+<title>SUPER ADMIN - 3A VENDE</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f5f5f5}
-header{background:#111;color:#fff;padding:12px 16px;position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center}
-.btn{border:none;padding:10px 14px;border-radius:8px;font-weight:800;font-size:12px;cursor:pointer}
-.btn-green{background:#00a650;color:#fff}.btn-red{background:#ff3b30;color:#fff}.btn-white{background:#fff;color:#111}
-.feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;padding:16px;max-width:1200px;margin:0 auto}
-.card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #eee}
-.card-media{height:200px;background:#000}.card-media img{width:100%;height:100%;object-fit:cover}
-.card-body{padding:10px}
-.log{background:#111;color:#0f0;padding:12px;border-radius:10px;font-family:monospace;font-size:11px;white-space:pre-wrap;margin:12px auto;max-width:1200px}
+body{background:#0f0f0f;color:#fff}
+header{background:#111;border-bottom:2px solid #00a650;padding:12px 16px;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.btn{border:none;padding:10px 14px;border-radius:8px;font-weight:900;font-size:11px;cursor:pointer;text-transform:uppercase}
+.btn-green{background:#00a650;color:#fff}.btn-red{background:#ff3b30;color:#fff}.btn-yellow{background:#ffcc00;color:#111}.btn-white{background:#fff;color:#111}.btn-gray{background:#333;color:#fff}
+.tabs{display:flex;gap:8px;padding:12px 16px;background:#1a1a1a;overflow:auto;position:sticky;top:52px;z-index:40}
+.tab{padding:8px 16px;border-radius:999px;background:#222;color:#888;font-weight:800;font-size:11px;cursor:pointer;white-space:nowrap;border:1px solid #333}.tab.active{background:#00a650;color:#fff;border-color:#00a650}
+.wrap{max-width:1300px;margin:16px auto;padding:0 16px}
+.card{background:#1e1e1e;border-radius:14px;padding:16px;border:1px solid #2a2a2a;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.item{background:#222;border-radius:12px;overflow:hidden;border:1px solid #333}
+.item-media{height:180px;background:#000}.item-media img{width:100%;height:100%;object-fit:cover}
+.item-body{padding:10px;font-size:12px}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.kpi-b{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:12px;padding:12px;text-align:center}.kpi-b b{font-size:20px;display:block;margin-top:4px;color:#00a650}
+.log{background:#000;color:#0f0;padding:12px;border-radius:10px;font-family:monospace;font-size:11px;white-space:pre-wrap;max-height:200px;overflow:auto}
+table{width:100%;font-size:12px;border-collapse:collapse}th{color:#888;font-size:10px;text-align:left;padding:8px;background:#222}td{padding:8px;border-bottom:1px solid #2a2a2a}
 </style>
 </head>
 <body>
 <header>
-<div style="font-weight:900"><span style="color:#00a650">3A</span> VENDE ADMIN - SHEET</div>
-<div style="display:flex;gap:6px">
-<button class="btn btn-white" onclick="location.href='index.html'">Ver Index</button>
+<div style="font-weight:900"><span style="color:#00a650">3A</span> SUPER ADMIN - CONTROL TOTAL</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap">
+<button class="btn btn-white" onclick="location.href='index.html'">INDEX</button>
+<button class="btn btn-white" onclick="location.href='panel.html'">PANEL</button>
+<button class="btn btn-red" onclick="vaciarTODO()">💣 VACIAR TODO</button>
 </div>
 </header>
-<div class="log" id="log">Conectando solo a Sheet...</div>
-<div style="max-width:1200px;margin:0 auto;padding:0 16px;display:flex;gap:12px;flex-wrap:wrap">
-<div style="background:#fff;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:800">Sheet: <span id="countSheet">0</span></div>
-<div style="background:#fff;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:800">Borrados: <span id="countBor">0</span></div>
-<div style="background:#fff;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:800">Mostrando: <span id="count">0</span></div>
-<div style="background:#00a650;color:#fff;padding:10px 14px;border-radius:999px;font-size:11px;font-weight:800">✅ Solo Sheet - Si borrás acá, queda en 0 en index y panel</div>
+
+<div class="tabs">
+<div class="tab active" id="tab-prods" onclick="openTab('prods')">📦 Productos (<span id="cProds">0</span>)</div>
+<div class="tab" id="tab-tiendas" onclick="openTab('tiendas')">🏪 Tiendas (<span id="cTiendas">0</span>)</div>
+<div class="tab" id="tab-local" onclick="openTab('local')">📱 Cuentas Locales (<span id="cLocal">0</span>)</div>
+<div class="tab" id="tab-borrados" onclick="openTab('borrados')">🗑️ Borrados (<span id="cBor">0</span>)</div>
+<div class="tab" id="tab-sis" onclick="openTab('sis')">⚙️ Sistema</div>
 </div>
-<div class="feed" id="feed"></div>
+
+<div class="wrap">
+<div class="kpi">
+<div class="kpi-b"><span>Productos Sheet</span><b id="kProd">0</b></div>
+<div class="kpi-b"><span>Tiendas Sheet</span><b id="kTienda">0</b></div>
+<div class="kpi-b"><span>Local Users</span><b id="kLocal">0</b></div>
+<div class="kpi-b"><span>Borrados</span><b id="kBor">0</b></div>
+</div>
+
+<div class="card log" id="log">Iniciando super admin...</div>
+
+<!-- PRODUCTOS -->
+<div id="wrap-prods">
+<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+<button class="btn btn-yellow" onclick="cargarTodo()">↻ RECARGAR SHEET</button>
+<button class="btn btn-red" onclick="vaciarProductos()">🗑️ Borrar TODOS los productos del Sheet</button>
+</div>
+<div class="grid" id="gridProds"></div>
+</div>
+
+<!-- TIENDAS -->
+<div id="wrap-tiendas" style="display:none">
+<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+<button class="btn btn-red" onclick="vaciarTiendas()">🗑️ Borrar TODAS las tiendas del Sheet</button>
+</div>
+<table><thead><tr><th>StoreID</th><th>Tienda</th><th>WhatsApp</th><th>Dir</th><th>Acción</th></tr></thead><tbody id="tablaTiendas"></tbody></table>
+</div>
+
+<!-- LOCAL -->
+<div id="wrap-local" style="display:none">
+<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+<button class="btn btn-red" onclick="vaciarLocal()">🗑️ Borrar todas las cuentas de ESTE celu</button>
+</div>
+<table><thead><tr><th>WhatsApp</th><th>StoreID</th><th>Nombre</th><th>Acción</th></tr></thead><tbody id="tablaLocal"></tbody></table>
+</div>
+
+<!-- BORRADOS -->
+<div id="wrap-borrados" style="display:none">
+<div class="card">
+<p style="font-size:12px;color:#888">Esta es la lista negra. Todo ID que esté acá, no se muestra nunca más en index ni panel aunque siga en la hoja producto.</p>
+<div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-yellow" onclick="limpiarBorradosSheet()">⚠️ Limpiar lista de borrados (vuelve a mostrar todo)</button></div>
+<table style="margin-top:12px"><thead><tr><th>ID Borrado</th><th>Fecha</th></tr></thead><tbody id="tablaBor"></tbody></table>
+</div>
+</div>
+
+<!-- SISTEMA -->
+<div id="wrap-sis" style="display:none">
+<div class="card">
+<h3>💣 Borrado Nuclear</h3>
+<p style="font-size:12px;color:#888;margin-top:8px">Hace esto: 1) Manda todos los productos a borrados 2) Manda todas las tiendas a borrados 3) Limpia localStorage de este celu 4) Te dice que vacíes a mano las hojas del Sheet</p>
+<button class="btn btn-red" style="width:100%;margin-top:12px;padding:16px;font-size:14px" onclick="vaciarTODO()">💣 VACIAR TODO AHORA - PRODUCTOS + TIENDAS + LOCAL</button>
+<div style="margin-top:16px;background:#222;padding:12px;border-radius:8px;font-size:11px">
+<b>Si no se borra del Index:</b><br>
+1. Andá a tu Google Sheet<br>
+2. Hoja <b>producto</b> → Ctrl+A → Supr<br>
+3. Hoja <b>tienda</b> → Borrá duplicados dejando 1 por número<br>
+4. Hoja <b>borrados</b> → Dejala como está (es la que bloquea)<br>
+5. Recargá index.html
+</div>
+</div>
+</div>
+
+</div>
+
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbyb_1T-3wAcKsBIYhW6XSissrzcs0nGbFWvY83YN6l9vuNBzNQrhBqdntvKbESh1v52aQ/exec";
 function enviarASheet(d){ fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(d)}); }
+function log(t){ document.getElementById('log').textContent = new Date().toLocaleTimeString()+' - '+t + '\n' + document.getElementById('log').textContent; }
 
-// Limpieza total de cache viejo
-localStorage.removeItem('marketProductsAR');
-localStorage.removeItem('marketProducts');
-localStorage.removeItem('3a_prods_cache');
+function getUsers(){try{return JSON.parse(localStorage.getItem('marketUsers')||'{}')}catch(e){return{}}}
+function getStores(){try{return JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){return{}}}
 
-let DB = [];
+let DB_PRODS=[], DB_TIENDAS=[], DB_BORRADOS=[];
 
-function render(){
- document.getElementById('count').textContent=DB.length;
- document.getElementById('feed').innerHTML=DB.map(p=>`<div class="card"><div class="card-media"><img src="${p.imagen}"></div><div class="card-body"><b>$${(parseInt(p.precio)||0).toLocaleString('es-AR')}</b><div style="font-size:12px">${p.producto}</div><div style="font-size:10px;color:#888">${p.id} - ${p.storeId}</div><div style="font-size:10px;color:#888">${p.tienda}</div><button class="btn btn-red" style="width:100%;margin-top:8px" onclick="borrarUno(${p.id})">Borrar del Sheet</button></div></div>`).join('')||'<div style="grid-column:1/-1;padding:60px;text-align:center;color:#888;background:#fff;border-radius:12px">✅ VACÍO TOTAL - 0 productos en Sheet<br><small>index.html y panel.html también están en 0 ahora</small></div>';
+function openTab(t){
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+ document.getElementById('tab-'+t).classList.add('active');
+ document.getElementById('wrap-prods').style.display=t==='prods'?'block':'none';
+ document.getElementById('wrap-tiendas').style.display=t==='tiendas'?'block':'none';
+ document.getElementById('wrap-local').style.display=t==='local'?'block':'none';
+ document.getElementById('wrap-borrados').style.display=t==='borrados'?'block':'none';
+ document.getElementById('wrap-sis').style.display=t==='sis'?'block':'none';
 }
 
-function borrarUno(id){
- if(!confirm('¿Borrar ID '+id+' del Sheet? Se borra en TODOS lados'))return;
- enviarASheet({tipo:'borrado',id:id,fecha:new Date().toLocaleString('es-AR')});
- document.getElementById('log').textContent='Borrando '+id+' del Sheet...';
- setTimeout(cargarSheet,1500);
-}
-
-async function cargarSheet(){
+async function cargarTodo(){
+ log('Leyendo Sheet...');
  try{
-  document.getElementById('log').textContent='Leyendo Sheet...';
-  let t=Date.now();
-  let r=await fetch(SHEET_URL+"?tipo=producto&t="+t).then(x=>x.json());
-  let rb=await fetch(SHEET_URL+"?tipo=borrado&t="+t).then(x=>x.json()).catch(()=>[]);
-  let borrados=new Set(rb.map(x=>String(x.id)));
-  document.getElementById('countSheet').textContent=r.length;
-  document.getElementById('countBor').textContent=borrados.size;
-  DB=r.filter(x=>x.id && x.imagen && !borrados.has(String(x.id)));
-  render();
-  document.getElementById('log').textContent='Sheet='+r.length+' Borrados='+borrados.size+' Final='+DB.length+(DB.length===0?' ✅ VACIO TOTAL EN TODA LA APP':'');
- }catch(e){ document.getElementById('log').textContent='Error: '+e.message; }
+  let ts=Date.now();
+  let prods = await fetch(SHEET_URL+"?tipo=producto&t="+ts).then(r=>r.json()).catch(()=>[]);
+  let borrados = await fetch(SHEET_URL+"?tipo=borrado&t="+ts).then(r=>r.json()).catch(()=>[]);
+  let tiendas = await fetch(SHEET_URL+"?tipo=tienda&t="+ts).then(r=>r.json()).catch(()=>[]);
+
+  // Si tienda devuelve HTML porque no tenés el if en Apps Script, lo ignora
+  if(!Array.isArray(tiendas)) tiendas=[];
+
+  DB_PRODS=prods; DB_BORRADOS=borrados; DB_TIENDAS=tiendas;
+
+  let setBor=new Set(borrados.map(x=>String(x.id)));
+  let visibles=prods.filter(p=>!setBor.has(String(p.id)));
+
+  document.getElementById('cProds').textContent=visibles.length;
+  document.getElementById('cTiendas').textContent=tiendas.length;
+  document.getElementById('cBor').textContent=borrados.length;
+  document.getElementById('kProd').textContent=prods.length;
+  document.getElementById('kTienda').textContent=tiendas.length;
+  document.getElementById('kBor').textContent=borrados.length;
+
+  // Productos
+  document.getElementById('gridProds').innerHTML=visibles.reverse().map(p=>`
+    <div class="item">
+      <div class="item-media"><img src="${p.imagen||''}"></div>
+      <div class="item-body">
+        <b>$${(parseInt(p.precio)||0).toLocaleString('es-AR')}</b> - ${p.producto||''}<br>
+        <small style="color:#888">${p.id} | ${p.storeId||''}<br>${p.tienda||''}</small>
+        <button class="btn btn-red" style="width:100%;margin-top:8px" onclick="borrarProd(${p.id})">Borrar</button>
+        <button class="btn btn-gray" style="width:100%;margin-top:4px" onclick="borrarTiendaDeProd('${p.storeId}')">Borrar TODA su tienda</button>
+      </div>
+    </div>
+  `).join('')||'<div style="padding:40px;text-align:center;color:#888">✅ Sin productos - Index en 0</div>';
+
+  // Tiendas
+  document.getElementById('tablaTiendas').innerHTML=tiendas.map(t=>`
+    <tr><td>${t.storeId||t.id||''}</td><td>${t.tienda||t.nombre||''}</td><td>${t.whatsapp||''}</td><td>${t.direccion||''}</td>
+    <td><button class="btn btn-red" onclick="borrarTiendaCompleta('${t.storeId||t.id}','${t.whatsapp}')">Borrar tienda + productos</button></td></tr>
+  `).join('')||'<tr><td colspan=5 style="text-align:center;color:#888">Sin tiendas en Sheet (agregá el código de tienda en Apps Script)</td></tr>';
+
+  // Borrados
+  document.getElementById('tablaBor').innerHTML=borrados.map(b=>`<tr><td>${b.id}</td><td>${b.fecha||''}</td></tr>`).join('');
+
+  cargarLocal();
+  log(`OK: Productos=${prods.length} Visibles=${visibles.length} Tiendas=${tiendas.length} Borrados=${borrados.length}`);
+ }catch(e){ log('ERROR: '+e.message); }
 }
 
-cargarSheet();
-setInterval(cargarSheet,10000);
+function cargarLocal(){
+ let users=getUsers(); let stores=getStores();
+ let keys=Object.keys(users);
+ document.getElementById('cLocal').textContent=keys.length;
+ document.getElementById('kLocal').textContent=keys.length;
+ document.getElementById('tablaLocal').innerHTML=keys.map(wsp=>{
+   let u=users[wsp];
+   return `<tr><td>${wsp}</td><td>${u.storeId||''}</td><td>${u.storeName||''}</td><td><button class="btn btn-red" onclick="borrarLocal('${wsp}')">Borrar de este celu</button></td></tr>`;
+ }).join('')||'<tr><td colspan=4 style="text-align:center;color:#888">Sin cuentas locales</td></tr>';
+}
+
+function borrarProd(id){
+ if(!confirm('¿Borrar producto '+id+'? Se borra de index y panel'))return;
+ enviarASheet({tipo:'borrado',id:id,fecha:new Date().toLocaleString('es-AR')});
+ log('Borrado '+id+' enviado a Sheet borrados');
+ setTimeout(cargarTodo,1500);
+}
+
+function borrarTiendaDeProd(storeId){
+ if(!confirm('¿Borrar TODOS los productos de la tienda '+storeId+'?'))return;
+ let prods=DB_PRODS.filter(p=>String(p.storeId)===String(storeId));
+ prods.forEach(p=> enviarASheet({tipo:'borrado',id:p.id,fecha:new Date().toLocaleString('es-AR')}));
+ log('Borrados '+prods.length+' productos de tienda '+storeId);
+ setTimeout(cargarTodo,2000);
+}
+
+function borrarTiendaCompleta(storeId, wsp){
+ if(!confirm('¿Borrar tienda '+storeId+' ('+wsp+') Y todos sus productos?'))return;
+ let prods=DB_PRODS.filter(p=>String(p.storeId)===String(storeId));
+ prods.forEach(p=> enviarASheet({tipo:'borrado',id:p.id,fecha:new Date().toLocaleString('es-AR')}));
+ enviarASheet({tipo:'borrado_tienda',id:storeId,storeId:storeId,whatsapp:wsp,fecha:new Date().toLocaleString('es-AR')});
+ log('Tienda '+storeId+' y '+prods.length+' productos enviados a borrados');
+ setTimeout(cargarTodo,2000);
+}
+
+function vaciarProductos(){
+ if(!confirm('¿Borrar TODOS los productos? Index quedará en 0'))return;
+ DB_PRODS.forEach(p=> enviarASheet({tipo:'borrado',id:p.id,fecha:new Date().toLocaleString('es-AR')}));
+ log('Enviados '+DB_PRODS.length+' productos a borrados');
+ setTimeout(cargarTodo,2000);
+}
+
+function vaciarTiendas(){
+ if(!confirm('¿Borrar TODAS las tiendas? Nadie podrá entrar hasta registrarse de nuevo'))return;
+ DB_TIENDAS.forEach(t=> enviarASheet({tipo:'borrado_tienda',id:t.storeId||t.id,storeId:t.storeId||t.id,fecha:new Date().toLocaleString('es-AR')}));
+ log('Enviadas '+DB_TIENDAS.length+' tiendas a borrados');
+}
+
+function borrarLocal(wsp){
+ if(!confirm('¿Borrar cuenta local '+wsp+'?'))return;
+ let users=getUsers(); delete users[wsp]; localStorage.setItem('marketUsers',JSON.stringify(users));
+ cargarLocal(); log('Cuenta local '+wsp+' borrada');
+}
+
+function vaciarLocal(){
+ if(!confirm('¿Borrar TODAS las cuentas de este celu?'))return;
+ localStorage.removeItem('marketUsers');
+ localStorage.removeItem('marketStores');
+ localStorage.removeItem('currentUser');
+ localStorage.removeItem('marketProductsAR');
+ localStorage.removeItem('marketProducts');
+ cargarLocal(); log('Local vaciado total');
+}
+
+function limpiarBorradosSheet(){
+ alert('Para limpiar borrados, andá al Sheet, hoja borrados, borrá todo. Eso hará que vuelvan a aparecer los productos si no borraste la hoja producto.');
+}
+
+async function vaciarTODO(){
+ if(!confirm('💣 CONFIRMAS VACIAR TODO? Productos + tiendas + local. Index y panel quedarán en 0'))return;
+ vaciarProductos();
+ setTimeout(()=>{ vaciarTiendas(); vaciarLocal(); log('VACIADO TOTAL EJECUTADO. Ahora vaciá a mano las hojas producto y tienda del Sheet para que quede 100% limpio'); },1500);
+}
+
+cargarTodo();
+setInterval(cargarTodo,15000);
 </script>
 </body>
-</html>
+ </html>
