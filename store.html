@@ -63,7 +63,7 @@ textarea{height:75px;resize:none}
 <div class="p-dir" id="pDir">📍 Tres Arroyos</div>
 <div class="p-desc" id="pDesc"></div>
 <div class="p-status" id="pStatus">Cargando...</div>
-<div style="font-size:10px;color:#aaa;margin-top:6px">ID: <span id="idShow"></span> • Link permanente</div>
+<div style="font-size:10px;color:#aaa;margin-top:6px">ID: <span id="idShow"></span> • Link permanente • <span style="color:#00a650">Sheet conectado</span></div>
 </div>
 <div class="p-actions">
 <button class="btn btn-black" id="btnEdit" onclick="abrirEdit()">✏️ EDITAR TIENDA</button>
@@ -98,7 +98,7 @@ textarea{height:75px;resize:none}
 <div class="edit-modal" id="editModal">
 <div class="edit-box">
 <h2 style="font-weight:900;font-size:18px">Editar mi tienda</h2>
-<p style="font-size:11px;color:#777;margin-top:4px">Todo se edita acá: fotos, nombre, descripción, WhatsApp. El panel es solo para publicaciones.</p>
+<p style="font-size:11px;color:#777;margin-top:4px">Todo se edita acá: fotos, nombre, descripción, WhatsApp.</p>
 
 <label>Nombre de la tienda *</label><input id="eName" placeholder="Ej: Makeup Tres Arroyos">
 <label>Descripción</label><textarea id="eDesc" placeholder="Qué vendés, horarios, envíos..."></textarea>
@@ -121,10 +121,14 @@ textarea{height:75px;resize:none}
 
 <button class="btn btn-green" style="width:100%;margin-top:18px;padding:14px" onclick="guardar()">💾 GUARDAR CAMBIOS</button>
 <button class="btn btn-gray" style="width:100%;margin-top:8px" onclick="cerrarEdit()">Cancelar</button>
+<div style="font-size:10px;color:#00a650;text-align:center;margin-top:8px">✅ Se envía automático al Sheet del Admin</div>
 </div>
 </div>
 
 <script>
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbyb_1T-3wAcKsBIYhW6XSissrzcs0nGbFWvY83YN6l9vuNBzNQrhBqdntvKbESh1v52aQ/exec";
+function enviarASheet(d){ try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(d)}); }catch(e){} }
+
 var curId=null,tempPerfil=null,tempPortada=null;
 function getStores(){try{return JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){return{}}}
 function setStores(o){localStorage.setItem('marketStores',JSON.stringify(o))}
@@ -139,9 +143,12 @@ var stores=getStores();var s=stores[curId];
 if(!s&&curId){var vals=Object.values(stores);s=vals.find(function(x){return x.id===curId});if(s)curId=s.id}
 if(!s){
   var users=getUsers();var wsp=localStorage.getItem('currentUser');
-  if(wsp&&users[wsp]&&!stores[users[wsp].storeId]){
-    stores[users[wsp].storeId]={id:users[wsp].storeId,name:users[wsp].storeName||'Mi tienda',wsp:wsp,dir:'Tres Arroyos',descStore:'',created:Date.now(),trialStart:Date.now()};
-    setStores(stores);s=stores[users[wsp].storeId];
+  if(wsp&&users[wsp]&&users[wsp].storeId){
+    if(!stores[users[wsp].storeId]){
+      stores[users[wsp].storeId]={id:users[wsp].storeId,name:users[wsp].storeName||'Mi tienda',wsp:wsp,dir:'Tres Arroyos',descStore:'',created:Date.now(),trialStart:Date.now()};
+      setStores(stores);
+    }
+    s=stores[users[wsp].storeId]; curId=s.id;
   }
 }
 if(!s){document.body.innerHTML='<div style="padding:40px;text-align:center"><h2>Tienda no encontrada</h2><p>ID: '+(curId||'vacío')+'</p><a href="panel.html" style="background:#00a650;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none;display:inline-block;margin-top:12px">Ir al panel</a></div>';return}
@@ -177,7 +184,9 @@ s.name=nn;if(nd)s.dir=nd;if(nw)s.wsp=nw;s.descStore=de;s.descripcion=de;if(tempP
 setStores(stores);
 var users=getUsers();var cw=localStorage.getItem('currentUser');if(cw&&users[cw]){users[cw].storeName=nn;if(nw&&nw!==cw){users[nw]=users[cw];delete users[cw];localStorage.setItem('currentUser',nw)}localStorage.setItem('marketUsers',JSON.stringify(users))}
 var prods=getProds();for(var i=0;i<prods.length;i++){if(prods[i].storeId===curId)prods[i].store=nn}setProds(prods);
-cerrarEdit();cargar();alert('¡Tienda guardada!');
+// ENVIO A SHEET ADMIN
+enviarASheet({tipo:'tienda',storeId:curId,tienda:nn,whatsapp:nw||s.wsp,direccion:nd,descripcion:de});
+cerrarEdit();cargar();alert('¡Tienda guardada y enviada al Admin!');
 }
 function contactar(){var s=getStores()[curId];window.open('https://wa.me/54'+(s.wsp||'').replace(/\D/g,'')+'?text='+encodeURIComponent('Hola! Vi tu tienda '+s.name),'_blank')}
 function compartir(){if(navigator.share)navigator.share({title:getStores()[curId].name,url:location.href});else prompt('Copiá link:',location.href)}
