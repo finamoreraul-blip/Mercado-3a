@@ -275,18 +275,28 @@ async function syncProductos(){
     let d=await r.json();
     let rb=await fetch(SHEET_URL+"?tipo=borrado&t="+t).then(x=>x.json()).catch(()=>[]);
     let borrados=new Set(rb.map(x=>String(x.id)));
-    let curAll=getProds();
-    let curFiltrado=curAll.filter(p=>!borrados.has(String(p.id)));
-    if(curFiltrado.length!==curAll.length){
-      setProds(curFiltrado);
-      cargarProds(); cargarFinanzas();
-    }
-    let ids=new Set(curFiltrado.map(x=>String(x.id)));
-    let nuevos=d.filter(x=>!ids.has(String(x.id))&&!borrados.has(String(x.id))&&x.imagen).map(x=>({id:parseInt(x.id)||Date.now(),storeId:x.storeId,store:x.tienda,name:x.producto,price:parseInt(x.precio)||0,cost:parseInt(x.costo)||0,category:x.categoria||'Otros',desc:x.descripcion||'',img:x.imagen,media:[{src:x.imagen}],created:Date.now()}));
-    if(nuevos.length>0){
-      setProds(curFiltrado.concat(nuevos));
-      cargarProds();
-    }
+
+    let delSheet=d.filter(x=>!borrados.has(String(x.id))).map(x=>({
+      id:parseInt(x.id)||Date.now(),
+      storeId:x.storeId||'store_1791746572552',
+      store:x.tienda||'',
+      name:x.producto,
+      price:parseInt(x.precio)||0,
+      cost:parseInt(x.costo)||0,
+      category:x.categoria||'Otros',
+      desc:x.descripcion||'',
+      img:x.imagen,
+      media:[{src:x.imagen}],
+      created:Date.now()
+    }));
+
+    // PISA todo lo local con lo del Sheet
+    let otros=getProds().filter(p=>p.storeId!=curStoreId);
+    setProds(otros.concat(delSheet));
+    cargarProds();
+    alert('Sync listo: '+delSheet.length+' productos del Sheet');
+  }catch(e){ alert('Error sync: '+e.message); }
+}
   }catch(e){}
 }
 async function syncPedidosSheet(){try{let r=await fetch(SHEET_URL+"?tipo=pedido&t="+Date.now());let d=await r.json();let cur=getPedidos();let ids=new Set(cur.map(x=>String(x.id)));let nuevos=d.filter(x=>x.storeId==curStoreId&&!ids.has(String(x.id))).map(x=>({id:parseInt(x.id)||Date.now(),storeId:x.storeId,producto:x.producto,cantidad:parseInt(x.cantidad)||1,total:parseInt(x.total)||0,cliente:x.cliente,clienteWsp:x.clienteWsp||'',entrega:x.entrega,direccion:x.direccion||'',pago:x.pago,nota:x.nota||'',fecha:Date.now(),estado:'nuevo'}));if(nuevos.length){cur=cur.concat(nuevos);setPedidos(cur);cargarPedidos();alert('✅ '+nuevos.length+' pedidos');}else alert('Al día');}catch(e){alert('Error: '+e.message);}}
