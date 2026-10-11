@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrar - 3A VENDE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Proxima Nova,Arial,sans-serif}
+body{background:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
+.box{background:#fff;border-radius:20px;padding:28px;max-width:380px;width:100%;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+h1{font-weight:900;font-size:22px} h1 b{color:#00a650}
+input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #e5e5e5;background:#f9f9f9;margin-top:10px;font-size:14px;outline:none}
+input:focus{border-color:#00a650;background:#fff}
+button{width:100%;padding:13px;border:none;border-radius:999px;font-weight:800;font-size:14px;cursor:pointer;margin-top:14px}
+.btn-green{background:#00a650;color:#fff}.btn-gray{background:#f5f5f5}
+.tab{display:flex;gap:8px;margin-top:16px}.tab div{flex:1;text-align:center;padding:10px;border-radius:999px;font-size:12px;font-weight:800;cursor:pointer;border:1px solid #eee}.tab.on{background:#111;color:#fff;border-color:#111}
+small{font-size:11px;color:#888;display:block;margin-top:12px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="box">
+<div style="text-align:center"><h1><b>3A</b> VENDE</h1><p style="font-size:12px;color:#888;margin-top:4px">Vende en Tres Arroyos</p></div>
+
+<div class="tab"><div id="tLogin" class="on" onclick="modo='login';renderTab()">Entrar</div><div id="tReg" onclick="modo='reg';renderTab()">Registrarme</div></div>
+
+<div id="formLogin">
+<input id="wspLogin" placeholder="WhatsApp ej: 2983555123" type="tel">
+<button class="btn-green" onclick="hacerLogin()">Entrar a mi panel →</button>
+<small>Usá el mismo número con el que te registraste. Si no tenés cuenta, tocá Registrarme.</small>
+</div>
+
+<div id="formReg" style="display:none">
+<input id="wsp" placeholder="WhatsApp ej: 2983555123" type="tel">
+<input id="storeName" placeholder="Nombre de tu tienda ej: Lo de Mari">
+<input id="dir" placeholder="Dirección ej: Av Moreno 123">
+<button class="btn-green" onclick="hacerRegistro()">Crear mi tienda gratis</button>
+<small>✓ 10 días gratis ✓ Te guardamos en Sheet automáticamente. Después $4500/mes o 10% por venta.</small>
+</div>
+
+<div style="text-align:center;margin-top:14px"><a href="index.html" style="font-size:12px;color:#888;text-decoration:none">← Volver al marketplace</a></div>
+</div>
+
+<script>
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbyb_1T-3wAcKsBIYhW6XSissrzcs0nGbFWvY83YN6l9vuNBzNQrhBqdntvKbESh1v52aQ/exec";
+function enviarASheet(d){ try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(d)}); }catch(e){} }
+
+let modo='login';
+function renderTab(){
+ document.getElementById('tLogin').className = modo==='login'?'on':'';
+ document.getElementById('tReg').className = modo==='reg'?'on':'';
+ document.getElementById('formLogin').style.display = modo==='login'?'block':'none';
+ document.getElementById('formReg').style.display = modo==='reg'?'block':'none';
+}
+function getUsers(){ try{return JSON.parse(localStorage.getItem('marketUsers')||'{}')}catch(e){return{}} }
+function getStores(){ try{return JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){return{}} }
+
+function hacerLogin(){
+ let wsp = document.getElementById('wspLogin').value.replace(/\D/g,'');
+ if(wsp.length<10){alert('Poné tu WhatsApp completo');return;}
+ let users = getUsers();
+ if(!users[wsp]){alert('No existe, registrate primero'); modo='reg'; renderTab(); document.getElementById('wsp').value=wsp; return;}
+ localStorage.setItem('currentUser', wsp);
+ // guardar login en sheet
+ let s = getStores()[users[wsp].storeId];
+ if(s){
+   enviarASheet({tipo:'tienda', storeId:s.id, tienda:s.name, whatsapp:s.wsp, direccion:s.dir, descripcion:'LOGIN '+new Date().toLocaleString('es-AR')});
+ }
+ location.href='panel.html';
+}
+
+function hacerRegistro(){
+ let wsp = document.getElementById('wsp').value.replace(/\D/g,'');
+ let name = document.getElementById('storeName').value.trim();
+ let dir = document.getElementById('dir').value.trim()||'Tres Arroyos';
+ if(wsp.length<10){alert('WhatsApp incompleto');return;}
+ if(!name){alert('Nombre de tienda');return;}
+ let users=getUsers(); let stores=getStores();
+ if(users[wsp]){alert('Ya existe, entrá con ese número'); modo='login'; renderTab(); return;}
+ let id='store_'+Date.now();
+ stores[id]={id:id, name:name, wsp:wsp, dir:dir, profile:'https://via.placeholder.com/80?text='+encodeURIComponent(name[0]), created:Date.now(), trialStart:Date.now(), plan:'trial'};
+ users[wsp]={storeId:id, wsp:wsp, storeName:name};
+ localStorage.setItem('marketStores', JSON.stringify(stores));
+ localStorage.setItem('marketUsers', JSON.stringify(users));
+ localStorage.setItem('currentUser', wsp);
+ // === ESTO ES LO QUE VA AL SHEET ===
+ enviarASheet({tipo:'tienda', storeId:id, tienda:name, whatsapp:wsp, direccion:dir, descripcion:'REGISTRO NUEVO '+new Date().toLocaleString('es-AR')});
+ location.href='panel.html';
+}
+renderTab();
+</script>
+</body>
+</html>
