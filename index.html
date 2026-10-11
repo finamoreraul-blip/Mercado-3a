@@ -42,7 +42,7 @@ header{background:#fff;padding:12px 16px;position:sticky;top:0;z-index:30;box-sh
 .card-store img{width:18px;height:18px;border-radius:50%}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-box{background:#fff;border-radius:16px;max-width:900px;width:100%;max-height:90vh;overflow:auto;display:grid;grid-template-columns:1fr 1fr}
-.modal-media{background:#000;display:flex;align-items:center;justify-content:center;min-height:400px;position:relative}
+.modal-media{background:#000;display:flex;align-items:center;justify-content:center;min-height:420px;position:relative;overflow:hidden}
 .modal-media img,.modal-media video{width:100%;height:100%;object-fit:contain;max-height:70vh}
 .modal-body{padding:20px}
 .modal-price{font-size:24px;font-weight:900}.modal-name{font-size:16px;font-weight:700;margin-top:6px}.modal-desc{font-size:13px;color:#555;margin-top:12px;line-height:1.5;white-space:pre-wrap}
@@ -90,7 +90,19 @@ header{background:#fff;padding:12px 16px;position:sticky;top:0;z-index:30;box-sh
 <div class="sidebar" id="tiendas"><h3>Tiendas verificadas (Sheet)</h3><div id="storeList"></div></div>
 <div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:12px;color:#888"><span id="count">0</span> publicaciones</div><button class="btn btn-gray" onclick="syncDesdeSheet()" style="font-size:10px">↻ Sync</button></div><div class="feed" id="feed"></div></div>
 </div>
-<div class="modal" id="modal" onclick="if(event.target.id==='modal') closeModal()"><div class="modal-box"><div class="modal-media" id="modalMedia"></div><div class="modal-body"><div style="display:flex;justify-content:space-between"><div style="display:flex;gap:8px;align-items:center"><img id="mStoreImg" src="" style="width:28px;height:28px;border-radius:50%"><b id="mStore" style="font-size:12px"></b></div><div class="close" onclick="closeModal()">✕</div></div><div class="modal-price" id="mPrice" style="margin-top:14px"></div><div class="modal-name" id="mName"></div><div class="modal-desc" id="mDesc"></div><div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn btn-green" style="padding:13px" onclick="abrirCheckout()">🛒 COMPRAR</button><button class="btn btn-gray" style="padding:13px" onclick="contactWsp()">💬 Consultar</button></div><button class="btn btn-black" style="width:100%;margin-top:8px;padding:11px" onclick="goStore()">Ver tienda</button><div id="checkout" class="checkout hidden"><div style="font-weight:900;font-size:14px">Finalizar pedido</div><input id="cNombre" placeholder="Tu nombre *"><input id="cWsp" placeholder="Tu WhatsApp *"><div style="display:grid;grid-template-columns:90px 1fr;gap:8px"><input id="cCant" type="number" value="1" min="1"><select id="cEntrega"><option>Envío a domicilio</option><option>Retiro en local</option></select></div><input id="cDir" placeholder="Dirección"><select id="cPago"><option>Efectivo</option><option>Transferencia</option></select><textarea id="cNota" placeholder="Nota..." style="height:60px"></textarea><div id="cResumen" style="background:#f9fafb;padding:10px;border-radius:10px;margin-top:10px;font-size:12px;font-weight:700"></div><button class="btn btn-green" style="width:100%;padding:14px;margin-top:10px" onclick="enviarPedidoWsp()">📲 Enviar pedido</button></div></div></div></div>
+
+<div class="modal" id="modal" onclick="if(event.target.id==='modal') closeModal()"><div class="modal-box">
+<div class="modal-media" id="modalMedia" ontouchstart="touchMStart(event)" ontouchend="touchMEnd(event)"></div>
+<div class="modal-body">
+<div style="display:flex;justify-content:space-between"><div style="display:flex;gap:8px;align-items:center"><img id="mStoreImg" src="" style="width:28px;height:28px;border-radius:50%"><b id="mStore" style="font-size:12px"></b></div><div class="close" onclick="closeModal()">✕</div></div>
+<div class="modal-price" id="mPrice" style="margin-top:14px"></div><div class="modal-name" id="mName"></div><div class="modal-desc" id="mDesc"></div>
+<div id="mDots" style="display:flex;gap:6px;justify-content:center;margin-top:14px"></div>
+<div id="mCounter" style="text-align:center;font-size:11px;color:#888;margin-top:6px;font-weight:800"></div>
+<div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn btn-green" style="padding:13px" onclick="abrirCheckout()">🛒 COMPRAR</button><button class="btn btn-gray" style="padding:13px" onclick="contactWsp()">💬 Consultar</button></div>
+<button class="btn btn-black" style="width:100%;margin-top:8px;padding:11px" onclick="goStore()">Ver tienda</button>
+<div id="checkout" class="checkout hidden"><div style="font-weight:900;font-size:14px">Finalizar pedido</div><input id="cNombre" placeholder="Tu nombre *"><input id="cWsp" placeholder="Tu WhatsApp *"><div style="display:grid;grid-template-columns:90px 1fr;gap:8px"><input id="cCant" type="number" value="1" min="1"><select id="cEntrega"><option>Envío a domicilio</option><option>Retiro en local</option></select></div><input id="cDir" placeholder="Dirección"><select id="cPago"><option>Efectivo</option><option>Transferencia</option></select><textarea id="cNota" placeholder="Nota..." style="height:60px"></textarea><div id="cResumen" style="background:#f9fafb;padding:10px;border-radius:10px;margin-top:10px;font-size:12px;font-weight:700"></div><button class="btn btn-green" style="width:100%;padding:14px;margin-top:10px" onclick="enviarPedidoWsp()">📲 Enviar pedido</button></div>
+</div></div></div>
+
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbyb_1T-3wAcKsBIYhW6XSissrzcs0nGbFWvY83YN6l9vuNBzNQrhBqdntvKbESh1v52aQ/exec";
 function enviarASheet(d){ try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(d)}); }catch(e){} }
@@ -127,8 +139,6 @@ return `<div class="card">
 </div>
 <div class="card-body" onclick="openModal(${p.id})"><div class="card-price">$${p.price.toLocaleString('es-AR')}</div><div class="card-name">${p.name}</div><div class="card-store"><img src="${st.profile||'https://via.placeholder.com/40'}">${p.store}</div></div></div>`;
 }).join('')||`<div style="grid-column:1/-1;text-align:center;padding:60px;background:#fff;border-radius:16px;color:#888">Sin productos en Sheet</div>`;
-
-// TIENDAS: solo las que tienen productos reales en Sheet, no todo marketStores
 let tiendasConProd = {};
 DB.forEach(p=>{ tiendasConProd[p.storeId]= tiendasConProd[p.storeId]||{name:p.store, profile: getStores()[p.storeId]?.profile||'', count:0}; tiendasConProd[p.storeId].count++; });
 document.getElementById('storeList').innerHTML=Object.entries(tiendasConProd).map(([id,s])=>`<div class="store-mini" onclick="location.href='store.html?store=${id}'"><img src="${s.profile||'https://via.placeholder.com/40'}"><div><b>${s.name}</b><span>${s.count} prod • Tres Arroyos</span></div></div>`).join('')||'<div style="font-size:11px;color:#999">Sin tiendas aún</div>';
@@ -161,8 +171,52 @@ function touchEnd(e,id){
   if(start-end>50) moverCard(id,1);
   iniciarAuto(id);
 }
-function openModal(id){let p=DB.find(x=>x.id===id);if(!p) return;curProd=p;curIdx=0;let st=getStores()[p.storeId];document.getElementById('mStore').textContent=p.store;document.getElementById('mStoreImg').src=st?st.profile:'';document.getElementById('mPrice').textContent='$'+p.price.toLocaleString('es-AR');document.getElementById('mName').textContent=p.name;document.getElementById('mDesc').textContent=p.desc||'';showModalMedia();document.getElementById('checkout').classList.add('hidden');document.getElementById('modal').style.display='flex';updateResumen();}
-function showModalMedia(){let media=curProd.media||[{type:'img',src:curProd.img}];let m=media[curIdx];document.getElementById('modalMedia').innerHTML=`${m.type==='video'?`<video src="${m.src}" controls autoplay style="width:100%;height:100%;object-fit:contain"></video>`:`<img src="${m.src}" style="width:100%;height:100%;object-fit:contain">`}${media.length>1?`<div class="arrow l" onclick="event.stopPropagation();curIdx=(curIdx-1+media.length)%media.length;showModalMedia()">‹</div><div class="arrow r" onclick="event.stopPropagation();curIdx=(curIdx+1)%media.length;showModalMedia()">›</div>`:''}`;}
+
+function openModal(id){
+  let p=DB.find(x=>x.id===id); if(!p) return;
+  curProd=p; curIdx=0;
+  let st=getStores()[p.storeId];
+  document.getElementById('mStore').textContent=p.store;
+  document.getElementById('mStoreImg').src=st?st.profile:'https://via.placeholder.com/40';
+  document.getElementById('mPrice').textContent='$'+p.price.toLocaleString('es-AR');
+  document.getElementById('mName').textContent=p.name;
+  document.getElementById('mDesc').textContent=p.desc||'';
+  showModalMedia();
+  document.getElementById('checkout').classList.add('hidden');
+  document.getElementById('modal').style.display='flex';
+  updateResumen();
+}
+
+function showModalMedia(){
+  let media=curProd.media||[{type:'img',src:curProd.img}];
+  let m=media[curIdx];
+  let html = m.type==='video'
+  ? `<video src="${m.src}" controls autoplay style="width:100%;height:100%;object-fit:contain;max-height:70vh"></video>`
+   : `<img src="${m.src}" style="width:100%;height:100%;object-fit:contain;max-height:70vh">`;
+
+  document.getElementById('modalMedia').innerHTML = `
+    <div style="position:absolute;top:12px;left:12px;background:rgba(0,0,0,.7);color:#fff;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;z-index:3">${curIdx+1} / ${media.length}</div>
+    ${html}
+    ${media.length>1?`<div class="arrow l" onclick="event.stopPropagation();curIdx=(curIdx-1+media.length)%media.length;showModalMedia()">‹</div><div class="arrow r" onclick="event.stopPropagation();curIdx=(curIdx+1)%media.length;showModalMedia()">›</div>`:''}
+  `;
+
+  document.getElementById('mDots').innerHTML = media.map((_,k)=>`<div onclick="curIdx=${k};showModalMedia()" style="width:${k===curIdx?18:6}px;height:6px;border-radius:999px;background:${k===curIdx?'#111':'#ccc'};cursor:pointer;transition:.2s"></div>`).join('');
+  document.getElementById('mCounter').textContent = media.length>1? `Foto ${curIdx+1} de ${media.length} • Tocá los puntos para cambiar` : '';
+}
+
+let touchM_X=null;
+function touchMStart(e){ touchM_X=e.touches[0].clientX; }
+function touchMEnd(e){
+  if(touchM_X==null ||!curProd) return;
+  let diff = touchM_X - e.changedTouches[0].clientX;
+  if(Math.abs(diff)>50){
+    if(diff>0) curIdx=(curIdx+1+curProd.media.length)%curProd.media.length;
+    else curIdx=(curIdx-1+curProd.media.length)%curProd.media.length;
+    showModalMedia();
+  }
+  touchM_X=null;
+}
+
 function closeModal(){document.getElementById('modal').style.display='none';}
 function contactWsp(){let s=getStores()[curProd.storeId]||{wsp:''};let msg=encodeURIComponent(`Hola! Vi ${curProd.name} por $${curProd.price} en 3A VENDE`);window.open(`https://wa.me/54${(s.wsp||'').replace(/\D/g,'')}?text=${msg}`,'_blank');}
 function goStore(){location.href='store.html?store='+curProd.storeId;}
