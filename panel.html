@@ -52,7 +52,6 @@ textarea{height:70px;resize:none}
 <div class="logo" onclick="location.href='index.html'"><b>3A</b> VENDE</div>
 <div style="display:flex;gap:8px"><button class="btn btn-gray" onclick="location.href='index.html'">Market</button><button class="btn btn-black" onclick="irTienda()">Mi tienda</button><button class="btn btn-red" onclick="logout()">Salir</button></div>
 </header>
-
 <div class="tabs">
 <div class="tab active" id="t-publi" onclick="openTab('publi')">📦 Publicar</div>
 <div class="tab pedido" id="t-pedidos" onclick="openTab('pedidos')">🛒 Pedidos <span id="pedCount">0</span></div>
@@ -60,7 +59,6 @@ textarea{height:70px;resize:none}
 <div class="tab" id="t-finanzas" onclick="openTab('finanzas')">💰 Finanzas</div>
 <div class="tab" id="t-ventas" onclick="openTab('ventas')">🧾 Ventas</div>
 </div>
-
 <div class="wrap" id="wrap-publi">
 <div>
 <div class="card">
@@ -72,8 +70,8 @@ textarea{height:70px;resize:none}
 <label>Costo (para ganancia)</label><input id="pCost" type="number" placeholder="Ej: 8000">
 <label>Categoría</label><select id="pCat" onchange="updatePreview()"><option>Ropa</option><option>Calzado</option><option>Makeup</option><option>Tecnología</option><option>Hogar</option><option>Otros</option></select>
 <label>Descripción</label><textarea id="pDesc" placeholder="Talle, estado..." oninput="updatePreview()"></textarea>
-<label>Fotos * (auto-comprime a 35KB para que cargue en todos lados)</label>
-<div class="upload" onclick="document.getElementById('fileMedia').click()"><b>📸 TOCÁ PARA SUBIR FOTOS</b><div style="font-size:11px;color:#666;margin-top:2px">Hasta 10 fotos - compresión a 35KB para Sheet</div><div id="compressInfo" style="font-size:10px;color:#00a650;margin-top:4px"></div></div>
+<label>Fotos * (mejor calidad 45KB)</label>
+<div class="upload" onclick="document.getElementById('fileMedia').click()"><b>📸 TOCÁ PARA SUBIR FOTOS</b><div style="font-size:11px;color:#666;margin-top:2px">Hasta 10 fotos - 600px calidad 45%</div><div id="compressInfo" style="font-size:10px;color:#00a650;margin-top:4px"></div></div>
 <input type="file" id="fileMedia" accept="image/*" multiple style="display:none">
 <div class="preview" id="preview"></div>
 <button class="btn btn-green" style="width:100%;margin-top:14px;padding:14px;font-size:14px" id="btnPub">📦 PUBLICAR AHORA</button>
@@ -90,7 +88,6 @@ textarea{height:70px;resize:none}
 <div class="grid" id="grid"></div>
 </div>
 </div>
-
 <div class="wrap hidden" id="wrap-pedidos" style="grid-template-columns:1fr">
 <div class="card">
 <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px"><h3 style="font-weight:900">🛒 Pedidos - Sincronizado entre celulares</h3><div style="display:flex;gap:6px"><button class="btn btn-gray" onclick="syncPedidosSheet()">↻ Traer del Sheet</button><button class="btn btn-black" onclick="exportPedidos()">Excel</button></div></div>
@@ -99,12 +96,10 @@ textarea{height:70px;resize:none}
 <div id="pedidosList"></div>
 </div>
 </div>
-
 <div class="wrap hidden" id="wrap-vista" style="grid-template-columns:1fr 1fr">
 <div class="card"><h3 style="font-weight:900">Cómo te ven en el Market</h3><div class="live" style="margin-top:12px"><div class="live-media" id="liveMedia2">Sin foto</div><div style="padding:12px"><div style="font-weight:900;font-size:18px" id="livePrice2">$0</div><div id="liveName2">Título</div><div style="font-size:11px;color:#777" id="liveCat2"></div><div style="font-size:12px;margin-top:8px" id="liveDesc2"></div></div></div></div>
 <div class="card"><h3 style="font-weight:900">Mi tienda</h3><div id="sideStore" style="margin-top:10px;font-size:13px"></div><button class="btn btn-black" style="width:100%;margin-top:12px" onclick="irTienda()">Ver tienda</button></div>
 </div>
-
 <div class="wrap hidden" id="wrap-finanzas" style="grid-template-columns:1fr">
 <div>
 <div class="kpi"><div class="kpi-box"><span>Ingresos</span><b id="kIngresos">$0</b></div><div class="kpi-box"><span>Costos</span><b id="kCostos">$0</b></div><div class="kpi-box" style="background:#e6f7ed"><span>Ganancia</span><b id="kGanancia" style="color:#0a7a2e">$0</b></div></div>
@@ -112,11 +107,9 @@ textarea{height:70px;resize:none}
 <div class="card" style="margin-top:12px"><h3 style="font-weight:900">Gastos extra</h3><div style="display:grid;grid-template-columns:1fr 100px 80px;gap:8px;margin-top:10px"><input id="gDesc" placeholder="Envío, bolsa"><input id="gMonto" type="number" placeholder="$"><button class="btn btn-black" onclick="addGasto()">Agregar</button></div><table class="table" style="margin-top:12px"><tbody id="gastoTable"></tbody></table></div>
 </div>
 </div>
-
 <div class="wrap hidden" id="wrap-ventas" style="grid-template-columns:1fr">
 <div class="card"><div style="display:flex;justify-content:space-between"><h3 style="font-weight:900">Ventas</h3><button class="btn btn-green" onclick="nuevaVenta()">+ Venta manual</button></div><table class="table" style="margin-top:12px"><thead><tr><th>Producto</th><th>Cliente</th><th>Precio</th><th>Fecha</th></tr></thead><tbody id="ventasTable"></tbody></table></div>
 </div>
-
 <canvas id="canvas" style="display:none"></canvas>
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbyb_1T-3wAcKsBIYhW6XSissrzcs0nGbFWvY83YN6l9vuNBzNQrhBqdntvKbESh1v52aQ/exec";
@@ -125,7 +118,7 @@ var curStoreId=null, mediaTemp=[], editId=null, filtroPed='todos';
 function getStores(){try{return JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){return{}}}
 function setStores(o){localStorage.setItem('marketStores',JSON.stringify(o))}
 function getProds(){try{return JSON.parse(localStorage.getItem('marketProductsAR')||'[]')}catch(e){return[]}}
-function setProds(p){ try{ localStorage.setItem('marketProductsAR',JSON.stringify(p)); return true; } catch(e){ alert('Memoria llena! Borrá publicaciones viejas. Error: '+e.message); document.getElementById('debug').textContent+='\nSTORAGE LLENO: '+e.message; return false; } }
+function setProds(p){ try{ localStorage.setItem('marketProductsAR',JSON.stringify(p)); return true; } catch(e){ alert('Memoria llena! Borrá publicaciones viejas. Error: '+e.message); return false; } }
 function getUsers(){try{return JSON.parse(localStorage.getItem('marketUsers')||'{}')}catch(e){return{}}}
 function getGastos(){try{return JSON.parse(localStorage.getItem('marketGastos')||'[]')}catch(e){return[]}}
 function setGastos(g){localStorage.setItem('marketGastos',JSON.stringify(g))}
@@ -136,26 +129,18 @@ function setPedidos(p){localStorage.setItem('marketPedidos',JSON.stringify(p))}
 function logout(){ localStorage.removeItem('currentUser'); location.href='login.html'; }
 function init(){
   try{
-    document.getElementById('debug').textContent='Iniciando... '+new Date().toLocaleTimeString();
     var wsp=localStorage.getItem('currentUser');
     var users=getUsers();
     var stores=getStores();
     if(!wsp ||!users[wsp]){ location.href='login.html'; return; }
     curStoreId=users[wsp].storeId;
     if(!stores[curStoreId]){ location.href='login.html'; return; }
-    document.getElementById('storeInfo').innerHTML='Publicando en: <b>'+stores[curStoreId].name+'</b><br>ID:'+curStoreId+'<br><span style="color:#00a650">✅ Logueado + Sheet conectado - CARGA EN TODOS LADOS</span>';
+    document.getElementById('storeInfo').innerHTML='Publicando en: <b>'+stores[curStoreId].name+'</b><br>ID:'+curStoreId+'<br><span style="color:#00a650">✅ 600px 45% calidad + borrado fix</span>';
     document.getElementById('sideStore').innerHTML='<b>'+stores[curStoreId].name+'</b><br>'+stores[curStoreId].dir+'<br>WSP: '+stores[curStoreId].wsp;
-    document.getElementById('debug').textContent+='\nStore OK: '+curStoreId+' Prods:'+getProds().length;
-    var lastKey='lastSheetLogin_'+curStoreId;
-    var last=parseInt(localStorage.getItem(lastKey)||'0');
-    if(Date.now()-last > 86400000){
-      localStorage.setItem(lastKey, Date.now().toString());
-      enviarASheet({tipo:'tienda', storeId:curStoreId, tienda:stores[curStoreId].name, whatsapp:stores[curStoreId].wsp, direccion:stores[curStoreId].dir, descripcion:'LOGIN PANEL '+new Date().toLocaleString('es-AR')});
-    }
     cargarProds(); cargarFinanzas(); cargarVentas(); cargarPedidos(); updatePreview();
     setTimeout(syncProductos, 1500);
     setInterval(syncProductos, 10000);
-  }catch(e){ document.getElementById('debug').textContent+='\nERROR INIT: '+e.message; alert('Error init: '+e.message); }
+  }catch(e){ alert('Error init: '+e.message); }
 }
 function openTab(t){
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
@@ -167,8 +152,6 @@ function openTab(t){
   document.getElementById('wrap-ventas').classList.add('hidden');
   document.getElementById('wrap-'+t).classList.remove('hidden');
   if(t==='pedidos') cargarPedidos();
-  if(t==='finanzas') cargarFinanzas();
-  if(t==='ventas') cargarVentas();
 }
 function compressImage(file, cb){
   var reader=new FileReader();
@@ -176,12 +159,12 @@ function compressImage(file, cb){
     var img=new Image();
     img.onload=function(){
       var canvas=document.getElementById('canvas');
-      var max=500, w=img.width, h=img.height;
+      var max=600, w=img.width, h=img.height;
       if(w>max||h>max){ if(w>h){ h*=max/w; w=max; } else { w*=max/h; h=max; } }
       canvas.width=w; canvas.height=h;
       canvas.getContext('2d').drawImage(img,0,0,w,h);
-      var b64=canvas.toDataURL('image/jpeg',0.3);
-      cb({type:'img',src:b64,orig:(file.size/1024/1024).toFixed(1),comp:(b64.length/1024).toFixed(0)});
+      var b64=canvas.toDataURL('image/jpeg',0.45);
+      cb({type:'img',src:b64,comp:(b64.length/1024).toFixed(0)});
     };
     img.src=e.target.result;
   };
@@ -190,13 +173,13 @@ function compressImage(file, cb){
 document.getElementById('fileMedia').addEventListener('change', function(e){
   var files=e.target.files;
   if(mediaTemp.length+files.length>10){alert('Máx 10 fotos');return;}
-  document.getElementById('compressInfo').textContent='Comprimiendo a 35KB (para que cargue en todos lados)...';
+  document.getElementById('compressInfo').textContent='Comprimiendo a 600px 45%...';
   var done=0;
   for(let i=0;i<files.length;i++){
     compressImage(files[i], function(obj){
       mediaTemp.push(obj);
       done++; renderPreview(); updatePreview();
-      document.getElementById('compressInfo').textContent='✅ '+done+'/'+files.length+' - '+obj.orig+'MB → '+obj.comp+'KB (35KB OK)';
+      document.getElementById('compressInfo').textContent='✅ '+done+'/'+files.length+' - '+obj.comp+'KB (calidad mejorada)';
     });
   }
   e.target.value='';
@@ -213,22 +196,19 @@ function updatePreview(){
   if(mediaTemp.length>0){ var h='<img src="'+mediaTemp[0].src+'">'; document.getElementById('liveMedia').innerHTML=h; document.getElementById('liveMedia2').innerHTML=h; }
 }
 function publicar(){
-  document.getElementById('debug').textContent+='\nClick publicar';
   try{
     var name=document.getElementById('pName').value.trim();
     var price=parseInt(document.getElementById('pPrice').value);
     var cost=parseInt(document.getElementById('pCost').value)||0;
     var cat=document.getElementById('pCat').value;
     var desc=document.getElementById('pDesc').value.trim();
-    if(!name){alert('Poné título');return;}
-    if(!price){alert('Poné precio');return;}
-    if(mediaTemp.length===0){alert('Subí al menos 1 foto');return;}
+    if(!name||!price){alert('Falta título o precio');return;}
+    if(mediaTemp.length===0){alert('Foto requerida');return;}
     var prods=getProds(); var stores=getStores(); var s=stores[curStoreId];
     if(editId){
       var idx=prods.findIndex(p=>p.id===editId);
-      if(idx>-1){ prods[idx].name=name; prods[idx].price=price; prods[idx].cost=cost; prods[idx].category=cat; prods[idx].desc=desc; prods[idx].media=mediaTemp.slice(); prods[idx].img=mediaTemp[0].src; prods[idx].imgs=mediaTemp.map(m=>m.src); }
-      if(!setProds(prods)) return;
-      document.getElementById('msg').textContent='✅ Actualizada'; cancelar(); cargarProds(); cargarFinanzas(); return;
+      if(idx>-1){ prods[idx].name=name; prods[idx].price=price; prods[idx].cost=cost; prods[idx].category=cat; prods[idx].desc=desc; prods[idx].media=mediaTemp.slice(); prods[idx].img=mediaTemp[0].src; }
+      setProds(prods); document.getElementById('msg').textContent='✅ Actualizada'; cancelar(); cargarProds(); cargarFinanzas(); return;
     }
     var nuevo={id:Date.now(),storeId:curStoreId,store:s.name,name:name,price:price,cost:cost,category:cat,desc:desc,media:mediaTemp.slice(),img:mediaTemp[0].src,imgs:mediaTemp.map(m=>m.src),created:Date.now()};
     prods.push(nuevo);
@@ -236,13 +216,9 @@ function publicar(){
     enviarASheet({tipo:'producto',id:nuevo.id,storeId:curStoreId,tienda:s.name,whatsapp:s.wsp,producto:name,precio:price,costo:cost,categoria:cat,descripcion:desc,imagen:mediaTemp[0].src,fecha:new Date().toLocaleString('es-AR')});
     document.getElementById('pName').value=''; document.getElementById('pPrice').value=''; document.getElementById('pCost').value=''; document.getElementById('pDesc').value='';
     mediaTemp=[]; renderPreview(); updatePreview();
-    document.getElementById('msg').textContent='✅ ¡Publicado y se ve en todos lados! (35KB)';
-    document.getElementById('debug').textContent+='\nPUBLICADO OK ID:'+nuevo.id+' 35KB';
+    document.getElementById('msg').textContent='✅ Publicado 45KB calidad mejorada';
     cargarProds(); cargarFinanzas();
-  }catch(err){
-    alert('ERROR: '+err.message);
-    document.getElementById('debug').textContent+='\nERROR PUBLICAR: '+err.message;
-  }
+  }catch(err){ alert('ERROR: '+err.message); }
 }
 document.getElementById('btnPub').addEventListener('click', publicar);
 function cargarProds(){
@@ -294,20 +270,28 @@ function cambiarEstado(id,nuevo){var all=getPedidos();var idx=all.findIndex(x=>x
 function imprimirPedido(id){var p=getPedidos().find(x=>x.id===id);var w=window.open('','_blank');w.document.write('<body style="font-family:Arial;padding:20px"><h2>'+getStores()[curStoreId].name+' - TICKET #'+p.id+'</h2><hr><b>Prod:</b> '+p.producto+' x'+p.cantidad+'<br><b>Total:</b> $'+p.total+'<br><b>Cliente:</b> '+p.cliente+'<br><b>WSP:</b> '+p.clienteWsp+'<br><b>Entrega:</b> '+p.entrega+'<br><b>Dir:</b> '+p.direccion+'<br><b>Pago:</b> '+p.pago+'<br><b>Nota:</b> '+p.nota+'<br><hr><button onclick="window.print()">Imprimir</button></body>');}
 async function syncProductos(){
   try{
-    let r=await fetch(SHEET_URL+"?tipo=producto");
+    let t=Date.now();
+    let r=await fetch(SHEET_URL+"?tipo=producto&t="+t);
     let d=await r.json();
-    let rb=await fetch(SHEET_URL+"?tipo=borrado").then(x=>x.json()).catch(()=>[]);
+    let rb=await fetch(SHEET_URL+"?tipo=borrado&t="+t).then(x=>x.json()).catch(()=>[]);
     let borrados=new Set(rb.map(x=>String(x.id)));
-    let cur=getProds();
-    cur=cur.filter(p=>!borrados.has(String(p.id)));
-    let ids=new Set(cur.map(x=>String(x.id)));
+    let curAll=getProds();
+    let curFiltrado=curAll.filter(p=>!borrados.has(String(p.id)));
+    if(curFiltrado.length!==curAll.length){
+      setProds(curFiltrado);
+      cargarProds(); cargarFinanzas();
+    }
+    let ids=new Set(curFiltrado.map(x=>String(x.id)));
     let nuevos=d.filter(x=>!ids.has(String(x.id))&&!borrados.has(String(x.id))&&x.imagen).map(x=>({id:parseInt(x.id)||Date.now(),storeId:x.storeId,store:x.tienda,name:x.producto,price:parseInt(x.precio)||0,cost:parseInt(x.costo)||0,category:x.categoria||'Otros',desc:x.descripcion||'',img:x.imagen,media:[{src:x.imagen}],created:Date.now()}));
-    if(nuevos.length||cur.length!==getProds().length){ setProds(cur.concat(nuevos)); cargarProds(); document.getElementById('debug').textContent+='\nSync OK: +'+nuevos.length+' - Borrados:'+rb.length; }
+    if(nuevos.length>0){
+      setProds(curFiltrado.concat(nuevos));
+      cargarProds();
+    }
   }catch(e){}
 }
-async function syncPedidosSheet(){try{let r=await fetch(SHEET_URL+"?tipo=pedido");let d=await r.json();let cur=getPedidos();let ids=new Set(cur.map(x=>String(x.id)));let nuevos=d.filter(x=>x.storeId==curStoreId&&!ids.has(String(x.id))).map(x=>({id:parseInt(x.id)||Date.now(),storeId:x.storeId,producto:x.producto,cantidad:parseInt(x.cantidad)||1,total:parseInt(x.total)||0,cliente:x.cliente,clienteWsp:x.clienteWsp||'',entrega:x.entrega,direccion:x.direccion||'',pago:x.pago,nota:x.nota||'',fecha:Date.now(),estado:'nuevo'}));if(nuevos.length){cur=cur.concat(nuevos);setPedidos(cur);cargarPedidos();alert('✅ '+nuevos.length+' pedidos del Sheet');}else alert('Al día');}catch(e){alert('Error: '+e.message);}}
+async function syncPedidosSheet(){try{let r=await fetch(SHEET_URL+"?tipo=pedido&t="+Date.now());let d=await r.json();let cur=getPedidos();let ids=new Set(cur.map(x=>String(x.id)));let nuevos=d.filter(x=>x.storeId==curStoreId&&!ids.has(String(x.id))).map(x=>({id:parseInt(x.id)||Date.now(),storeId:x.storeId,producto:x.producto,cantidad:parseInt(x.cantidad)||1,total:parseInt(x.total)||0,cliente:x.cliente,clienteWsp:x.clienteWsp||'',entrega:x.entrega,direccion:x.direccion||'',pago:x.pago,nota:x.nota||'',fecha:Date.now(),estado:'nuevo'}));if(nuevos.length){cur=cur.concat(nuevos);setPedidos(cur);cargarPedidos();alert('✅ '+nuevos.length+' pedidos');}else alert('Al día');}catch(e){alert('Error: '+e.message);}}
 function exportPedidos(){var all=getPedidos().filter(p=>p.storeId===curStoreId);var csv='producto,cantidad,total,cliente,wsp,entrega,direccion,pago,nota,estado\n'+all.map(p=>`${p.producto},${p.cantidad},${p.total},${p.cliente},${p.clienteWsp},${p.entrega},${p.direccion},${p.pago},${p.nota},${p.estado}`).join('\n');var blob=new Blob([csv],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='pedidos.csv';a.click();}
 window.onload=init;
 </script>
 </body>
-                                                                                                                                                                                                     </html>
+</html>
