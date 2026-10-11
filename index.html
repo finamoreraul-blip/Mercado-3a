@@ -14,39 +14,41 @@ header{background:#fff;padding:12px 16px;position:sticky;top:0;z-index:30;box-sh
 .search span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;color:#888}
 .btn{border:none;padding:8px 14px;border-radius:6px;font-weight:700;font-size:12px;cursor:pointer}
 .btn-green{background:#00a650;color:#fff}.btn-gray{background:#f5f5f5;border:1px solid #e5e5e5}
-.cat{padding:8px 14px;border-radius:999px;border:1px solid #e5e5e5;background:#fff;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;transition:.2s}
+.cat{padding:8px 14px;border-radius:999px;border:1px solid #e5e5e5;background:#fff;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer}
 .cat.active{background:#111;color:#fff;border-color:#111}
-.wrap{max-width:1200px;margin:16px auto;padding:0 16px;display:grid;grid-template-columns:220px 1fr;gap:16px}
-.sidebar{background:#fff;border-radius:12px;padding:14px;height:fit-content;position:sticky;top:84px}
-.sidebar h3{font-size:12px;font-weight:800;margin-bottom:10px}
-.store-mini{display:flex;gap:8px;align-items:center;padding:8px;border-radius:8px;cursor:pointer}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:12px 0;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.wrap{max-width:1200px;margin:16px auto;padding:0 16px;display:grid;grid-template-columns:240px 1fr;gap:20px}
+.sidebar{background:#fff;border-radius:16px;padding:16px;height:fit-content;position:sticky;top:88px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.sidebar h3{font-size:12px;font-weight:800;margin-bottom:12px}
+.store-mini{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;cursor:pointer}
 .store-mini:hover{background:#f5f5f5}
-.store-mini img{width:32px;height:32px;border-radius:50%;object-fit:cover}
-.store-mini b{font-size:11px;display:block}.store-mini span{font-size:10px;color:#888}
+.store-mini img{width:36px;height:36px;border-radius:50%;object-fit:cover}
+.store-mini b{font-size:12px;display:block}.store-mini span{font-size:10px;color:#888}
 .feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
-.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer;transition:.2s;position:relative}
-.card:hover{box-shadow:0 8px 24px rgba(0,0,0,.12);transform:translateY(-4px)}
-.card-media{position:relative;height:320px;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer;transition:.25s;position:relative;border:1px solid #f0f0f0}
+.card:hover{box-shadow:0 12px 32px rgba(0,0,0,.12);transform:translateY(-4px)}
+.card-media{position:relative;height:360px;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .card-media img,.card-media video{width:100%;height:100%;object-fit:cover}
-.card-badge{position:absolute;top:10px;left:10px;background:#111;color:#fff;padding:6px 10px;border-radius:999px;font-size:10px;font-weight:800}
+.card-badge{position:absolute;top:12px;left:12px;background:#111;color:#fff;padding:6px 12px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.5px}
 .card-badge.video{background:#00a650}
-.card-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;background:rgba(0,0,0,.5);padding:6px 12px;border-radius:999px}
-.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.6)}.dot.on{background:#fff;width:18px}
-.card-body{padding:14px}
-.card-price{font-weight:900;font-size:18px}.card-name{font-size:14px;margin-top:4px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.card-store{font-size:11px;color:#888;margin-top:6px;display:flex;align-items:center;gap:5px}
-.card-store img{width:18px;height:18px;border-radius:50%}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
-.modal-box{background:#fff;border-radius:16px;max-width:900px;width:100%;max-height:90vh;overflow:auto;display:grid;grid-template-columns:1fr 1fr}
+.card-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px;background:rgba(0,0,0,.6);padding:8px 14px;border-radius:999px;backdrop-filter:blur(4px)}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.6)}.dot.on{background:#fff;width:20px}
+.card-body{padding:16px}
+.card-price{font-weight:900;font-size:20px}.card-name{font-size:14px;margin-top:6px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-weight:600}
+.card-store{font-size:11px;color:#888;margin-top:8px;display:flex;align-items:center;gap:6px}
+.card-store img{width:20px;height:20px;border-radius:50%}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px)}
+.modal-box{background:#fff;border-radius:20px;max-width:900px;width:100%;max-height:90vh;overflow:auto;display:grid;grid-template-columns:1fr 1fr}
 .modal-media{background:#000;display:flex;align-items:center;justify-content:center;min-height:400px;position:relative}
 .modal-media img,.modal-media video{width:100%;height:100%;object-fit:contain;max-height:70vh}
-.modal-body{padding:20px}
-.modal-price{font-size:24px;font-weight:900}.modal-name{font-size:16px;font-weight:700;margin-top:6px}.modal-desc{font-size:13px;color:#555;margin-top:12px;line-height:1.5;white-space:pre-wrap}
-.arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.9);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800;z-index:2}
-.arrow.l{left:12px}.arrow.r{right:12px}
-.close{position:absolute;top:10px;right:10px;background:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800;z-index:3}
+.modal-body{padding:24px}
+.modal-price{font-size:28px;font-weight:900}.modal-name{font-size:17px;font-weight:700;margin-top:8px}.modal-desc{font-size:13px;color:#555;margin-top:14px;line-height:1.6;white-space:pre-wrap}
+.arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.95);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800;z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.arrow.l{left:14px}.arrow.r{right:14px}
+.close{position:absolute;top:12px;right:12px;background:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800;z-index:3}
 .hidden{display:none!important}
-@media(max-width:900px){.wrap{grid-template-columns:1fr}.sidebar{display:none}.modal-box{grid-template-columns:1fr}.feed{grid-template-columns:repeat(2,1fr);gap:12px}.card-media{height:260px}.search{max-width:180px}}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.sidebar{display:none}.modal-box{grid-template-columns:1fr}.feed{grid-template-columns:repeat(2,1fr);gap:12px}.card-media{height:240px}.search{max-width:160px}}
 </style>
 </head>
 <body>
@@ -54,80 +56,148 @@ header{background:#fff;padding:12px 16px;position:sticky;top:0;z-index:30;box-sh
 <div class="top">
 <div style="display:flex;gap:12px;align-items:center">
 <div style="position:relative">
-<button onclick="document.getElementById('menuLeft').classList.toggle('hidden')" style="border:none;background:#f5f5f5;width:40px;height:40px;border-radius:50%;font-size:22px;cursor:pointer;font-weight:800">⋮</button>
-<div id="menuLeft" class="hidden" style="position:absolute;left:0;top:48px;background:#fff;border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.18);padding:12px;z-index:50;min-width:240px;border:1px solid #eee">
-<div style="font-size:11px;color:#888;font-weight:800;padding:6px 10px;letter-spacing:.5px">MENÚ</div>
-<div class="cat" onclick="setCat('todos',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:4px 0;display:flex;justify-content:space-between">🛍️ Todos los productos <span>→</span></div>
-<div class="cat" onclick="document.getElementById('storeList').scrollIntoView({behavior:'smooth'});document.getElementById('menuLeft').classList.add('hidden')" style="margin:4px 0;display:flex;justify-content:space-between">🏪 Ver tiendas <span>→</span></div>
-<div class="cat" onclick="document.getElementById('q').focus();document.getElementById('menuLeft').classList.add('hidden')" style="margin:4px 0;display:flex;justify-content:space-between">🔍 Buscar <span>→</span></div>
-<div style="height:1px;background:#eee;margin:10px 0"></div>
-<div style="font-size:11px;color:#888;font-weight:800;padding:6px 10px;letter-spacing:.5px">CATEGORÍAS</div>
-<div class="cat" onclick="setCat('maquillaje',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:4px 0">💄 Maquillaje</div>
-<div class="cat" onclick="setCat('limpieza',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:4px 0">🧹 Limpieza</div>
-<div class="cat" onclick="setCat('comida',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:4px 0">🍔 Comida</div>
-<div class="cat" onclick="setCat('clothing',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:4px 0">👕 Ropa</div>
-<div class="cat" onclick="setCat('verduleria',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:4px 0">🥬 Verdulería</div>
-<div class="cat" onclick="setCat('carniceria',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:4px 0">🥩 Carnicería</div>
-<div style="height:1px;background:#eee;margin:10px 0"></div>
-<a href="panel.html" style="display:block;text-align:center;background:#00a650;color:#fff;padding:12px;border-radius:999px;font-size:12px;font-weight:800;text-decoration:none">+ Publicar gratis 10 días</a>
-<div style="font-size:10px;color:#888;text-align:center;margin-top:8px">Después $4.500/mes o 10% por venta</div>
+<button onclick="document.getElementById('menuLeft').classList.toggle('hidden')" style="border:none;background:#f5f5f5;width:42px;height:42px;border-radius:50%;font-size:22px;cursor:pointer;font-weight:800">⋮</button>
+<div id="menuLeft" class="hidden" style="position:absolute;left:0;top:50px;background:#fff;border-radius:18px;box-shadow:0 16px 40px rgba(0,0,0,.2);padding:14px;z-index:50;min-width:260px;border:1px solid #eee">
+<div style="font-size:11px;color:#888;font-weight:800;padding:6px 10px;letter-spacing:.6px">NAVEGACIÓN</div>
+<div class="cat" onclick="setCat('todos',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:5px 0;padding:12px 14px">🛍️ Todos los productos</div>
+<div class="cat" onclick="document.getElementById('tiendas').scrollIntoView({behavior:'smooth'});document.getElementById('menuLeft').classList.add('hidden')" style="margin:5px 0;padding:12px 14px">🏪 Tiendas destacadas</div>
+<div class="cat" onclick="document.getElementById('q').focus();document.getElementById('menuLeft').classList.add('hidden')" style="margin:5px 0;padding:12px 14px">🔍 Buscar productos</div>
+<div style="height:1px;background:#eee;margin:12px 0"></div>
+<div style="font-size:11px;color:#888;font-weight:800;padding:6px 10px;letter-spacing:.6px">CATEGORÍAS</div>
+<div class="cat" onclick="setCat('maquillaje',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:5px 0">💄 Maquillaje</div>
+<div class="cat" onclick="setCat('limpieza',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:5px 0">🧹 Limpieza del hogar</div>
+<div class="cat" onclick="setCat('comida',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:5px 0">🍔 Comida y delivery</div>
+<div class="cat" onclick="setCat('clothing',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:5px 0">👕 Ropa y accesorios</div>
+<div class="cat" onclick="setCat('verduleria',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:5px 0">🥬 Verdulería</div>
+<div class="cat" onclick="setCat('carniceria',this);document.getElementById('menuLeft').classList.add('hidden')" style="margin:5px 0">🥩 Carnicería</div>
+<div style="height:1px;background:#eee;margin:12px 0"></div>
+<a href="panel.html" style="display:block;text-align:center;background:#00a650;color:#fff;padding:14px;border-radius:999px;font-size:13px;font-weight:800;text-decoration:none">+ Publicar gratis 10 días</a>
+<div style="font-size:10px;color:#888;text-align:center;margin-top:10px;line-height:1.4">Después $4.500/mes o 10% por venta<br>WhatsApp directo • Sin intermediarios</div>
 </div>
 </div>
 <div class="logo" onclick="location.href='index.html'"><b>3A</b> VENDE</div>
 </div>
 <div style="display:flex;gap:8px;align-items:center">
-<div class="search"><span>🔍</span><input id="q" placeholder="Buscar productos..." oninput="render()"></div>
-<button class="btn btn-green" onclick="location.href='panel.html'">Mi panel</button>
+<div class="search"><span>🔍</span><input id="q" placeholder="Buscar en Tres Arroyos..." oninput="render()"></div>
+<button class="btn btn-green" style="padding:10px 18px" onclick="location.href='panel.html'">Mi panel</button>
 </div>
 </div>
 </header>
 
-<div class="wrap">
-<div class="sidebar"><h3>Tiendas en Tres Arroyos</h3><div id="storeList"></div></div>
-<div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:12px;color:#888"><span id="count">0</span> publicaciones</div><div style="font-size:11px;color:#888">Tres Arroyos • Envíos y retiros</div></div><div class="feed" id="feed"></div></div>
+<!-- BANNER CENTRADO -->
+<div style="max-width:1200px;margin:18px auto;padding:0 16px">
+<div style="background:linear-gradient(135deg,#00a650 0%,#00d26a 100%);border-radius:24px;padding:40px 20px;text-align:center;color:#fff;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,166,80,.25)">
+<div style="position:absolute;top:-30px;right:-30px;font-size:140px;opacity:.12">🛒</div>
+<div style="position:absolute;bottom:-30px;left:-30px;font-size:120px;opacity:.1">📦</div>
+<h1 style="font-size:34px;font-weight:900;letter-spacing:-1.2px;position:relative;z-index:2">3A VENDE</h1>
+<p style="font-size:15px;margin-top:10px;opacity:.95;position:relative;z-index:2;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.5">El marketplace de Tres Arroyos. Comprá directo por WhatsApp, con envíos y retiros en el día.</p>
+<div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative;z-index:2">
+<span style="background:rgba(255,255,255,.25);padding:8px 16px;border-radius:999px;font-size:11px;font-weight:700;backdrop-filter:blur(4px)">✓ 10 días gratis</span>
+<span style="background:rgba(255,255,255,.25);padding:8px 16px;border-radius:999px;font-size:11px;font-weight:700;backdrop-filter:blur(4px)">✓ Publicación ilimitada</span>
+<span style="background:#fff;color:#00a650;padding:8px 16px;border-radius:999px;font-size:11px;font-weight:900;box-shadow:0 2px 8px rgba(0,0,0,.15)">✓ WhatsApp directo</span>
+</div>
+</div>
 </div>
 
-<div class="modal" id="modal" onclick="if(event.target.id==='modal') closeModal()"><div class="modal-box"><div class="modal-media" id="modalMedia"></div><div class="modal-body"><div style="display:flex;justify-content:space-between"><div style="display:flex;gap:8px;align-items:center"><img id="mStoreImg" src="" style="width:28px;height:28px;border-radius:50%"><b id="mStore" style="font-size:12px"></b></div><div class="close" onclick="closeModal()">✕</div></div><div class="modal-price" id="mPrice" style="margin-top:14px"></div><div class="modal-name" id="mName"></div><div class="modal-desc" id="mDesc"></div><div style="margin-top:16px;display:flex;gap:8px"><button class="btn btn-green" style="flex:1;padding:12px" onclick="contactWsp()">WhatsApp</button><button class="btn btn-gray" style="flex:1;padding:12px" onclick="goStore()">Ver tienda</button></div></div></div></div>
+<!-- STATS + CATS -->
+<div style="max-width:1200px;margin:0 auto;padding:0 16px">
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+<div style="background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.06)"><b id="statProd" style="font-size:20px;display:block">0</b><span style="font-size:11px;color:#888">Publicaciones</span></div>
+<div style="background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.06)"><b id="statStore" style="font-size:20px;display:block">0</b><span style="font-size:11px;color:#888">Tiendas activas</span></div>
+<div style="background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.06)"><b style="font-size:20px;display:block">24h</b><span style="font-size:11px;color:#888">Envíos en Tres Arroyos</span></div>
+</div>
+<div class="cats" id="catsTop">
+<div class="cat active" onclick="setCat('todos',this)">Todos</div>
+<div class="cat" onclick="setCat('maquillaje',this)">💄 Maquillaje</div>
+<div class="cat" onclick="setCat('limpieza',this)">🧹 Limpieza</div>
+<div class="cat" onclick="setCat('comida',this)">🍔 Comida</div>
+<div class="cat" onclick="setCat('clothing',this)">👕 Ropa</div>
+<div class="cat" onclick="setCat('verduleria',this)">🥬 Verdulería</div>
+<div class="cat" onclick="setCat('carniceria',this)">🥩 Carnicería</div>
+</div>
+</div>
+
+<div class="wrap">
+<div class="sidebar" id="tiendas">
+<h3>🏪 Tiendas destacadas</h3>
+<div id="storeList"></div>
+<div style="margin-top:16px;padding-top:16px;border-top:1px solid #eee">
+<div style="font-size:11px;color:#888;font-weight:700">¿Tenés tienda en Tres Arroyos?</div>
+<div style="font-size:12px;margin-top:6px;line-height:1.4">Publicá gratis y vendé por WhatsApp sin comisiones fijas.</div>
+<a href="panel.html" style="display:block;margin-top:10px;background:#00a650;color:#fff;text-align:center;padding:10px;border-radius:999px;font-size:12px;font-weight:800;text-decoration:none">Empezar a vender →</a>
+<div style="font-size:10px;color:#888;margin-top:8px;text-align:center">10 días gratis • Luego $4.500/mes o 10%</div>
+</div>
+<div style="margin-top:16px;background:#f8f8f8;border-radius:12px;padding:12px">
+<div style="font-size:11px;font-weight:800">💬 Cómo comprar</div>
+<div style="font-size:11px;color:#666;margin-top:6px;line-height:1.5">1. Buscá el producto<br>2. Tocá WhatsApp<br>3. Coordiná envío/retiro<br>Directo con el vendedor</div>
+</div>
+</div>
+<div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+<div style="font-size:13px;color:#666"><b id="count">0</b> <span style="color:#888">publicaciones en Tres Arroyos</span></div>
+<div style="font-size:11px;color:#888;background:#fff;padding:6px 12px;border-radius:999px;border:1px solid #eee">📍 Tres Arroyos • Envíos y retiros</div>
+</div>
+<div class="feed" id="feed"></div>
+<div style="margin-top:32px;background:#fff;border-radius:16px;padding:20px;text-align:center;border:1px solid #eee">
+<div style="font-size:12px;font-weight:800">¿No encontraste lo que buscabas?</div>
+<div style="font-size:11px;color:#888;margin-top:4px">Publicá tu pedido o buscá en todas las categorías</div>
+<button onclick="setCat('todos',document.querySelector('.cat'));document.getElementById('q').value='';render()" style="margin-top:12px;background:#111;color:#fff;border:none;padding:10px 20px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer">Ver todo</button>
+</div>
+</div>
+</div>
+
+<div style="max-width:1200px;margin:32px auto;padding:0 16px">
+<div style="background:#111;color:#fff;border-radius:20px;padding:24px;text-align:center">
+<div style="font-weight:900;font-size:18px"><b style="color:#00a650">3A</b> VENDE</div>
+<div style="font-size:11px;color:#888;margin-top:6px">Marketplace de Tres Arroyos • Hecho para emprendedores locales</div>
+<div style="margin-top:14px;display:flex;gap:12px;justify-content:center;font-size:11px;color:#666"><span>WhatsApp directo</span><span>•</span><span>Sin comisiones ocultas</span><span>•</span><span>Publicá gratis</span></div>
+</div>
+</div>
+
+<a href="panel.html" style="position:fixed;bottom:20px;right:20px;background:#00a650;color:#fff;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;box-shadow:0 8px 24px rgba(0,166,80,.4);z-index:20">+</a>
+
+<div class="modal" id="modal" onclick="if(event.target.id==='modal') closeModal()"><div class="modal-box"><div class="modal-media" id="modalMedia"></div><div class="modal-body"><div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;gap:10px;align-items:center"><img id="mStoreImg" src="" style="width:32px;height:32px;border-radius:50%"><b id="mStore" style="font-size:13px"></b></div><div class="close" onclick="closeModal()">✕</div></div><div class="modal-price" id="mPrice" style="margin-top:16px"></div><div class="modal-name" id="mName"></div><div class="modal-desc" id="mDesc"></div><div style="margin-top:20px;display:flex;gap:10px"><button class="btn btn-green" style="flex:1;padding:14px;font-size:13px" onclick="contactWsp()">💬 WhatsApp</button><button class="btn btn-gray" style="flex:1;padding:14px;font-size:13px" onclick="goStore()">🏪 Ver tienda</button></div><div style="margin-top:12px;font-size:11px;color:#888">Publicado en 3A VENDE • Compra segura por WhatsApp directo</div></div></div></div>
 
 <script>
 function getStores(){try{return JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){return{}}}
 function getProds(){try{return JSON.parse(localStorage.getItem('marketProductsAR')||'[]')}catch(e){return[]}}
 function isStoreActive(id){
-let stores=getStores();let s=stores[id];if(!s) return true;
-let now=Date.now();if(s.paid&&s.paidUntil&&now<s.paidUntil) return true;if(s.plan==='comision') return true;
-let start=s.trialStart||s.created||now;return Math.floor((now-start)/86400000)<=365;
+let s=getStores()[id];if(!s) return true;let now=Date.now();if(s.paid&&s.paidUntil&&now<s.paidUntil) return true;if(s.plan==='comision') return true;let start=s.trialStart||s.created||now;return Math.floor((now-start)/86400000)<=365;
 }
 let curCat='todos',curProd=null,curIdx=0;
 function setCat(c,el){
 curCat=c;
 document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));
-if(el) el.classList.add('active');
+if(el){el.classList.add('active');document.querySelectorAll('#catsTop.cat').forEach(x=>{if(x.textContent===el.textContent) x.classList.add('active')})}
 render();
 }
 function render(){
 let all=getProds().slice().sort((a,b)=>b.id-a.id);
 let q=(document.getElementById('q').value||'').toLowerCase();
-all=all.filter(p=>isStoreActive(p.storeId));
+let allActive=all.filter(p=>isStoreActive(p.storeId));
 if(curCat!=='todos') all=all.filter(p=>p.category===curCat);
-if(q) all=all.filter(p=>p.name.toLowerCase().includes(q)||p.store.toLowerCase().includes(q));
+if(q) all=all.filter(p=>p.name.toLowerCase().includes(q)||p.store.toLowerCase().includes(q)||(p.desc||'').toLowerCase().includes(q));
+all=all.filter(p=>isStoreActive(p.storeId));
 document.getElementById('count').textContent=all.length;
+document.getElementById('statProd').textContent=allActive.length;
+document.getElementById('statStore').textContent=Object.keys(getStores()).filter(id=>isStoreActive(id)).length;
 document.getElementById('feed').innerHTML=all.map(p=>{
-let stores=getStores();let st=stores[p.storeId];
+let st=getStores()[p.storeId];
 let first=p.media?p.media[0]:{type:'img',src:p.img};
 let isVideo=first.type==='video';
 let count=(p.media?p.media.length:(p.imgs?p.imgs.length:1));
-return `<div class="card" onclick="openModal(${p.id})"><div class="card-media">${isVideo?`<video src="${first.src}" muted></video>`:`<img src="${p.imgs?p.imgs[0]:p.img}" loading="lazy">`}<div class="card-badge ${isVideo?'video':''}">${isVideo?'VIDEO':''} ${count>1?'• '+count:''}</div>${count>1?`<div class="card-dots">${Array(count).fill(0).map((_,i)=>`<div class="dot ${i===0?'on':''}"></div>`).join('')}</div>`:''}</div><div class="card-body"><div class="card-price">$${p.price.toLocaleString('es-AR')}</div><div class="card-name">${p.name}</div><div class="card-store"><img src="${st?st.profile:'https://via.placeholder.com/40'}">${p.store}</div></div></div>`;
-}).join('')||`<div style="grid-column:1/-1;text-align:center;padding:60px;color:#888">No hay publicaciones<br><a href="panel.html" style="color:#00a650">Publicá la primera</a></div>`;
-let stores=getStores();let active=Object.entries(stores).filter(([id])=>isStoreActive(id));
-document.getElementById('storeList').innerHTML=active.slice(0,12).map(([id,s])=>`<div class="store-mini" onclick="location.href='store.html?store=${id}'"><img src="${s.profile||'https://via.placeholder.com/40'}"><div><b>${s.name}</b><span>${s.dir||'Tres Arroyos'}</span></div></div>`).join('')||'<div style="font-size:11px;color:#999">Sin tiendas</div>';
+return `<div class="card" onclick="openModal(${p.id})"><div class="card-media">${isVideo?`<video src="${first.src}" muted playsinline></video>`:`<img src="${p.imgs?p.imgs[0]:p.img}" loading="lazy">`}<div class="card-badge ${isVideo?'video':''}">${isVideo?'VIDEO':''} ${count>1?'• '+count+' FOTOS':''}</div>${count>1?`<div class="card-dots">${Array(count).fill(0).map((_,i)=>`<div class="dot ${i===0?'on':''}"></div>`).join('')}</div>`:''}</div><div class="card-body"><div class="card-price">$${p.price.toLocaleString('es-AR')}</div><div class="card-name">${p.name}</div><div class="card-store"><img src="${st?st.profile:'https://via.placeholder.com/40'}"><span>${p.store}</span><span style="margin-left:auto;background:#f5f5f5;padding:3px 8px;border-radius:999px;font-size:9px">Tres Arroyos</span></div></div></div>`;
+}).join('')||`<div style="grid-column:1/-1;text-align:center;padding:80px 20px;background:#fff;border-radius:16px"><div style="font-size:40px">🔍</div><div style="font-weight:800;margin-top:12px">No hay publicaciones en esta categoría</div><div style="font-size:12px;color:#888;margin-top:6px">Probá con otra categoría o buscá algo diferente</div><a href="panel.html" style="display:inline-block;margin-top:16px;background:#00a650;color:#fff;padding:10px 20px;border-radius:999px;font-size:12px;font-weight:800;text-decoration:none">¡Sé el primero en publicar!</a></div>`;
+let active=Object.entries(getStores()).filter(([id])=>isStoreActive(id));
+document.getElementById('storeList').innerHTML=active.slice(0,12).map(([id,s])=>`<div class="store-mini" onclick="location.href='store.html?store=${id}'"><img src="${s.profile||'https://via.placeholder.com/40'}"><div><b>${s.name}</b><span>${s.dir||'Tres Arroyos'} • ${s.cant||0} productos</span></div></div>`).join('')||'<div style="font-size:11px;color:#999;padding:8px">Aún no hay tiendas activas<br><a href="panel.html" style="color:#00a650;font-weight:700">¡Creá la primera!</a></div>';
 }
-function openModal(id){let p=getProds().find(x=>x.id===id);if(!p) return;curProd=p;curIdx=0;let stores=getStores();let st=stores[p.storeId];document.getElementById('mStore').textContent=p.store;document.getElementById('mStoreImg').src=st?st.profile:'';document.getElementById('mPrice').textContent='$'+p.price.toLocaleString('es-AR');document.getElementById('mName').textContent=p.name;document.getElementById('mDesc').textContent=p.desc||'';showModalMedia();document.getElementById('modal').style.display='flex';}
-function showModalMedia(){let media=curProd.media||(curProd.imgs?curProd.imgs.map(src=>({type:'img',src})): [{type:'img',src:curProd.img}]);let m=media[curIdx];document.getElementById('modalMedia').innerHTML=`${m.type==='video'?`<video src="${m.src}" controls autoplay style="width:100%;height:100%;object-fit:contain"></video>`:`<img src="${m.src}" style="width:100%;height:100%;object-fit:contain">`}${media.length>1?`<div class="arrow l" onclick="event.stopPropagation();curIdx=(curIdx-1+media.length)%media.length;showModalMedia()">‹</div><div class="arrow r" onclick="event.stopPropagation();curIdx=(curIdx+1)%media.length;showModalMedia()">›</div>`:''}`;}
+function openModal(id){let p=getProds().find(x=>x.id===id);if(!p) return;curProd=p;curIdx=0;let st=getStores()[p.storeId];document.getElementById('mStore').textContent=p.store;document.getElementById('mStoreImg').src=st?st.profile:'';document.getElementById('mPrice').textContent='$'+p.price.toLocaleString('es-AR');document.getElementById('mName').textContent=p.name;document.getElementById('mDesc').textContent=p.desc||'Sin descripción';showModalMedia();document.getElementById('modal').style.display='flex';}
+function showModalMedia(){let media=curProd.media||(curProd.imgs?curProd.imgs.map(src=>({type:'img',src})): [{type:'img',src:curProd.img}]);let m=media[curIdx];document.getElementById('modalMedia').innerHTML=`${m.type==='video'?`<video src="${m.src}" controls autoplay style="width:100%;height:100%;object-fit:contain"></video>`:`<img src="${m.src}" style="width:100%;height:100%;object-fit:contain">`}${media.length>1?`<div class="arrow l" onclick="event.stopPropagation();curIdx=(curIdx-1+media.length)%media.length;showModalMedia()">‹</div><div class="arrow r" onclick="event.stopPropagation();curIdx=(curIdx+1)%media.length;showModalMedia()">›</div><div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#fff;padding:6px 14px;border-radius:999px;font-size:12px;backdrop-filter:blur(4px)">${curIdx+1} / ${media.length}</div>`:''}`;}
 function closeModal(){document.getElementById('modal').style.display='none';}
-function contactWsp(){let stores=getStores();let s=stores[curProd.storeId];let msg=encodeURIComponent(`Hola! Vi ${curProd.name} por $${curProd.price} en 3A VENDE`);window.open(`https://wa.me/54${s.wsp.replace(/\D/g,'')}?text=${msg}`,'_blank');}
+function contactWsp(){let s=getStores()[curProd.storeId];let msg=encodeURIComponent(`Hola! Vi ${curProd.name} por $${curProd.price} en 3A VENDE. ¿Sigue disponible?`);window.open(`https://wa.me/54${s.wsp.replace(/\D/g,'')}?text=${msg}`,'_blank');}
 function goStore(){location.href='store.html?store='+curProd.storeId;}
 document.addEventListener('click',e=>{if(!e.target.closest('#menuLeft')&&!e.target.closest('button')){let m=document.getElementById('menuLeft');if(m) m.classList.add('hidden');}});
 render();
 </script>
 </body>
-</html>
+  </html>
