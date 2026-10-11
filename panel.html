@@ -78,13 +78,23 @@ textarea{height:80px;resize:none}
 <label>Dirección</label><input id="regDir" placeholder="Moreno 456">
 <button class="btn btn-green" id="btnCrear" style="width:100%;margin-top:20px;padding:13px" onclick="register()">Crear cuenta - 10 días gratis</button>
 <p style="font-size:12px;text-align:center;margin-top:16px"><b style="cursor:pointer;color:#00a650" onclick="setTab('login')">Ya tengo cuenta</b></p>
-<p id="regMsg" style="color:#ff3b30;font-size:12px;margin-top:10px;font-weight:800;text-align:center"></p>
+<p id="regMsg" style="color:#ff3b30;font-size:12px;margin-top:8px;font-weight:800;text-align:center"></p>
 </div>
 </div>
 
 <div id="panel" class="hidden">
 <div class="wrap">
 <div>
+<!-- MI TIENDA - EDITAR SIN ROMPER ID -->
+<div class="card">
+<h2>🏪 Mi tienda</h2>
+<label>Nombre</label><input id="editName" placeholder="Nombre de tu tienda">
+<label>Dirección</label><input id="editDir" placeholder="Moreno 456, Tres Arroyos">
+<label>Foto perfil URL</label><input id="editProfile" placeholder="https://...">
+<button class="btn btn-green" style="width:100%;margin-top:14px;padding:12px" onclick="guardarTienda()">Guardar cambios tienda</button>
+<p style="font-size:10px;color:#888;margin-top:8px;text-align:center">* El ID no se cambia, tu link sigue funcionando siempre</p>
+</div>
+
 <div class="card">
 <h2>Crear publicación</h2>
 <label>Título del producto</label><input id="pName" placeholder="Ej: Labial mate rojo">
@@ -99,6 +109,7 @@ textarea{height:80px;resize:none}
 </div>
 <div class="card"><h2>Mis publicaciones (<span id="prodCount">0</span>)</h2><div class="grid-prod" id="gridProd"></div></div>
 </div>
+
 <div>
 <div class="card pay-card" id="payCard">
 <h2>💳 2 opciones de pago - 10 días gratis!</h2>
@@ -106,6 +117,7 @@ textarea{height:80px;resize:none}
 <div class="pay-option"><div><div style="font-weight:800;font-size:13px">Opción 2: 10% por venta</div><div style="font-size:11px;color:#666">Solo cuando vendés</div></div><button class="btn btn-gray" onclick="elegirComision()">Elegir 10%</button></div>
 <div id="estadoPago" style="margin-top:14px;font-size:11px;color:#888;background:#f5f5f5;padding:8px 10px;border-radius:8px"></div>
 </div>
+
 <div class="card">
 <h2>📊 Ventas rápidas</h2>
 <div style="display:flex;gap:8px;margin-top:12px"><input id="saleProd" placeholder="Producto" style="flex:1"><input id="salePrice" type="number" placeholder="$" style="width:100px"></div>
@@ -113,22 +125,41 @@ textarea{height:80px;resize:none}
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px"><div style="background:#f5f5f5;padding:10px;border-radius:10px;text-align:center"><div style="font-size:11px;color:#888">Ventas</div><div id="statVentas" style="font-weight:800;font-size:16px">0</div></div><div style="background:#f5f5f5;padding:10px;border-radius:10px;text-align:center"><div style="font-size:11px;color:#888">Total</div><div id="statTotal" style="font-weight:800;font-size:16px">$0</div></div></div>
 <table class="sales-table"><thead><tr><th>Fecha</th><th>Producto</th><th>$</th><th></th></tr></thead><tbody id="salesBody"></tbody></table>
 </div>
+
 <div class="card" style="border:2px solid #00a650">
-<h2>📒 Contabilidad completa</h2>
-<p style="font-size:11px;color:#666">Ingresos, gastos, costos y ganancia real.</p>
-<div class="kpi"><div><div style="font-size:10px;color:#888">INGRESOS</div><b id="kpiIng" style="color:#00a650">$0</b></div><div><div style="font-size:10px;color:#888">EGRESOS</div><b id="kpiEgr" style="color:#ff3b30">$0</b></div><div><div style="font-size:10px;color:#888">GANANCIA</div><b id="kpiGan">$0</b></div></div>
-<div class="excel-tabs"><button id="tabIng" class="active" onclick="setContaTab('ing')">Ingresos</button><button id="tabEgr" onclick="setContaTab('egr')">Gastos</button><button id="tabRes" onclick="setContaTab('res')">Resumen</button></div>
-<div id="contaForm" style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap"><input id="contaConcepto" placeholder="Concepto" style="flex:1;min-width:140px"><input id="contaMonto" type="number" placeholder="$" style="width:110px"><select id="contaTipo" style="width:120px"><option value="ingreso">Ingreso</option><option value="gasto">Gasto</option><option value="costo">Costo</option></select><button class="btn btn-green" style="width:auto;padding:12px 14px" onclick="addConta()">+ Agregar</button></div>
-<div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-gray" style="font-size:10px" onclick="exportConta()">⬇️ CSV</button><button class="btn btn-gray" style="font-size:10px" onclick="clearConta()">Borrar</button></div>
+<h2>📒 Contabilidad completa - tipo Excel</h2>
+<p style="font-size:11px;color:#666">Llevá ingresos, gastos, costos y ganancia real. Todo queda guardado.</p>
+<div class="kpi">
+<div><div style="font-size:10px;color:#888">INGRESOS</div><b id="kpiIng" style="color:#00a650">$0</b></div>
+<div><div style="font-size:10px;color:#888">EGRESOS</div><b id="kpiEgr" style="color:#ff3b30">$0</b></div>
+<div><div style="font-size:10px;color:#888">GANANCIA</div><b id="kpiGan">$0</b></div>
+</div>
+<div class="excel-tabs">
+<button id="tabIng" class="active" onclick="setContaTab('ing')">Ingresos</button>
+<button id="tabEgr" onclick="setContaTab('egr')">Gastos</button>
+<button id="tabRes" onclick="setContaTab('res')">Resumen</button>
+</div>
+<div id="contaForm" style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap">
+<input id="contaConcepto" placeholder="Concepto ej: Compra mercadería / Venta" style="flex:1;min-width:140px">
+<input id="contaMonto" type="number" placeholder="$" style="width:110px">
+<select id="contaTipo" style="width:120px"><option value="ingreso">Ingreso</option><option value="gasto">Gasto</option><option value="costo">Costo</option></select>
+<button class="btn btn-green" style="width:auto;padding:12px 14px" onclick="addConta()">+ Agregar</button>
+</div>
+<div style="display:flex;gap:6px;margin-top:10px">
+<button class="btn btn-gray" style="font-size:10px" onclick="exportConta()">⬇️ Exportar Excel CSV</button>
+<button class="btn btn-gray" style="font-size:10px" onclick="clearConta()">Borrar todo</button>
+</div>
 <table class="sales-table" style="margin-top:12px"><thead><tr><th>Fecha</th><th>Concepto</th><th>Tipo</th><th style="text-align:right">Monto</th><th></th></tr></thead><tbody id="contaBody"></tbody></table>
 <p id="noConta" style="font-size:11px;color:#999;text-align:center;margin-top:10px">Sin movimientos aún</p>
 <div id="resumenBox" class="hidden" style="margin-top:14px;background:#f8f9fb;border-radius:10px;padding:12px;font-size:12px;line-height:1.6"><div id="resumenText"></div></div>
 </div>
+
 </div>
 </div>
 </div>
 
 <script>
+function logMov(t,a,d){try{let l=JSON.parse(localStorage.getItem('adminLogs')||'[]');l.push({id:Date.now(),fecha:new Date().toLocaleString('es-AR'),tipo:t,accion:a,detalle:d,store:localStorage.getItem('currentUser')||'visitante'});if(l.length>5000)l=l.slice(-5000);localStorage.setItem('adminLogs',JSON.stringify(l));}catch(e){}}
 let currentUser=null,media=[],editingId=null,contaTab='ing';
 function getStores(){try{return JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){return{}}}
 function setStores(s){localStorage.setItem('marketStores',JSON.stringify(s))}
@@ -142,7 +173,7 @@ function getConta(){try{return JSON.parse(localStorage.getItem('marketConta')||'
 function setConta(c){localStorage.setItem('marketConta',JSON.stringify(c))}
 function setTab(t){document.getElementById('formLogin').classList.toggle('hidden',t==='reg');document.getElementById('formReg').classList.toggle('hidden',t==='login')}
 function toBase64(f,cb){let r=new FileReader();r.onload=e=>cb(e.target.result);r.readAsDataURL(f)}
-document.getElementById('pFiles').addEventListener('change',e=>{[...e.target.files].forEach(f=>{if(f.size>30*1024*1024){alert('Archivo muy grande');return}toBase64(f,b64=>{media.push({type:f.type.startsWith('video')?'video':'img',src:b64});renderThumbs();renderPrev();});});e.target.value='';});
+document.getElementById('pFiles').addEventListener('change',e=>{[...e.target.files].forEach(f=>{if(f.size>30*1024*1024){alert('Muy grande');return}toBase64(f,b64=>{media.push({type:f.type.startsWith('video')?'video':'img',src:b64});renderThumbs();renderPrev();});});e.target.value='';});
 function renderThumbs(){document.getElementById('pubImgs').innerHTML=media.map((m,i)=>`<div class="thumb">${m.type==='video'?`<video src="${m.src}" muted></video>`:`<img src="${m.src}">`}<div class="del" onclick="removeMedia(${i})">✕</div></div>`).join('')}
 function removeMedia(i){media.splice(i,1);renderThumbs();renderPrev();}
 function renderPrev(){let b=document.getElementById('prevMain');if(!media.length){b.innerHTML='<span style="color:#555;font-size:12px">Foto / Video acá</span>';return}let m=media[0];b.innerHTML=m.type==='video'?`<video src="${m.src}" style="width:100%;max-height:340px" controls autoplay muted loop></video>`:`<img src="${m.src}" style="width:100%;max-height:340px;object-fit:contain">`}
@@ -152,10 +183,8 @@ document.getElementById('pDesc').addEventListener('input',e=>document.getElement
 function checkTrial(){let stores=getStores();let s=stores[currentUser.storeId];if(!s) return false;let now=Date.now();let start=s.trialStart||s.created||now;let left=10-Math.floor((now-start)/86400000);let bar=document.getElementById('trialBar');let est=document.getElementById('estadoPago');if(s.paid&&s.paidUntil&&now<s.paidUntil){bar.innerHTML=`<div style="background:#e6f7ed;border:1px solid #00a650;color:#006b30;padding:12px;border-radius:10px;font-size:12px;font-weight:700">✓ Activo hasta ${new Date(s.paidUntil).toLocaleDateString('es-AR')}</div>`;est.textContent='Plan $4.500 activo';return true;}if(s.plan==='comision'){bar.innerHTML=`<div style="background:#fff3e0;border:1px solid #ff9800;color:#e65100;padding:12px;border-radius:10px;font-size:12px;font-weight:700">✓ Plan 10% activo</div>`;est.textContent='Plan 10% activo';return true;}if(left>=0){bar.innerHTML=`<div style="background:#111;color:#fff;padding:12px;border-radius:10px;font-size:12px;display:flex;justify-content:space-between"><div><b style="color:#00a650">${left} días gratis</b></div><div style="color:#888">ID ${currentUser.storeId.slice(-4)}</div></div>`;est.textContent=`Quedan ${left} días gratis`;return true;}else{bar.innerHTML=`<div style="background:#fff;border:2px solid #ff3b30;border-radius:14px;padding:20px;text-align:center"><div style="font-weight:800">Prueba terminada</div><div style="display:flex;gap:10px;justify-content:center;margin-top:10px"><a href="https://mpago.la/1UShvFr" target="_blank" style="background:#009ee3;color:#fff;padding:10px 16px;border-radius:20px;text-decoration:none;font-weight:800">Pagar $4.500</a><button onclick="elegirComision()" style="background:#111;color:#fff;padding:10px 16px;border-radius:20px;font-weight:800;border:none">10% por venta</button></div></div>`;return false;}}
 function elegirComision(){if(!confirm('¿Confirmás 10% por venta?')) return;let stores=getStores();stores[currentUser.storeId].plan='comision';setStores(stores);checkTrial();}
 
-// ==== REGISTER ARREGLADO - YA NO SE CUELGA ====
 function register(){
-let btn=document.getElementById('btnCrear');
-let msg=document.getElementById('regMsg');
+let btn=document.getElementById('btnCrear');let msg=document.getElementById('regMsg');
 try{
 if(btn){btn.textContent='CREANDO...';btn.disabled=true;}
 if(msg) msg.textContent='';
@@ -164,55 +193,55 @@ let wspRaw=(document.getElementById('regWsp').value||'').trim();
 let wsp=wspRaw.replace(/\D/g,'');
 let pass=(document.getElementById('regPass').value||'').trim();
 let dir=(document.getElementById('regDir').value||'').trim();
-if(!nombre){throw new Error('Poné nombre de tienda');}
-if(wsp.length<10){throw new Error('WhatsApp 10 números ej: 2983401234');}
-if(pass.length<6){throw new Error('Contraseña mínimo 6 caracteres');}
-let users=getUsers();
-let stores=getStores();
-if(users[wsp]){
-if(msg) msg.textContent='Ese WhatsApp ya tiene cuenta: '+users[wsp].storeName;
-setTimeout(()=>{
-if(btn){btn.textContent='Crear cuenta - 10 días gratis';btn.disabled=false;}
-setTab('login');
-document.getElementById('loginWsp').value=wsp;
-},500);
-return;
-}
+if(!nombre) throw new Error('Poné nombre de tienda');
+if(wsp.length<10) throw new Error('WhatsApp 10 números ej: 2983401234');
+if(pass.length<6) throw new Error('Contraseña mínimo 6 caracteres');
+let users=getUsers();let stores=getStores();
+if(users[wsp]){throw new Error('⚠️ Ese WhatsApp ya tiene cuenta: '+users[wsp].storeName+' - Andá a Ingresar');}
 let storeId='store_'+Date.now();
-stores[storeId]={id:storeId,name:nombre,wsp:wsp,dir:dir||'Tres Arroyos',created:Date.now(),trialStart:Date.now(),vence:Date.now()+10*86400000,status:'trial',profile:'https://via.placeholder.com/100',cant:0};
+stores[storeId]={id:storeId,name:nombre,wsp:wsp,dir:dir||'Tres Arroyos',created:Date.now(),trialStart:Date.now(),vence:Date.now()+10*86400000,status:'trial',profile:'https://via.placeholder.com/100'};
 users[wsp]={storeId:storeId,storeName:nombre,pass:pass,created:Date.now()};
-setStores(stores);setUsers(users);
-localStorage.setItem('currentUser',wsp);
-try{
-let logs=JSON.parse(localStorage.getItem('adminLogs')||'[]');
-logs.push({id:Date.now(),fecha:new Date().toLocaleString('es-AR'),tipo:'TIENDA',accion:'registro_tienda',detalle:'Nueva tienda '+nombre+' wsp:'+wsp,store:nombre});
-localStorage.setItem('adminLogs',JSON.stringify(logs));
-}catch(e){}
-alert('¡Tienda '+nombre+' creada! 10 días gratis');
-location.reload();
-}catch(e){
-console.error(e);
-if(msg) msg.textContent=e.message||'Error al registrar';
-alert(e.message||'Error');
-if(btn){btn.textContent='Crear cuenta - 10 días gratis';btn.disabled=false;}
-}
+setStores(stores);setUsers(users);localStorage.setItem('currentUser',wsp);
+try{let logs=JSON.parse(localStorage.getItem('adminLogs')||'[]');logs.push({id:Date.now(),fecha:new Date().toLocaleString('es-AR'),tipo:'TIENDA',accion:'registro_tienda',detalle:'Nueva tienda '+nombre+' wsp:'+wsp,store:nombre});localStorage.setItem('adminLogs',JSON.stringify(logs));}catch(e){}
+alert('¡Tienda '+nombre+' creada! 10 días gratis');location.reload();
+}catch(e){if(msg) msg.textContent=e.message;alert(e.message);if(btn){btn.textContent='Crear cuenta - 10 días gratis';btn.disabled=false;}}
 }
 function login(){let wsp=document.getElementById('loginWsp').value.trim().replace(/\D/g,''),pass=document.getElementById('loginPass').value.trim();let users=getUsers();if(!users[wsp]||users[wsp].pass!==pass) return alert('Datos incorrectos');localStorage.setItem('currentUser',wsp);load();}
-function load(){let wsp=localStorage.getItem('currentUser');if(!wsp){document.getElementById('auth').classList.remove('hidden');document.getElementById('panel').classList.add('hidden');document.getElementById('trialBar').innerHTML='';return}let users=getUsers();if(!users[wsp]){localStorage.removeItem('currentUser');load();return}currentUser=users[wsp];document.getElementById('auth').classList.add('hidden');document.getElementById('panel').classList.remove('hidden');document.getElementById('btnLogout').classList.remove('hidden');let stores=getStores();let s=stores[currentUser.storeId];if(s){document.getElementById('prevStoreName').textContent=s.name;}checkTrial();renderMyProds();renderSales();renderConta();}
-function addProduct(){if(!checkTrial()) return alert('Prueba terminada');let name=document.getElementById('pName').value.trim(),price=parseInt(document.getElementById('pPrice').value),cat=document.getElementById('pCat').value,desc=document.getElementById('pDesc').value.trim();if(!name||!price||!media.length) return alert('Falta título, precio y foto');let prods=getProds();if(editingId){let idx=prods.findIndex(p=>p.id===editingId);if(idx>-1){prods[idx].name=name;prods[idx].price=price;prods[idx].category=cat;prods[idx].desc=desc;prods[idx].img=media[0].src;prods[idx].imgs=media.map(m=>m.src);prods[idx].media=media;}editingId=null;document.getElementById('btnPublicar').textContent='Publicar';document.getElementById('btnCancelEdit').classList.add('hidden');}else{prods.push({id:Date.now(),store:currentUser.storeName,storeId:currentUser.storeId,name,price,category:cat,img:media[0].src,imgs:media.map(m=>m.src),media:media,desc});}setProds(prods);document.getElementById('pName').value='';document.getElementById('pPrice').value='';document.getElementById('pDesc').value='';media=[];renderThumbs();renderPrev();renderMyProds();}
+function load(){let wsp=localStorage.getItem('currentUser');if(!wsp){document.getElementById('auth').classList.remove('hidden');document.getElementById('panel').classList.add('hidden');document.getElementById('trialBar').innerHTML='';return}let users=getUsers();if(!users[wsp]){localStorage.removeItem('currentUser');load();return}currentUser=users[wsp];document.getElementById('auth').classList.add('hidden');document.getElementById('panel').classList.remove('hidden');document.getElementById('btnLogout').classList.remove('hidden');let stores=getStores();let s=stores[currentUser.storeId];if(s){document.getElementById('prevStoreName').textContent=s.name;document.getElementById('editName').value=s.name;document.getElementById('editDir').value=s.dir||'';document.getElementById('editProfile').value=s.profile||'';if(s.profile) document.getElementById('prevStoreImg').src=s.profile;}checkTrial();renderMyProds();renderSales();renderConta();}
+function guardarTienda(){
+let stores=getStores();let s=stores[currentUser.storeId];
+if(!s) return alert('Tienda no encontrada');
+let nuevoName=document.getElementById('editName').value.trim();
+let nuevoDir=document.getElementById('editDir').value.trim();
+let nuevoProf=document.getElementById('editProfile').value.trim();
+if(nuevoName) s.name=nuevoName;
+if(nuevoDir) s.dir=nuevoDir;
+if(nuevoProf) s.profile=nuevoProf;
+setStores(stores);
+let users=getUsers();let wsp=localStorage.getItem('currentUser');
+if(users[wsp] && nuevoName) users[wsp].storeName=nuevoName;
+setUsers(users);
+let prods=getProds();
+prods.forEach(p=>{if(p.storeId===currentUser.storeId && nuevoName) p.store=nuevoName;});
+setProds(prods);
+logMov('TIENDA','editar_tienda','Editó tienda '+nuevoName);
+alert('Tienda guardada! Tu link sigue igual');
+load();
+}
+function addProduct(){if(!checkTrial()) return alert('Prueba terminada');let name=document.getElementById('pName').value.trim(),price=parseInt(document.getElementById('pPrice').value),cat=document.getElementById('pCat').value,desc=document.getElementById('pDesc').value.trim();if(!name||!price||!media.length) return alert('Falta título, precio y foto');let prods=getProds();if(editingId){let idx=prods.findIndex(p=>p.id===editingId);if(idx>-1){prods[idx].name=name;prods[idx].price=price;prods[idx].category=cat;prods[idx].desc=desc;prods[idx].img=media[0].src;prods[idx].imgs=media.map(m=>m.src);prods[idx].media=media;}editingId=null;document.getElementById('btnPublicar').textContent='Publicar';document.getElementById('btnCancelEdit').classList.add('hidden');}else{prods.push({id:Date.now(),store:currentUser.storeName,storeId:currentUser.storeId,name,price,category:cat,img:media[0].src,imgs:media.map(m=>m.src),media:media,desc});}setProds(prods);document.getElementById('pName').value='';document.getElementById('pPrice').value='';document.getElementById('pDesc').value='';media=[];renderThumbs();renderPrev();renderMyProds();logMov('PRODUCTO','crear_publicacion',name+' $'+price);}
 function renderMyProds(){let all=getProds().filter(p=>p.storeId===currentUser.storeId).sort((a,b)=>b.id-a.id);document.getElementById('prodCount').textContent=all.length;document.getElementById('gridProd').innerHTML=all.map(p=>`<div class="prod">${p.media&&p.media[0]?.type==='video'?`<video src="${p.media[0].src}" muted></video>`:`<img src="${p.imgs?p.imgs[0]:p.img}">`}<div class="prod-info"><div class="prod-price">$${p.price.toLocaleString('es-AR')}</div><div class="prod-name">${p.name}</div><div class="prod-desc">${p.desc||''}</div></div><div class="prod-actions"><button class="edit" onclick="editProd(${p.id})">Editar</button><button class="resub" onclick="resubir(${p.id})">Resubir</button><button onclick="delProd(${p.id})">Borrar</button></div></div>`).join('')||'<p style="font-size:11px;color:#999">Sin publicaciones</p>';}
 function editProd(id){let p=getProds().find(x=>x.id===id);if(!p) return;document.getElementById('pName').value=p.name;document.getElementById('pPrice').value=p.price;document.getElementById('pCat').value=p.category;document.getElementById('pDesc').value=p.desc||'';media=p.media||[];renderThumbs();renderPrev();editingId=id;document.getElementById('btnPublicar').textContent='Guardar';document.getElementById('btnCancelEdit').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}
 function cancelEdit(){editingId=null;document.getElementById('pName').value='';document.getElementById('pPrice').value='';document.getElementById('pDesc').value='';media=[];renderThumbs();renderPrev();document.getElementById('btnPublicar').textContent='Publicar';document.getElementById('btnCancelEdit').classList.add('hidden');}
-function delProd(id){if(!confirm('Borrar?')) return;setProds(getProds().filter(x=>x.id!==id));renderMyProds();}
-function resubir(id){let prods=getProds();let p=prods.find(x=>x.id===id);if(!p) return;let others=prods.filter(x=>x.id!==id);p.id=Date.now();others.push(p);setProds(others);renderMyProds();}
-function addSale(){let prod=document.getElementById('saleProd').value.trim(),price=parseInt(document.getElementById('salePrice').value);if(!prod||!price) return alert('Producto y precio');let sales=getSales();let s=sales[currentUser.storeId]||[];s.push({id:Date.now(),date:new Date().toLocaleDateString('es-AR'),prod,price});sales[currentUser.storeId]=s;setSales(sales);addContaAuto(prod,price);document.getElementById('saleProd').value='';document.getElementById('salePrice').value='';renderSales();}
+function delProd(id){if(!confirm('Borrar?')) return;setProds(getProds().filter(x=>x.id!==id));renderMyProds();logMov('PRODUCTO','borrar_publicacion','ID '+id);}
+function resubir(id){let prods=getProds();let p=prods.find(x=>x.id===id);if(!p) return;let others=prods.filter(x=>x.id!==id);p.id=Date.now();others.push(p);setProds(others);renderMyProds();logMov('PRODUCTO','resubir','ID '+id);}
+function addSale(){let prod=document.getElementById('saleProd').value.trim(),price=parseInt(document.getElementById('salePrice').value);if(!prod||!price) return alert('Producto y precio');let sales=getSales();let s=sales[currentUser.storeId]||[];s.push({id:Date.now(),date:new Date().toLocaleDateString('es-AR'),prod,price});sales[currentUser.storeId]=s;setSales(sales);addContaAuto(prod,price);document.getElementById('saleProd').value='';document.getElementById('salePrice').value='';renderSales();logMov('VENTA','venta_rapida',prod+' $'+price);}
 function delSale(id){let sales=getSales();sales[currentUser.storeId]=sales[currentUser.storeId].filter(x=>x.id!==id);setSales(sales);renderSales();}
 function renderSales(){let sales=getSales()[currentUser.storeId]||[];document.getElementById('salesBody').innerHTML=sales.slice().reverse().map(s=>`<tr><td>${s.date}</td><td>${s.prod}</td><td>$${s.price.toLocaleString('es-AR')}</td><td><span style="cursor:pointer" onclick="delSale(${s.id})">✕</span></td></tr>`).join('');document.getElementById('statVentas').textContent=sales.length;document.getElementById('statTotal').textContent='$'+sales.reduce((a,b)=>a+b.price,0).toLocaleString('es-AR');}
 function setContaTab(t){contaTab=t;document.getElementById('tabIng').classList.toggle('active',t==='ing');document.getElementById('tabEgr').classList.toggle('active',t==='egr');document.getElementById('tabRes').classList.toggle('active',t==='res');document.getElementById('resumenBox').classList.toggle('hidden',t!=='res');renderConta();}
-function addConta(){let concepto=document.getElementById('contaConcepto').value.trim();let monto=parseInt(document.getElementById('contaMonto').value);let tipo=document.getElementById('contaTipo').value;if(!concepto||!monto) return alert('Poné concepto y monto');let conta=getConta();let list=conta[currentUser.storeId]||[];list.push({id:Date.now(),fecha:new Date().toLocaleString('es-AR'),concepto,monto,tipo});conta[currentUser.storeId]=list;setConta(conta);document.getElementById('contaConcepto').value='';document.getElementById('contaMonto').value='';renderConta();}
+function addConta(){let concepto=document.getElementById('contaConcepto').value.trim();let monto=parseInt(document.getElementById('contaMonto').value);let tipo=document.getElementById('contaTipo').value;if(!concepto||!monto) return alert('Poné concepto y monto');let conta=getConta();let list=conta[currentUser.storeId]||[];list.push({id:Date.now(),fecha:new Date().toLocaleString('es-AR'),concepto,monto,tipo});conta[currentUser.storeId]=list;setConta(conta);document.getElementById('contaConcepto').value='';document.getElementById('contaMonto').value='';renderConta();logMov('CONTA',tipo,concepto+' $'+monto);}
 function addContaAuto(prod,price){let conta=getConta();let list=conta[currentUser.storeId]||[];list.push({id:Date.now(),fecha:new Date().toLocaleString('es-AR'),concepto:'Venta: '+prod,monto:price,tipo:'ingreso'});conta[currentUser.storeId]=list;setConta(conta);renderConta();}
 function delConta(id){let conta=getConta();conta[currentUser.storeId]=conta[currentUser.storeId].filter(x=>x.id!==id);setConta(conta);renderConta();}
-function renderConta(){let conta=getConta()[currentUser.storeId]||[];let filtrados=contaTab==='ing'?conta.filter(x=>x.tipo==='ingreso'):contaTab==='egr'?conta.filter(x=>x.tipo!=='ingreso'):conta;document.getElementById('contaBody').innerHTML=filtrados.slice().reverse().map(c=>`<tr><td>${c.fecha}</td><td>${c.concepto}</td><td><span style="padding:2px 6px;border-radius:10px;font-size:10px;font-weight:800;background:${c.tipo==='ingreso'?'#e6f7ed;color:#00a650':c.tipo==='gasto'?'#ffebeb;color:#ff3b30':'#fff3e0;color:#e65100'}">${c.tipo}</span></td><td style="text-align:right;font-weight:800;color:${c.tipo==='ingreso'?'#00a650':'#ff3b30'}">${c.tipo==='ingreso'?'+': '-'}$${c.monto.toLocaleString('es-AR')}</td><td><span style="cursor:pointer" onclick="delConta(${c.id})">✕</span></td></tr>`).join('');document.getElementById('noConta').style.display=filtrados.length?'none':'block';let ingresos=conta.filter(x=>x.tipo==='ingreso').reduce((a,b)=>a+b.monto,0);let egresos=conta.filter(x=>x.tipo!=='ingreso').reduce((a,b)=>a+b.monto,0);let ganancia=ingresos-egresos;document.getElementById('kpiIng').textContent='$'+ingresos.toLocaleString('es-AR');document.getElementById('kpiEgr').textContent='$'+egresos.toLocaleString('es-AR');document.getElementById('kpiGan').textContent='$'+ganancia.toLocaleString('es-AR');document.getElementById('kpiGan').style.color=ganancia>=0?'#00a650':'#ff3b30';document.getElementById('resumenText').innerHTML=`<b>Resumen</b><br>Ingresos: $${ingresos.toLocaleString('es-AR')}<br>Egresos: $${egresos.toLocaleString('es-AR')}<br><b style="font-size:14px;color:${ganancia>=0?'#00a650':'#ff3b30'}">Ganancia: $${ganancia.toLocaleString('es-AR')}</b><br>Margen: ${ingresos?Math.round((ganancia/ingresos)*100):0}% - Movimientos: ${conta.length}`;}
+function renderConta(){let conta=getConta()[currentUser.storeId]||[];let filtrados=contaTab==='ing'?conta.filter(x=>x.tipo==='ingreso'):contaTab==='egr'?conta.filter(x=>x.tipo!=='ingreso'):conta;document.getElementById('contaBody').innerHTML=filtrados.slice().reverse().map(c=>`<tr><td>${c.fecha}</td><td>${c.concepto}</td><td><span style="padding:2px 6px;border-radius:10px;font-size:10px;font-weight:800;background:${c.tipo==='ingreso'?'#e6f7ed;color:#00a650':c.tipo==='gasto'?'#ffebeb;color:#ff3b30':'#fff3e0;color:#e65100'}">${c.tipo}</span></td><td style="text-align:right;font-weight:800;color:${c.tipo==='ingreso'?'#00a650':'#ff3b30'}">${c.tipo==='ingreso'?'+': '-'}$${c.monto.toLocaleString('es-AR')}</td><td><span style="cursor:pointer" onclick="delConta(${c.id})">✕</span></td></tr>`).join('');document.getElementById('noConta').style.display=filtrados.length?'none':'block';let ingresos=conta.filter(x=>x.tipo==='ingreso').reduce((a,b)=>a+b.monto,0);let egresos=conta.filter(x=>x.tipo!=='ingreso').reduce((a,b)=>a+b.monto,0);let ganancia=ingresos-egresos;document.getElementById('kpiIng').textContent='$'+ingresos.toLocaleString('es-AR');document.getElementById('kpiEgr').textContent='$'+egresos.toLocaleString('es-AR');document.getElementById('kpiGan').textContent='$'+ganancia.toLocaleString('es-AR');document.getElementById('kpiGan').style.color=ganancia>=0?'#00a650':'#ff3b30';document.getElementById('resumenText').innerHTML=`<b>Resumen del mes</b><br>Ingresos totales: $${ingresos.toLocaleString('es-AR')}<br>Egresos totales: $${egresos.toLocaleString('es-AR')}<br><b style="font-size:14px;color:${ganancia>=0?'#00a650':'#ff3b30'}">Ganancia neta: $${ganancia.toLocaleString('es-AR')}</b><br><br>Margen: ${ingresos?Math.round((ganancia/ingresos)*100):0}%<br>Movimientos: ${conta.length}<br>${ganancia<0?'<span style="color:#ff3b30">⚠️ Estás en pérdida</span>':'<span style="color:#00a650">✓ Rentable</span>'}`;}
 function exportConta(){let conta=getConta()[currentUser.storeId]||[];if(!conta.length) return alert('No hay datos');let csv='Fecha,Concepto,Tipo,Monto\n'+conta.map(c=>`"${c.fecha}","${c.concepto}","${c.tipo}",${c.monto}`).join('\n');let blob=new Blob([csv],{type:'text/csv'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='contabilidad_'+currentUser.storeName+'.csv';a.click();}
 function clearConta(){if(!confirm('¿Borrar toda la contabilidad?')) return;let conta=getConta();conta[currentUser.storeId]=[];setConta(conta);renderConta();}
 function verMiTienda(){if(!currentUser) return alert('Iniciá sesión');location.href='store.html?store='+currentUser.storeId}
@@ -220,4 +249,4 @@ function logout(){localStorage.removeItem('currentUser');location.reload()}
 load();
 </script>
 </body>
-</html>
+                                                                                                                                                                                                                                                                           </html>
