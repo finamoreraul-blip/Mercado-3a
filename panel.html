@@ -226,17 +226,43 @@ logMov('PANEL','elegir_plan','Eligió 10% por venta');
 checkTrial();
 }
 
-function register(){
-let store=document.getElementById('regStore').value.trim(),wsp=document.getElementById('regWsp').value.trim(),pass=document.getElementById('regPass').value.trim(),dir=document.getElementById('regDir').value.trim()||'Tres Arroyos';
-if(!store||!wsp||pass.length<6) return alert('Completa todos los datos');
-let users=getUsers();if(users[wsp]) return alert('Ya existe ese WhatsApp');
-let storeId=store.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-'+Date.now().toString().slice(-4);
-users[wsp]={wsp,pass,storeId,storeName:store};setUsers(users);
-let stores=getStores();stores[storeId]={name:store,dir,wsp,profile:'https://via.placeholder.com/200?text='+encodeURIComponent(store.slice(0,2)),cover:'https://via.placeholder.com/800x300?text='+encodeURIComponent(store),trialStart:Date.now(),paid:false,paidUntil:null,plan:null};setStores(stores);
+function crearCuenta(){
+let btn = document.getElementById('btnCrear') || document.querySelector('button[onclick="crearCuenta()"]');
+if(btn){ btn.textContent='CREANDO...'; btn.disabled=true; }
+let nombre = (document.getElementById('regNombre')?.value||'').trim();
+let wspRaw = (document.getElementById('regWsp')?.value||'').trim();
+let wsp = wspRaw.replace(/\D/g,'');
+let pass = (document.getElementById('regPass')?.value||'').trim();
+let dir = (document.getElementById('regDir')?.value||'').trim();
+let msgEl = document.getElementById('regMsg');
+
+function err(t){ if(msgEl) msgEl.textContent=t; alert(t); if(btn){btn.textContent='CREAR MI TIENDA AHORA'; btn.disabled=false;} }
+
+if(!nombre||!wsp||!pass) return err('Completa nombre, whatsapp y clave');
+if(pass.length<4) return err('Clave mínimo 4 letras');
+if(wsp.length<10) return err('WhatsApp tiene que tener 10 números, ej: 2983551234');
+
+let users = {}; let stores={};
+try{ users=JSON.parse(localStorage.getItem('marketUsers')||'{}')}catch(e){}
+try{ stores=JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){}
+
+if(users[wsp]) return err('Ese WhatsApp ya tiene tienda, tocá Entrar');
+
+let storeId='store_'+Date.now();
+stores[storeId]={id:storeId,name:nombre,wsp:wsp,dir:dir,created:Date.now(),vence:Date.now()+10*86400000,status:'trial',products:[]};
+users[wsp]={storeId:storeId,storeName:nombre,pass:pass,created:Date.now()};
+
+localStorage.setItem('marketStores',JSON.stringify(stores));
+localStorage.setItem('marketUsers',JSON.stringify(users));
 localStorage.setItem('currentUser',wsp);
-logMov('PANEL','registro_tienda','Nueva tienda: '+store+' - '+wsp);
-load();
-}
+
+let logs=[]; try{logs=JSON.parse(localStorage.getItem('adminLogs')||'[]')}catch(e){}
+logs.push({id:Date.now(),fecha:new Date().toLocaleString('es-AR'),tipo:'TIENDA',accion:'registro_tienda - CREAR CUENTA',detalle:'Nueva tienda: '+nombre+' wsp:'+wsp,store:nombre,url:'panel.html'});
+localStorage.setItem('adminLogs',JSON.stringify(logs));
+
+alert('¡Listo! Tienda '+nombre+' creada');
+location.reload();
+  }
 function login(){
 let wsp=document.getElementById('loginWsp').value.trim(),pass=document.getElementById('loginPass').value.trim();
 let users=getUsers();if(!users[wsp]||users[wsp].pass!==pass) return alert('Datos incorrectos');
