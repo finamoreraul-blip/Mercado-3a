@@ -2,57 +2,59 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tienda - 3A VENDE</title>
+<title>Mi Tienda - 3A VENDE</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Proxima Nova,Arial,sans-serif}
 body{background:#f5f5f5;color:#333}
 header{background:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,.08);position:sticky;top:0;z-index:10}
 .logo{font-weight:900;font-size:19px;cursor:pointer}.logo b{color:#00a650}
-.btn{border:none;padding:8px 14px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer}
+.btn{border:none;padding:9px 16px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer}
 .btn-green{background:#00a650;color:#fff}.btn-gray{background:#fff;border:1px solid #e5e5e5}.btn-black{background:#111;color:#fff}
-.cover{height:200px;background:#ddd;background-size:cover;background-position:center;position:relative;background-color:#111}
+.cover{height:220px;background:#111;background-size:cover;background-position:center;position:relative;display:flex;align-items:center;justify-content:center;color:#666;font-size:12px}
 .profile-wrap{max-width:1100px;margin:0 auto;padding:0 16px;position:relative}
-.profile-card{background:#fff;border-radius:14px;padding:16px;display:flex;gap:14px;align-items:center;margin-top:-50px;box-shadow:0 4px 20px rgba(0,0,0,.08);position:relative;z-index:2}
-.profile-card img{width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.p-name{font-size:18px;font-weight:800}.p-dir{font-size:12px;color:#888;margin-top:2px}
+.profile-card{background:#fff;border-radius:16px;padding:20px;display:flex;gap:16px;align-items:center;margin-top:-60px;box-shadow:0 8px 30px rgba(0,0,0,.12);position:relative;z-index:2}
+.profile-card img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:4px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+.p-name{font-size:20px;font-weight:900}.p-dir{font-size:12px;color:#888;margin-top:2px}.p-desc{font-size:12px;color:#444;margin-top:6px;max-width:500px;line-height:1.4}
 .p-actions{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
-.wrap{max-width:1100px;margin:16px auto;padding:0 16px;display:grid;grid-template-columns:1fr 300px;gap:16px}
+.wrap{max-width:1100px;margin:18px auto;padding:0 16px;display:grid;grid-template-columns:1fr 320px;gap:16px}
 .feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
-.card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.06);cursor:pointer;transition:.2s}
-.card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);cursor:pointer}
 .card-media{height:200px;background:#000;display:flex;align-items:center;justify-content:center;position:relative}
 .card-media img,.card-media video{width:100%;height:100%;object-fit:cover}
 .card-body{padding:10px}.card-price{font-weight:800;font-size:14px}.card-name{font-size:12px;margin-top:2px}
-.side{background:#fff;border-radius:12px;padding:14px;height:fit-content;position:sticky;top:80px}
+.side{background:#fff;border-radius:12px;padding:18px;height:fit-content;position:sticky;top:80px}
+.side b{font-size:13px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-box{background:#fff;border-radius:16px;max-width:900px;width:100%;max-height:90vh;overflow:auto;display:grid;grid-template-columns:1fr 1fr}
 .modal-media{background:#000;display:flex;align-items:center;justify-content:center;min-height:400px;position:relative}
 .modal-media img,.modal-media video{width:100%;height:100%;object-fit:contain;max-height:70vh}
 .modal-body{padding:20px}
-.edit-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
-.edit-box{background:#fff;border-radius:14px;padding:22px;max-width:420px;width:100%;max-height:90vh;overflow:auto}
-label{font-size:11px;font-weight:700;display:block;margin-top:14px;margin-bottom:4px;color:#444}
-input,textarea{width:100%;padding:10px 12px;border:1px solid #e9e9e9;border-radius:8px;font-size:12px;outline:none;background:#fafafa}
-.arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.9);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800;z-index:2}
+.edit-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+.edit-box{background:#fff;border-radius:16px;padding:24px;max-width:460px;width:100%;max-height:95vh;overflow:auto}
+label{font-size:11px;font-weight:800;display:block;margin-top:14px;margin-bottom:5px;color:#333;letter-spacing:.3px}
+input,textarea{width:100%;padding:11px 14px;border:1px solid #e9e9e9;border-radius:10px;font-size:13px;outline:none;background:#fafafa}
+input:focus,textarea:focus{background:#fff;border-color:#00a650}
+textarea{height:70px;resize:none}
+.arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.9);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800}
 .arrow.l{left:12px}.arrow.r{right:12px}
 .hidden{display:none!important}
-@media(max-width:900px){.wrap{grid-template-columns:1fr}.feed{grid-template-columns:repeat(2,1fr)}.modal-box{grid-template-columns:1fr}.p-actions{margin-left:0;margin-top:10px}.profile-card{flex-direction:column;align-items:flex-start}}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.feed{grid-template-columns:repeat(2,1fr)}.modal-box{grid-template-columns:1fr}.profile-card{flex-direction:column;align-items:flex-start}.p-actions{margin-left:0}}
 </style>
 </head>
 <body>
 <header>
 <div class="logo" onclick="location.href='index.html'"><b>3A</b> VENDE</div>
-<div style="display:flex;gap:8px"><button class="btn btn-gray" onclick="location.href='index.html'">Marketplace</button><button class="btn btn-green" onclick="location.href='panel.html'">Mi panel</button></div>
+<div style="display:flex;gap:8px"><button class="btn btn-gray" onclick="location.href='index.html'">Marketplace</button><button class="btn btn-green" onclick="location.href='panel.html'">Panel</button></div>
 </header>
 
-<div class="cover" id="cover"></div>
+<div class="cover" id="cover">Sin portada</div>
 <div class="profile-wrap">
 <div class="profile-card">
 <img id="pImg" src="https://via.placeholder.com/200">
-<div><div class="p-name" id="pName">Tienda</div><div class="p-dir" id="pDir">Tres Arroyos</div><div style="font-size:11px;color:#00a650;margin-top:4px;font-weight:700" id="pStatus"></div></div>
+<div style="flex:1"><div class="p-name" id="pName">Cargando...</div><div class="p-dir" id="pDir"></div><div class="p-desc" id="pDesc"></div><div style="font-size:11px;color:#00a650;margin-top:6px;font-weight:800" id="pStatus"></div></div>
 <div class="p-actions">
 <button class="btn btn-green" onclick="contactStore()">WhatsApp</button>
-<button class="btn btn-black hidden" id="btnEdit" onclick="openEdit()">Editar tienda</button>
+<button class="btn btn-black hidden" id="btnEdit" onclick="openEdit()">Editar mi tienda</button>
 <button class="btn btn-gray" onclick="shareStore()">Compartir</button>
 </div>
 </div>
@@ -60,16 +62,18 @@ input,textarea{width:100%;padding:10px 12px;border:1px solid #e9e9e9;border-radi
 
 <div class="wrap">
 <div>
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:13px;font-weight:700"><span id="prodCount">0</span> publicaciones</div><div style="font-size:11px;color:#888" id="trialInfo"></div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:13px;font-weight:800"><span id="prodCount">0</span> publicaciones</div><div style="font-size:11px;color:#888" id="trialInfo"></div></div>
 <div class="feed" id="feed"></div>
 </div>
 <div class="side">
-<div style="font-weight:800;font-size:13px">Información</div>
-<div style="margin-top:10px;font-size:12px"><b>Dirección:</b> <span id="sDir"></span></div>
-<div style="margin-top:6px;font-size:12px"><b>WhatsApp:</b> <span id="sWsp"></span></div>
-<div style="margin-top:12px;padding-top:12px;border-top:1px solid #eee">
-<div style="font-size:11px;color:#888">¿Querés tu tienda así?</div>
-<a href="panel.html" style="font-size:12px;color:#00a650;font-weight:700;text-decoration:none">Creá tu tienda - 10 días gratis →</a>
+<div style="font-weight:800">Sobre la tienda</div>
+<div style="margin-top:12px;font-size:12px;line-height:1.6">
+<div><b>Dirección:</b> <span id="sDir">-</span></div>
+<div style="margin-top:6px"><b>WhatsApp:</b> <span id="sWsp">-</span></div>
+<div style="margin-top:10px"><b>Descripción:</b><div id="sDesc" style="color:#555;margin-top:4px;white-space:pre-wrap">-</div></div>
+</div>
+<div style="margin-top:16px;padding-top:14px;border-top:1px solid #eee">
+<button class="btn btn-black hidden" id="btnEdit2" style="width:100%;padding:12px" onclick="openEdit()">✏️ Editar mi tienda</button>
 </div>
 </div>
 </div>
@@ -78,9 +82,9 @@ input,textarea{width:100%;padding:10px 12px;border:1px solid #e9e9e9;border-radi
 <div class="modal-box">
 <div class="modal-media" id="modalMedia"></div>
 <div class="modal-body">
-<div style="display:flex;justify-content:space-between;align-items:center"><b id="mName" style="font-size:14px"></b><div style="cursor:pointer;background:#f5f5f5;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center" onclick="closeModal()">✕</div></div>
+<div style="display:flex;justify-content:space-between"><b id="mName"></b><div style="cursor:pointer;background:#f5f5f5;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center" onclick="closeModal()">✕</div></div>
 <div style="font-size:22px;font-weight:900;margin-top:10px" id="mPrice"></div>
-<div style="font-size:13px;color:#555;margin-top:10px;white-space:pre-wrap;line-height:1.5" id="mDesc"></div>
+<div style="font-size:13px;color:#555;margin-top:10px;white-space:pre-wrap" id="mDesc"></div>
 <button class="btn btn-green" style="width:100%;margin-top:16px;padding:14px" onclick="contactProduct()">Consultar por WhatsApp</button>
 </div>
 </div>
@@ -88,17 +92,23 @@ input,textarea{width:100%;padding:10px 12px;border:1px solid #e9e9e9;border-radi
 
 <div class="edit-modal" id="editModal">
 <div class="edit-box">
-<h2 style="font-size:16px;font-weight:800">Editar mi tienda</h2>
-<label>Nombre de la tienda</label><input id="eName">
-<label>Dirección</label><input id="eDir">
-<label>WhatsApp (sin +54)</label><input id="eWsp" placeholder="2983401234">
+<h2 style="font-size:18px;font-weight:900">Editar mi tienda</h2>
+<p style="font-size:11px;color:#888;margin-top:4px">Todo lo de tu tienda se edita acá</p>
+
+<label>Nombre de la tienda</label><input id="eName" placeholder="Ej: Makeup Tres Arroyos">
+<label>Descripción de la tienda</label><textarea id="eDescStore" placeholder="Ej: Maquillaje y accesorios, envíos en Tres Arroyos..."></textarea>
+<label>Dirección</label><input id="eDir" placeholder="Moreno 456">
+<label>WhatsApp (solo números)</label><input id="eWsp" placeholder="2983401234">
+
 <label>Foto de perfil</label><input type="file" id="eProfile" accept="image/*">
-<img id="previewProfile" style="width:60px;height:60px;border-radius:50%;margin-top:8px;display:none;object-fit:cover">
+<img id="previewProfile" style="width:70px;height:70px;border-radius:50%;margin-top:8px;display:none;object-fit:cover;border:2px solid #eee">
+
 <label>Foto de portada</label><input type="file" id="eCover" accept="image/*">
-<div id="previewCover" style="height:80px;background:#eee;border-radius:8px;margin-top:8px;display:none;background-size:cover;background-position:center"></div>
-<button class="btn btn-green" style="width:100%;margin-top:16px;padding:14px" onclick="saveEdit()">Guardar cambios</button>
+<div id="previewCover" style="height:90px;background:#f0f0f0;border-radius:10px;margin-top:8px;display:none;background-size:cover;background-position:center"></div>
+
+<button class="btn btn-green" style="width:100%;margin-top:18px;padding:14px" onclick="saveEdit()">Guardar todo</button>
 <button class="btn btn-gray" style="width:100%;margin-top:8px;padding:12px" onclick="closeEdit()">Cancelar</button>
-<p style="font-size:10px;color:#888;margin-top:12px;text-align:center">El ID no cambia, tu link <br><b id="linkInfo" style="color:#333"></b><br>sigue funcionando</p>
+<p style="font-size:10px;color:#888;text-align:center;margin-top:10px">ID: <b id="idInfo"></b> - no cambia nunca</p>
 </div>
 </div>
 
@@ -109,49 +119,70 @@ function getProds(){try{return JSON.parse(localStorage.getItem('marketProductsAR
 function setProds(p){localStorage.setItem('marketProductsAR',JSON.stringify(p))}
 function getUsers(){try{return JSON.parse(localStorage.getItem('marketUsers')||'{}')}catch(e){return{}}}
 
-let curStoreId=new URLSearchParams(location.search).get('store');
+let params=new URLSearchParams(location.search);
+let curStoreId=params.get('store');
 let curStore=null, curProd=null, curIdx=0;
 let tempProfile=null, tempCover=null;
+
+// SI NO VIENE?store=, INTENTA CARGAR TU TIENDA LOGUEADA
+if(!curStoreId){
+  let wsp=localStorage.getItem('currentUser');
+  let users=getUsers();
+  if(wsp && users[wsp] && users[wsp].storeId){
+    curStoreId=users[wsp].storeId;
+    history.replaceState(null,'','store.html?store='+curStoreId);
+  }
+}
 
 function loadStore(){
 let stores=getStores();
 let s=stores[curStoreId];
+
 if(!s && curStoreId){
-  // Fallback por si el ID está viejo
   s=Object.values(stores).find(x=>x.id===curStoreId || x.name===curStoreId);
-  if(s) curStoreId=s.id;
+  if(s) {curStoreId=s.id; history.replaceState(null,'','store.html?store='+curStoreId);}
 }
+
 if(!s){
-document.body.innerHTML='<div style="padding:60px 20px;text-align:center;font-family:Arial"><div style="font-size:50px">🏪</div><h2>Tienda no encontrada</h2><p style="color:#888;margin-top:8px">ID: '+curStoreId+'</p><p style="color:#888;font-size:12px">Guardadas: '+Object.keys(stores).length+'</p><div style="margin-top:20px"><a href="index.html" style="background:#00a650;color:#fff;padding:12px 24px;border-radius:999px;text-decoration:none;font-weight:800">Volver</a></div></div>';
+let all=Object.values(stores);
+let list=all.map(x=>`<div style="padding:8px;border:1px solid #eee;border-radius:8px;margin-top:6px;display:flex;justify-content:space-between"><span>${x.name}</span><a href="store.html?store=${x.id}" style="color:#00a650;font-weight:800">Abrir</a></div>`).join('')||'<div style="color:#888">No hay tiendas guardadas en este celu</div>';
+document.body.innerHTML=`<div style="padding:40px 20px;text-align:center;max-width:400px;margin:0 auto;font-family:Arial"><div style="font-size:60px">🏪</div><h2 style="margin-top:10px">Tienda no encontrada</h2><p style="font-size:13px;color:#888;margin-top:8px">ID buscado: ${curStoreId||'vacío'}</p><p style="font-size:12px;color:#888;margin-top:10px">Si acabas de crear tu cuenta, andá al panel y tocá "Mi tienda"</p><div style="margin-top:20px"><a href="panel.html" style="background:#00a650;color:#fff;padding:14px 28px;border-radius:999px;text-decoration:none;font-weight:800;display:inline-block">Ir a mi panel</a></div><div style="margin-top:30px;text-align:left"><div style="font-weight:800;font-size:13px">Tiendas en este dispositivo:</div>${list}</div></div>`;
 return;
 }
 curStore=s;
-document.getElementById('cover').style.backgroundImage=s.cover?`url(${s.cover})`:'';
-document.getElementById('pImg').src=s.profile||'https://via.placeholder.com/200';
-document.getElementById('pName').textContent=s.name;
-document.getElementById('pDir').textContent=s.dir||'Tres Arroyos';
-document.getElementById('sDir').textContent=s.dir||'Tres Arroyos';
-document.getElementById('sWsp').textContent=s.wsp||'';
-document.getElementById('linkInfo').textContent='store.html?store='+curStoreId;
 
-let now=Date.now();let start=s.trialStart||s.created||now;let left=10-Math.floor((now-start)/86400000);
+document.getElementById('cover').textContent='';
+document.getElementById('cover').style.backgroundImage=s.cover?`url(${s.cover})`:'none';
+if(!s.cover) document.getElementById('cover').textContent='Sin portada - Edita tu tienda para agregar una';
+
+document.getElementById('pImg').src=s.profile||'https://via.placeholder.com/200';
+document.getElementById('pName').textContent=s.name||'Mi tienda';
+document.getElementById('pDir').textContent=s.dir||'Tres Arroyos';
+document.getElementById('pDesc').textContent=s.descStore||s.descripcion||'';
+document.getElementById('sDir').textContent=s.dir||'-';
+document.getElementById('sWsp').textContent=s.wsp||'-';
+document.getElementById('sDesc').textContent=s.descStore||s.descripcion||'-';
+document.getElementById('idInfo').textContent=curStoreId;
+
+let now=Date.now(), start=s.trialStart||s.created||now, left=10-Math.floor((now-start)/86400000);
 if(s.paid && s.paidUntil && now < s.paidUntil){
 document.getElementById('pStatus').textContent='✓ Activa hasta '+new Date(s.paidUntil).toLocaleDateString('es-AR');
-document.getElementById('trialInfo').textContent='Activa';
+document.getElementById('trialInfo').textContent='Activa mensual';
 }else if(s.plan==='comision'){
-document.getElementById('pStatus').textContent='✓ Plan 10%';
-document.getElementById('trialInfo').textContent='10% por venta';
+document.getElementById('pStatus').textContent='✓ Plan 10% por venta';
+document.getElementById('trialInfo').textContent='Plan 10%';
 }else if(left>=0){
-document.getElementById('pStatus').textContent='Quedan '+left+' días gratis';
+document.getElementById('pStatus').textContent='Prueba gratis: quedan '+left+' días';
 document.getElementById('trialInfo').textContent=left+' días gratis';
 }else{
 document.getElementById('pStatus').textContent='Prueba terminada';
 document.getElementById('trialInfo').textContent='Terminada';
 }
 
-let wsp=localStorage.getItem('currentUser');let users=getUsers();
+let wsp=localStorage.getItem('currentUser'), users=getUsers();
 if(wsp && users[wsp] && users[wsp].storeId===curStoreId){
 document.getElementById('btnEdit').classList.remove('hidden');
+document.getElementById('btnEdit2').classList.remove('hidden');
 }
 
 let prods=getProds().filter(p=>p.storeId===curStoreId).sort((a,b)=>b.id-a.id);
@@ -160,89 +191,56 @@ document.getElementById('feed').innerHTML=prods.map(p=>{
 let first=p.media?p.media[0]:{type:'img',src:p.img};
 let isVideo=first.type==='video';
 let count=p.media?p.media.length:(p.imgs?p.imgs.length:1);
-return `<div class="card" onclick="openProd(${p.id})"><div class="card-media">${isVideo?`<video src="${first.src}" muted></video>`:`<img src="${p.imgs?p.imgs[0]:p.img}" loading="lazy">`}${count>1?`<div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.6);color:#fff;padding:3px 8px;border-radius:999px;font-size:10px">${count}</div>`:''}${isVideo?`<div style="position:absolute;top:6px;left:6px;background:#00a650;color:#fff;padding:3px 6px;border-radius:4px;font-size:9px;font-weight:800">VIDEO</div>`:''}</div><div class="card-body"><div class="card-price">$${p.price.toLocaleString('es-AR')}</div><div class="card-name">${p.name}</div></div></div>`;
-}).join('')||'<div style="text-align:center;color:#888;padding:40px;background:#fff;border-radius:12px">Esta tienda aún no tiene publicaciones<br><a href="panel.html" style="color:#00a650;font-weight:700">Publicá tu primera</a></div>';
+return `<div class="card" onclick="openProd(${p.id})"><div class="card-media">${isVideo?`<video src="${first.src}" muted></video>`:`<img src="${p.imgs?p.imgs[0]:p.img}" loading="lazy">`}${count>1?`<div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.7);color:#fff;padding:3px 8px;border-radius:999px;font-size:10px">${count}</div>`:''}</div><div class="card-body"><div class="card-price">$${p.price.toLocaleString('es-AR')}</div><div class="card-name">${p.name}</div></div></div>`;
+}).join('')||'<div style="text-align:center;color:#888;padding:40px;background:#fff;border-radius:12px">Sin publicaciones<br><a href="panel.html" style="color:#00a650;font-weight:800">Creá una en tu panel →</a></div>';
 }
 
-function openProd(id){let p=getProds().find(x=>x.id===id);if(!p) return;curProd=p;curIdx=0;document.getElementById('mName').textContent=p.name;document.getElementById('mPrice').textContent='$'+p.price.toLocaleString('es-AR');document.getElementById('mDesc').textContent=p.desc||'Sin descripción';showMedia();document.getElementById('modal').style.display='flex';}
-function showMedia(){let media=curProd.media||(curProd.imgs?curProd.imgs.map(src=>({type:'img',src})): [{type:'img',src:curProd.img}]);let m=media[curIdx];document.getElementById('modalMedia').innerHTML=`${m.type==='video'?`<video src="${m.src}" controls autoplay style="width:100%;height:100%;object-fit:contain"></video>`:`<img src="${m.src}" style="width:100%;height:100%;object-fit:contain">`}${media.length>1?`<div class="arrow l" onclick="event.stopPropagation();curIdx=(curIdx-1+media.length)%media.length;showMedia()">‹</div><div class="arrow r" onclick="event.stopPropagation();curIdx=(curIdx+1)%media.length;showMedia()">›</div><div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;padding:4px 10px;border-radius:999px;font-size:11px">${curIdx+1}/${media.length}</div>`:''}`;}
+function openProd(id){let p=getProds().find(x=>x.id===id);if(!p) return;curProd=p;curIdx=0;document.getElementById('mName').textContent=p.name;document.getElementById('mPrice').textContent='$'+p.price.toLocaleString('es-AR');document.getElementById('mDesc').textContent=p.desc||'';showMedia();document.getElementById('modal').style.display='flex';}
+function showMedia(){let media=curProd.media||(curProd.imgs?curProd.imgs.map(src=>({type:'img',src})): [{type:'img',src:curProd.img}]);let m=media[curIdx];document.getElementById('modalMedia').innerHTML=`${m.type==='video'?`<video src="${m.src}" controls autoplay style="width:100%;height:100%;object-fit:contain"></video>`:`<img src="${m.src}" style="width:100%;height:100%;object-fit:contain">`}${media.length>1?`<div class="arrow l" onclick="event.stopPropagation();curIdx=(curIdx-1+media.length)%media.length;showMedia()">‹</div><div class="arrow r" onclick="event.stopPropagation();curIdx=(curIdx+1)%media.length;showMedia()">›</div>`:''}`;}
 function closeModal(){document.getElementById('modal').style.display='none';}
 function contactStore(){let s=getStores()[curStoreId];window.open(`https://wa.me/54${(s.wsp||'').replace(/\D/g,'')}?text=${encodeURIComponent('Hola! Vi tu tienda '+s.name+' en 3A VENDE')}`,'_blank');}
-function contactProduct(){let s=getStores()[curStoreId];window.open(`https://wa.me/54${(s.wsp||'').replace(/\D/g,'')}?text=${encodeURIComponent('Hola! Vi '+curProd.name+' por $'+curProd.price+' en '+s.name)}`,'_blank');}
+function contactProduct(){let s=getStores()[curStoreId];window.open(`https://wa.me/54${(s.wsp||'').replace(/\D/g,'')}?text=${encodeURIComponent('Hola! Vi '+curProd.name+' por $'+curProd.price)}`,'_blank');}
 function shareStore(){if(navigator.share){navigator.share({title:curStore.name,url:location.href})}else{prompt('Copiá link:',location.href)}}
-
 function openEdit(){
 let s=getStores()[curStoreId];
-if(!s) return alert('No se pudo cargar tienda');
+if(!s) return alert('No se encontró tienda');
 document.getElementById('eName').value=s.name||'';
 document.getElementById('eDir').value=s.dir||'';
 document.getElementById('eWsp').value=s.wsp||'';
+document.getElementById('eDescStore').value=s.descStore||s.descripcion||'';
 tempProfile=null; tempCover=null;
 document.getElementById('previewProfile').style.display='none';
 document.getElementById('previewCover').style.display='none';
 document.getElementById('editModal').style.display='flex';
 }
-function closeEdit(){document.getElementById('editModal').style.display='none';tempProfile=null;tempCover=null;}
+function closeEdit(){document.getElementById('editModal').style.display='none';}
 function toBase64(f,cb){let r=new FileReader();r.onload=e=>cb(e.target.result);r.readAsDataURL(f)}
-
 document.getElementById('eProfile').addEventListener('change',e=>{
 let f=e.target.files[0];if(!f) return;
-toBase64(f,b64=>{
-tempProfile=b64;
-let img=document.getElementById('previewProfile');
-img.src=b64;img.style.display='block';
-document.getElementById('pImg').src=b64;
-});
+toBase64(f,b64=>{tempProfile=b64;let img=document.getElementById('previewProfile');img.src=b64;img.style.display='block';document.getElementById('pImg').src=b64;});
 });
 document.getElementById('eCover').addEventListener('change',e=>{
 let f=e.target.files[0];if(!f) return;
-toBase64(f,b64=>{
-tempCover=b64;
-let div=document.getElementById('previewCover');
-div.style.backgroundImage=`url(${b64})`;div.style.display='block';
-document.getElementById('cover').style.backgroundImage=`url(${b64})`;
+toBase64(f,b64=>{tempCover=b64;let div=document.getElementById('previewCover');div.style.backgroundImage=`url(${b64})`;div.style.display='block';document.getElementById('cover').style.backgroundImage=`url(${b64})`;document.getElementById('cover').textContent='';});
 });
-});
-
 function saveEdit(){
-let stores=getStores();
-let s=stores[curStoreId];
-if(!s) return alert('Error: tienda no existe');
-let newName=document.getElementById('eName').value.trim();
-let newDir=document.getElementById('eDir').value.trim();
-let newWsp=document.getElementById('eWsp').value.trim().replace(/\D/g,'');
-
-if(newName) s.name=newName;
-if(newDir) s.dir=newDir;
-if(newWsp) s.wsp=newWsp;
+let stores=getStores();let s=stores[curStoreId];
+if(!s) return alert('Tienda no encontrada');
+s.name=document.getElementById('eName').value.trim()||s.name;
+s.dir=document.getElementById('eDir').value.trim()||s.dir;
+let wspNew=document.getElementById('eWsp').value.trim().replace(/\D/g,'');
+if(wspNew) s.wsp=wspNew;
+s.descStore=document.getElementById('eDescStore').value.trim();
+s.descripcion=s.descStore;
 if(tempProfile) s.profile=tempProfile;
 if(tempCover) s.cover=tempCover;
-
 setStores(stores);
-
-// Actualizar marketUsers y productos
-let users=getUsers();
-let currentWsp=localStorage.getItem('currentUser');
-if(currentWsp && users[currentWsp]){
-if(newName) users[currentWsp].storeName=newName;
-if(newWsp && newWsp!==currentWsp){
-users[newWsp]=users[currentWsp];
-delete users[currentWsp];
-localStorage.setItem('currentUser',newWsp);
+let users=getUsers();let curWsp=localStorage.getItem('currentUser');
+if(curWsp && users[curWsp]){users[curWsp].storeName=s.name; if(wspNew && wspNew!==curWsp){users[wspNew]=users[curWsp];delete users[curWsp];localStorage.setItem('currentUser',wspNew);} localStorage.setItem('marketUsers',JSON.stringify(users));}
+let prods=getProds();prods.forEach(p=>{if(p.storeId===curStoreId) p.store=s.name;});setProds(prods);
+closeEdit();loadStore();
+alert('¡Tienda guardada! ID: '+curStoreId+' sigue igual, nunca se rompe');
 }
-localStorage.setItem('marketUsers',JSON.stringify(users));
-}
-
-let prods=getProds();
-let changed=false;
-prods.forEach(p=>{if(p.storeId===curStoreId){if(newName) p.store=newName; changed=true;}});
-if(changed) setProds(prods);
-
-closeEdit();
-loadStore();
-alert('¡Tienda guardada! Tu link sigue igual');
-}
-
 loadStore();
 </script>
 </body>
