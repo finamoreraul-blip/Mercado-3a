@@ -44,7 +44,7 @@ textarea{height:70px;resize:none}
 <body>
 <header>
 <div class="logo" onclick="location.href='index.html'"><b>3A</b> VENDE</div>
-<div style="display:flex;gap:8px"><button class="btn btn-gray" onclick="location.href='index.html'">Market</button><button class="btn btn-black" onclick="irTienda()">Mi tienda</button></div>
+<div style="display:flex;gap:8px"><button class="btn btn-gray" onclick="location.href='index.html'">Market</button><button class="btn btn-black" onclick="irTienda()">Mi tienda</button><button class="btn btn-red" onclick="logout()">Salir</button></div>
 </header>
 
 <div class="tabs">
@@ -120,7 +120,7 @@ function getProds(){try{return JSON.parse(localStorage.getItem('marketProductsAR
 function setProds(p){
   try{ localStorage.setItem('marketProductsAR',JSON.stringify(p)); return true; }
   catch(e){
-    alert('Memoria llena! Tenés muchas fotos. Borrá publicaciones viejas. Error: '+e.message);
+    alert('Memoria llena! Borrá publicaciones viejas. Error: '+e.message);
     document.getElementById('debug').textContent+='\nSTORAGE LLENO: '+e.message;
     return false;
   }
@@ -131,21 +131,36 @@ function setGastos(g){localStorage.setItem('marketGastos',JSON.stringify(g))}
 function getVentas(){try{return JSON.parse(localStorage.getItem('marketVentas')||'[]')}catch(e){return[]}}
 function setVentas(v){localStorage.setItem('marketVentas',JSON.stringify(v))}
 
+function logout(){ localStorage.removeItem('currentUser'); location.href='login.html'; }
+
 function init(){
   try{
     document.getElementById('debug').textContent='Iniciando... '+new Date().toLocaleTimeString();
     var wsp=localStorage.getItem('currentUser');
     var users=getUsers();
     var stores=getStores();
+    // === AHORA SI OBLIGA LOGIN ===
     if(!wsp ||!users[wsp]){
-      wsp='2983000000'; localStorage.setItem('currentUser',wsp);
-      users[wsp]={storeId:'store_'+Date.now(),storeName:'Mi tienda'}; localStorage.setItem('marketUsers',JSON.stringify(users));
+      location.href='login.html';
+      return;
     }
     curStoreId=users[wsp].storeId;
-    if(!stores[curStoreId]){ stores[curStoreId]={id:curStoreId,name:users[wsp].storeName||'Mi tienda',wsp:wsp,dir:'Tres Arroyos',created:Date.now()}; setStores(stores); }
-    document.getElementById('storeInfo').innerHTML='Publicando en: <b>'+stores[curStoreId].name+'</b><br>ID:'+curStoreId+'<br><span style="color:#00a650">✅ Fotos con compresión + Sheet</span>';
-    document.getElementById('sideStore').innerHTML='<b>'+stores[curStoreId].name+'</b><br>'+stores[curStoreId].dir;
+    if(!stores[curStoreId]){
+      location.href='login.html';
+      return;
+    }
+    document.getElementById('storeInfo').innerHTML='Publicando en: <b>'+stores[curStoreId].name+'</b><br>ID:'+curStoreId+'<br><span style="color:#00a650">✅ Logueado + Sheet conectado</span>';
+    document.getElementById('sideStore').innerHTML='<b>'+stores[curStoreId].name+'</b><br>'+stores[curStoreId].dir+'<br>WSP: '+stores[curStoreId].wsp;
     document.getElementById('debug').textContent+='\nStore OK: '+curStoreId+' Prods:'+getProds().length;
+
+    // === GUARDAR LOGIN EN SHEET 1 VEZ POR DIA ===
+    var lastKey='lastSheetLogin_'+curStoreId;
+    var last=parseInt(localStorage.getItem(lastKey)||'0');
+    if(Date.now()-last > 86400000){
+      localStorage.setItem(lastKey, Date.now().toString());
+      enviarASheet({tipo:'tienda', storeId:curStoreId, tienda:stores[curStoreId].name, whatsapp:stores[curStoreId].wsp, direccion:stores[curStoreId].dir, descripcion:'LOGIN PANEL '+new Date().toLocaleString('es-AR')});
+    }
+
     cargarProds(); cargarFinanzas(); cargarVentas(); updatePreview();
   }catch(e){ document.getElementById('debug').textContent+='\nERROR INIT: '+e.message; alert('Error init: '+e.message); }
 }
@@ -205,7 +220,6 @@ function updatePreview(){
   if(mediaTemp.length>0){ var h='<img src="'+mediaTemp[0].src+'">'; document.getElementById('liveMedia').innerHTML=h; document.getElementById('liveMedia2').innerHTML=h; }
 }
 
-// PUBLICAR - A PRUEBA DE FALLOS
 function publicar(){
   document.getElementById('debug').textContent+='\nClick publicar';
   try{
@@ -231,11 +245,11 @@ function publicar(){
     prods.push(nuevo);
     if(!setProds(prods)) return;
 
-    enviarASheet({tipo:'publicacion',storeId:curStoreId,tienda:s.name,whatsapp:s.wsp,producto:name,precio:price,costo:cost,categoria:cat,descripcion:desc});
+    enviarASheet({tipo:'producto',storeId:curStoreId,tienda:s.name,whatsapp:s.wsp,producto:name,precio:price,costo:cost,categoria:cat,descripcion:desc});
 
     document.getElementById('pName').value=''; document.getElementById('pPrice').value=''; document.getElementById('pCost').value=''; document.getElementById('pDesc').value='';
     mediaTemp=[]; renderPreview(); updatePreview();
-    document.getElementById('msg').textContent='✅ ¡Publicado con '+nuevo.imgs.length+' fotos comprimidas y enviado al Sheet!';
+    document.getElementById('msg').textContent='✅ ¡Publicado y enviado al Sheet!';
     document.getElementById('debug').textContent+='\nPUBLICADO OK ID:'+nuevo.id;
     cargarProds(); cargarFinanzas();
   }catch(err){
@@ -249,7 +263,7 @@ function cargarProds(){
   var prods=getProds().filter(p=>p.storeId===curStoreId).reverse();
   document.getElementById('count').textContent=prods.length;
   var html=''; for(let p of prods){ let img=p.img||''; if(p.media&&p.media[0]) img=p.media[0].src; html+='<div class="prod"><div class="prod-media"><img src="'+img+'"></div><div class="prod-body"><b>$'+p.price.toLocaleString('es-AR')+'</b><div style="font-size:12px">'+p.name+'</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-gray" style="flex:1" onclick="editar('+p.id+')">Editar</button><button class="btn btn-red" style="flex:1" onclick="borrar('+p.id+')">Borrar</button><button class="btn btn-green" style="flex:1" onclick="vender('+p.id+')">Vendido</button></div></div></div>'; }
-  document.getElementById('grid').innerHTML=html||'<div style="background:#fff;padding:20px;border-radius:12px;text-align:center;color:#888">Sin publicaciones - subí fotos y publicá</div>';
+  document.getElementById('grid').innerHTML=html||'<div style="background:#fff;padding:20px;border-radius:12px;text-align:center;color:#888">Sin publicaciones</div>';
 }
 function editar(id){ var p=getProds().find(x=>x.id===id); if(!p)return; editId=id; document.getElementById('pName').value=p.name; document.getElementById('pPrice').value=p.price; document.getElementById('pCost').value=p.cost||''; document.getElementById('pCat').value=p.category||'Otros'; document.getElementById('pDesc').value=p.desc||''; mediaTemp=p.media||[]; renderPreview(); updatePreview(); document.getElementById('btnPub').textContent='💾 GUARDAR'; document.getElementById('btnCancel').classList.remove('hidden'); window.scrollTo(0,0); }
 function cancelar(){ editId=null; mediaTemp=[]; renderPreview(); updatePreview(); document.getElementById('pName').value=''; document.getElementById('pPrice').value=''; document.getElementById('pCost').value=''; document.getElementById('pDesc').value=''; document.getElementById('btnPub').textContent='📦 PUBLICAR AHORA'; document.getElementById('btnCancel').classList.add('hidden'); }
