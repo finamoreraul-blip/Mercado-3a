@@ -20,7 +20,7 @@ button{width:100%;padding:13px;border:none;border-radius:999px;font-weight:800;f
 <body>
 <div class="box">
 <h1><b>3A</b> VENDE</h1>
-<p style="font-size:11px;color:#888;text-align:center">Un WhatsApp puede tener varias tiendas</p>
+<p style="font-size:11px;color:#888;text-align:center" id="sub">Un WhatsApp puede tener varias tiendas</p>
 <button class="btn-client" onclick="entrarComoCliente()">👀 Entrar como cliente</button>
 <div style="text-align:center;font-size:10px;color:#aaa;margin:8px 0">— o —</div>
 <div class="tab"><div id="tLogin" class="on" onclick="setModo('login')">Entrar</div><div id="tReg" onclick="setModo('reg')">+ Nueva tienda</div></div>
@@ -30,15 +30,16 @@ button{width:100%;padding:13px;border:none;border-radius:999px;font-weight:800;f
 <button class="btn-green" id="btnLogin" onclick="hacerLogin()">Entrar →</button>
 </div>
 <div id="formReg" style="display:none">
-<input id="wsp" type="tel" placeholder="WhatsApp (mismo que ya usás)">
+<input id="wsp" type="tel" placeholder="WhatsApp">
 <input id="storeName" placeholder="Nombre de la NUEVA tienda">
 <input id="dir" placeholder="Dirección">
-<div class="field"><input id="pass" type="password" placeholder="Contraseña (la misma de siempre)"><span class="eye" onclick="toggle('pass')">👁️</span></div>
+<div class="field"><input id="pass" type="password" placeholder="Contraseña"><span class="eye" onclick="toggle('pass')">👁️</span></div>
 <div class="field"><input id="pass2" type="password" placeholder="Repetir contraseña"><span class="eye" onclick="toggle('pass2')">👁️</span></div>
-<button class="btn-black" id="btnReg" onclick="hacerRegistro()">Crear otra tienda</button>
+<button class="btn-black" id="btnReg" onclick="hacerRegistro()">Crear tienda</button>
 </div>
 <a href="index.html" style="font-size:12px;color:#888;text-decoration:none;display:block;text-align:center;margin-top:14px">← Volver</a>
 <div id="msg"></div>
+<button id="btnLimpiar" class="btn-client" style="display:none;margin-top:10px;background:#fff3f3;border-color:#ff3b30;color:#ff3b30" onclick="limpiarLocal()">🧹 Limpiar cuentas duplicadas de este celu</button>
 </div>
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbyb_1T-3wAcKsBIYhW6XSissrzcs0nGbFWvY83YN6l9vuNBzNQrhBqdntvKbESh1v52aQ/exec";
@@ -62,13 +63,24 @@ async function getSheet(tipo){
  }catch(e){return [];}
 }
 
+function limpiarLocal(){
+ if(!confirm('¿Borrar las 4 cuentas duplicadas de este celu y dejar solo lo que está en el Sheet?')) return;
+ localStorage.removeItem('marketStores');
+ localStorage.removeItem('marketUsers');
+ localStorage.removeItem('currentUser');
+ localStorage.removeItem('currentStoreId');
+ document.getElementById('msg').style.color='#00a650';
+ document.getElementById('msg').textContent='✅ Local limpio. Ahora entrá de nuevo.';
+ document.getElementById('btnLimpiar').style.display='none';
+}
+
 async function hacerLogin(){
  let wsp=document.getElementById('wspLogin').value.replace(/\D/g,'');
  let pass=document.getElementById('passLogin').value;
  if(wsp.length<10){document.getElementById('msg').textContent='WhatsApp incompleto';return;}
  document.getElementById('btnLogin').textContent='Verificando...';
  document.getElementById('msg').style.color='#888';
- document.getElementById('msg').textContent='Consultando Sheet...';
+ document.getElementById('msg').textContent='Consultando Sheet y limpiando duplicados...';
 
  let tiendas=await getSheet('tienda');
  let borradas=await getSheet('borrado_tienda');
@@ -79,33 +91,44 @@ async function hacerLogin(){
  if(misTiendas.length===0){
    document.getElementById('msg').style.color='#ff3b30';
    document.getElementById('msg').textContent='No hay tiendas con ese WhatsApp. Registrate.';
+   // Limpia las truchas locales de ese wsp
+   let stores=getStores(); Object.keys(stores).forEach(id=>{ if(String(stores[id].wsp||'').replace(/\D/g,'')===wsp) delete stores[id]; }); setStores(stores);
+   let users=getUsers(); if(users[wsp]){ delete users[wsp]; setUsers(users); }
    setModo('reg'); document.getElementById('wsp').value=wsp;
    document.getElementById('btnLogin').textContent='Entrar →';
+   document.getElementById('btnLimpiar').style.display='block';
    return;
  }
 
- // Sincronizar todas las tiendas de ese wsp al localStorage
- let stores=getStores(); let users=getUsers();
+ // *** FIX PRINCIPAL: RECONSTRUYE marketStores SOLO con lo que está en Sheet ***
+ let stores={}; // borra todo lo viejo
  misTiendas.forEach(t=>{
    let id = t.storeId;
-   stores[id] = {id:id, name:t.tienda, wsp:wsp, ownerWsp:wsp, dir:t.direccion||'Tres Arroyos', profile:t.foto||'', created:Date.now()};
+   stores[id] = {id:id, name:t.tienda, wsp:wsp, ownerWsp:wsp, dir:t.direccion||'Tres Arroyos', profile:t.foto||'', cover:t.portada||'', created:Date.now()};
  });
  setStores(stores);
+
+ let users=getUsers();
  if(!users[wsp]) users[wsp]={storeId:misTiendas[0].storeId, wsp:wsp, password:pass};
- // validar pass si existe local
  if(users[wsp] && users[wsp].password && users[wsp].password!==pass){
    document.getElementById('msg').style.color='#ff3b30';
    document.getElementById('msg').textContent='Contraseña incorrecta';
    document.getElementById('btnLogin').textContent='Entrar →';
    return;
  }
- users[wsp].password = pass; // guarda pass actual
+ users[wsp].password = pass;
+ users[wsp].storeId = misTiendas[0].storeId;
+ users[wsp].allStoreIds = misTiendas.map(x=>x.storeId);
  setUsers(users);
 
+ document.getElementById('msg').style.color='#00a650';
+ document.getElementById('msg').textContent=`✅ ${misTiendas.length} tienda(s) encontrada(s). Entrando...`;
+ document.getElementById('sub').textContent = `${misTiendas.length} cuenta(s) real(es) en Sheet con este wsp`;
+
  localStorage.setItem('currentUser',wsp);
- localStorage.removeItem('currentStoreId'); // fuerza selector en panel si hay varias
+ localStorage.removeItem('currentStoreId');
  localStorage.setItem('role','vendedor');
- location.href='panel.html';
+ setTimeout(()=> location.href='panel.html', 600);
 }
 
 async function hacerRegistro(){
@@ -114,24 +137,41 @@ async function hacerRegistro(){
  let dir=document.getElementById('dir').value.trim()||'Tres Arroyos';
  let p1=document.getElementById('pass').value; let p2=document.getElementById('pass2').value;
  if(wsp.length<10||!name||p1.length<4||p1!==p2){document.getElementById('msg').textContent='Faltan datos o claves distintas';return;}
- document.getElementById('btnReg').textContent='Creando...';
+ document.getElementById('btnReg').textContent='Validando...';
 
  let tiendas=await getSheet('tienda');
  let borradas=await getSheet('borrado_tienda');
  let setBor=new Set(borradas.map(x=>String(x.storeId||x.id)));
+ let tiendasActivas = tiendas.filter(x=>!setBor.has(String(x.storeId||x.id)));
+ let misTiendas = tiendasActivas.filter(x=>String(x.whatsapp||'').replace(/\D/g,'')===wsp);
 
- // Ya no bloqueamos si existe mismo wsp, permitimos multi-tienda
+ // Si ya tiene una tienda con el mismo nombre, no dejar duplicar
+ if(misTiendas.some(t=> (t.tienda||'').toLowerCase().trim() === name.toLowerCase().trim())){
+   document.getElementById('msg').style.color='#ff3b30';
+   document.getElementById('msg').textContent='Ya tenés una tienda con ese nombre';
+   document.getElementById('btnReg').textContent='Crear tienda';
+   return;
+ }
+
  let users=getUsers(); let stores=getStores();
+ // Limpia duplicados locales antes de crear
+ Object.keys(stores).forEach(id=>{ if(!tiendasActivas.find(t=>String(t.storeId)===String(id)) && String(stores[id].wsp||'').replace(/\D/g,'')===wsp) delete stores[id]; });
+
  let id='store_'+Date.now();
  stores[id]={id:id,name:name,wsp:wsp,ownerWsp:wsp,dir:dir,created:Date.now(), profile:''};
- users[wsp]={storeId:id,wsp:wsp,storeName:name,password:p1, allStoreIds: [...(users[wsp]?.allStoreIds||[]), id]};
+ users[wsp]={storeId:id,wsp:wsp,storeName:name,password:p1, allStoreIds: [...misTiendas.map(x=>x.storeId), id]};
  setStores(stores); setUsers(users);
  localStorage.setItem('currentUser',wsp);
  localStorage.setItem('currentStoreId',id);
  localStorage.setItem('role','vendedor');
- enviarASheet({tipo:'tienda',storeId:id,tienda:name,whatsapp:wsp,direccion:dir,descripcion:'REGISTRO MULTI '+new Date().toLocaleString('es-AR')});
+ enviarASheet({tipo:'tienda',storeId:id,tienda:name,whatsapp:wsp,direccion:dir,descripcion:'REGISTRO '+new Date().toLocaleString('es-AR')});
  location.href='panel.html';
 }
+
+// Al cargar, si hay duplicados locales muestra botón
+(function(){
+ let st=getStores(); if(Object.keys(st).length>=3) document.getElementById('btnLimpiar').style.display='block';
+})();
 </script>
 </body>
-</html>
+ </html>
