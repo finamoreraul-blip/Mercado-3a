@@ -10,291 +10,178 @@ header{background:#fff;padding:12px 16px;display:flex;justify-content:space-betw
 .logo{font-weight:900;font-size:20px}.logo b{color:#00a650}
 .btn{border:none;padding:10px 16px;border-radius:999px;font-weight:800;font-size:12px;cursor:pointer}
 .btn-green{background:#00a650;color:#fff}.btn-black{background:#111;color:#fff}.btn-gray{background:#fff;border:1px solid #ddd}
-.cover{height:200px;background:#222;background-size:cover;background-position:center;position:relative}
-.cover-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#888;font-size:12px}
-.card{max-width:1100px;margin:-60px auto 0;background:#fff;border-radius:16px;padding:18px;display:flex;gap:16px;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.12);position:relative;z-index:2;margin-left:16px;margin-right:16px}
-.card img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #fff}
+.cover{height:220px;background:#222;background-size:cover;background-position:center;position:relative}
+.cover-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#888;font-size:12px;flex-direction:column}
+.profile-wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.profile-card{max-width:1100px;margin:-60px auto 0;background:#fff;border-radius:20px;padding:20px;display:flex;gap:18px;box-shadow:0 12px 32px rgba(0,0,0,.12);position:relative;z-index:2}
+.pfp{width:90px;height:90px;border-radius:50%;object-fit:cover;border:4px solid #fff;flex-shrink:0}
+.p-info{flex:1;min-width:0}
+.p-name{font-size:22px;font-weight:900}
+.p-dir{font-size:13px;color:#777;margin-top:3px}
+.p-desc{font-size:13px;color:#333;margin-top:10px;background:#f9fafb;padding:10px 12px;border-radius:10px;white-space:pre-wrap;line-height:1.4}
+.p-status{font-size:11px;color:#00a650;background:#e6f7ed;padding:6px 12px;border-radius:999px;font-weight:800;margin-top:8px;display:inline-block}
+.p-actions{display:flex;flex-direction:column;gap:8px;min-width:140px}
 .wrap{max-width:1100px;margin:20px auto;padding:0 16px;display:grid;grid-template-columns:1fr 320px;gap:16px}
-.feed{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.prod{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #eee}
-.prod-media{height:180px;background:#000;display:flex;align-items:center;justify-content:center}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.prod{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #eee;transition:.2s;cursor:pointer}
+.prod:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.1)}
+.prod-media{height:200px;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .prod-media img{width:100%;height:100%;object-fit:cover}
-.prod-body{padding:10px}
-.side{background:#fff;border-radius:12px;padding:16px;height:fit-content;position:sticky;top:70px}
+.prod-body{padding:12px}
+.prod-price{font-weight:900;font-size:16px}
+.prod-name{font-size:13px;margin-top:3px;color:#222;line-height:1.3}
+.side{background:#fff;border-radius:16px;padding:18px;height:fit-content;position:sticky;top:70px;border:1px solid #eee}
+.side-item{font-size:13px;margin-top:10px;line-height:1.5}
 .edit-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
-.edit-box{background:#fff;border-radius:16px;padding:20px;max-width:440px;width:100%;max-height:90vh;overflow:auto}
-label{font-size:11px;font-weight:800;display:block;margin-top:12px;margin-bottom:4px}
-input,textarea{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:10px;font-size:13px;background:#fafafa}
-textarea{height:70px;resize:none}
-.upload{border:2px dashed #ccc;border-radius:12px;padding:12px;text-align:center;margin-top:6px;cursor:pointer;background:#fafafa}
-.upload img{width:70px;height:70px;border-radius:50%;display:none;margin:8px auto 0;object-fit:cover}
-.upload-cover{height:80px;border-radius:8px;background-size:cover;background-position:center;display:none;margin-top:8px}
+.edit-box{background:#fff;border-radius:18px;padding:22px;max-width:440px;width:100%;max-height:92vh;overflow:auto}
+label{font-size:11px;font-weight:800;display:block;margin-top:14px;margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
+input,textarea{width:100%;padding:11px 12px;border:1px solid #ddd;border-radius:10px;font-size:13px;background:#fafafa;outline:none}
+input:focus,textarea:focus{background:#fff;border-color:#00a650}
+textarea{height:75px;resize:none}
+.upload{border:2px dashed #ccc;border-radius:12px;padding:12px;text-align:center;margin-top:6px;cursor:pointer;background:#fafafa;transition:.2s}
+.upload:hover{border-color:#00a650;background:#f6fdf8}
+.upload img{width:72px;height:72px;border-radius:50%;display:none;margin:8px auto 0;object-fit:cover;border:3px solid #fff}
+.upload-cover{height:90px;border-radius:10px;background-size:cover;background-position:center;display:none;margin-top:8px;border:1px solid #eee}
 .hidden{display:none!important}
-.debug{background:#111;color:#0f0;padding:10px;border-radius:8px;font-size:11px;font-family:monospace;margin-top:10px;white-space:pre-wrap}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.profile-card{flex-direction:column}.p-actions{flex-direction:row;flex-wrap:wrap;min-width:auto;width:100%}.p-actions.btn{flex:1;justify-content:center}}
 </style>
 </head>
 <body>
 <header>
 <div class="logo" onclick="location.href='index.html'"><b>3A</b> VENDE</div>
-<div style="display:flex;gap:8px"><button class="btn btn-gray" onclick="location.href='index.html'">Market</button><button class="btn btn-green" onclick="location.href='panel.html'">Panel</button></div>
+<div style="display:flex;gap:8px"><button class="btn btn-gray" onclick="location.href='index.html'">Marketplace</button><button class="btn btn-green" onclick="location.href='panel.html'">Panel</button></div>
 </header>
 
 <div class="cover" id="cover"><div class="cover-empty" id="coverEmpty">Sin portada</div></div>
 
-<div class="card">
-<img id="pImg" src="https://via.placeholder.com/200">
-<div style="flex:1">
-<div id="pName" style="font-weight:900;font-size:18px">Cargando...</div>
-<div id="pDir" style="font-size:12px;color:#777;margin-top:2px"></div>
-<div id="pDesc" style="font-size:12px;color:#333;margin-top:6px;background:#f9f9f9;padding:8px;border-radius:8px;white-space:pre-wrap"></div>
-<div id="pStatus" style="font-size:11px;color:#00a650;margin-top:6px;font-weight:800"></div>
-<div style="font-size:10px;color:#999;margin-top:4px">ID: <span id="idShow"></span></div>
+<div class="profile-wrap">
+<div class="profile-card">
+<img id="pImg" class="pfp" src="https://via.placeholder.com/200">
+<div class="p-info">
+<div class="p-name" id="pName">Mi tienda</div>
+<div class="p-dir" id="pDir">📍 Tres Arroyos</div>
+<div class="p-desc" id="pDesc"></div>
+<div class="p-status" id="pStatus">Cargando...</div>
+<div style="font-size:10px;color:#aaa;margin-top:6px">ID: <span id="idShow"></span> • Link permanente</div>
 </div>
-<div style="display:flex;flex-direction:column;gap:6px">
-<button class="btn btn-green" onclick="contactar()">WhatsApp</button>
+<div class="p-actions">
 <button class="btn btn-black" id="btnEdit" onclick="abrirEdit()">✏️ EDITAR TIENDA</button>
-<button class="btn btn-gray" onclick="compartir()">Compartir</button>
+<button class="btn btn-green" onclick="contactar()">💬 WhatsApp</button>
+<button class="btn btn-gray" onclick="compartir()">↗ Compartir</button>
+</div>
 </div>
 </div>
 
 <div class="wrap">
 <div>
-<div style="display:flex;justify-content:space-between;margin-bottom:10px"><b id="prodCount">0 publicaciones</b><span id="info" style="font-size:11px;color:#888"></span></div>
+<div class="section-title">
+<h3 style="font-size:16px;font-weight:900">Publicaciones (<span id="prodCount">0</span>)</h3>
+<span id="info" style="font-size:11px;color:#888;background:#fff;padding:6px 12px;border-radius:999px;border:1px solid #eee"></span>
+</div>
 <div class="feed" id="feed"></div>
-<div id="debugBox" style="margin-top:20px"></div>
 </div>
+
 <div class="side">
-<div style="font-weight:900">Mi tienda</div>
-<div style="font-size:13px;margin-top:10px;line-height:1.5">
-<div><b>Nombre:</b> <span id="sName"></span></div>
-<div><b>Dir:</b> <span id="sDir"></span></div>
-<div><b>Wsp:</b> <span id="sWsp"></span></div>
-<div style="margin-top:8px"><b>Desc:</b><div id="sDesc" style="color:#555;white-space:pre-wrap"></div></div>
-</div>
-<button class="btn btn-black" style="width:100%;margin-top:14px;padding:14px" onclick="abrirEdit()">✏️ EDITAR - SUBIR FOTOS</button>
-<div style="margin-top:12px">
-<button class="btn btn-gray" style="width:100%;font-size:11px" onclick="verDebug()">🔍 Ver datos guardados</button>
-<button class="btn btn-gray" style="width:100%;font-size:11px;margin-top:6px" onclick="repararTienda()">🔧 Reparar tienda automática</button>
+<div style="font-weight:900;font-size:14px">Información</div>
+<div class="side-item"><b>Nombre:</b> <span id="sName"></span></div>
+<div class="side-item"><b>Dirección:</b> <span id="sDir"></span></div>
+<div class="side-item"><b>WhatsApp:</b> <span id="sWsp"></span></div>
+<div class="side-item" style="margin-top:12px"><b>Descripción:</b><div id="sDesc" style="color:#555;margin-top:6px;white-space:pre-wrap;background:#f9fafb;padding:10px;border-radius:10px;line-height:1.4"></div></div>
+<div style="margin-top:16px;padding-top:14px;border-top:1px solid #eee">
+<div style="font-size:11px;color:#888;text-align:center">¿Querés tu tienda así?</div>
+<a href="panel.html" style="display:block;margin-top:8px;background:#f5f5f5;text-align:center;padding:10px;border-radius:999px;text-decoration:none;color:#111;font-weight:800;font-size:12px">Crear mi tienda gratis →</a>
 </div>
 </div>
 </div>
 
 <div class="edit-modal" id="editModal">
 <div class="edit-box">
-<h2 style="font-weight:900">Editar mi tienda</h2>
-<p style="font-size:11px;color:#666;margin-top:4px">Subí fotos directo desde galería</p>
-<label>Nombre *</label><input id="eName">
-<label>Descripción</label><textarea id="eDesc"></textarea>
-<label>Dirección</label><input id="eDir">
-<label>WhatsApp</label><input id="eWsp">
+<h2 style="font-weight:900;font-size:18px">Editar mi tienda</h2>
+<p style="font-size:11px;color:#777;margin-top:4px">Todo se edita acá: fotos, nombre, descripción, WhatsApp. El panel es solo para publicaciones.</p>
+
+<label>Nombre de la tienda *</label><input id="eName" placeholder="Ej: Makeup Tres Arroyos">
+<label>Descripción</label><textarea id="eDesc" placeholder="Qué vendés, horarios, envíos..."></textarea>
+<label>Dirección</label><input id="eDir" placeholder="Moreno 456, Tres Arroyos">
+<label>WhatsApp *</label><input id="eWsp" placeholder="2983401234">
+
 <label>Foto de perfil</label>
 <div class="upload" onclick="document.getElementById('filePerfil').click()">
-<div style="font-weight:800;font-size:12px">📸 TOCÁ PARA SUBIR PERFIL</div>
+<div style="font-weight:800;font-size:12px">📸 TOCÁ PARA SUBIR FOTO PERFIL</div><div style="font-size:11px;color:#888">Galería o cámara</div>
 <img id="prevPerfil">
 </div>
 <input type="file" id="filePerfil" accept="image/*" class="hidden">
+
 <label>Foto de portada</label>
 <div class="upload" onclick="document.getElementById('filePortada').click()">
-<div style="font-weight:800;font-size:12px">🖼️ TOCÁ PARA SUBIR PORTADA</div>
+<div style="font-weight:800;font-size:12px">🖼️ TOCÁ PARA SUBIR PORTADA</div><div style="font-size:11px;color:#888">Foto ancha queda mejor</div>
 <div id="prevPortada" class="upload-cover"></div>
 </div>
 <input type="file" id="filePortada" accept="image/*" class="hidden">
-<button class="btn btn-green" style="width:100%;margin-top:14px;padding:14px" onclick="guardar()">💾 GUARDAR</button>
+
+<button class="btn btn-green" style="width:100%;margin-top:18px;padding:14px" onclick="guardar()">💾 GUARDAR CAMBIOS</button>
 <button class="btn btn-gray" style="width:100%;margin-top:8px" onclick="cerrarEdit()">Cancelar</button>
 </div>
 </div>
 
 <script>
-var curId = null;
-var tempPerfil = null;
-var tempPortada = null;
+var curId=null,tempPerfil=null,tempPortada=null;
+function getStores(){try{return JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){return{}}}
+function setStores(o){localStorage.setItem('marketStores',JSON.stringify(o))}
+function getProds(){try{return JSON.parse(localStorage.getItem('marketProductsAR')||'[]')}catch(e){return[]}}
+function setProds(p){localStorage.setItem('marketProductsAR',JSON.stringify(p))}
+function getUsers(){try{return JSON.parse(localStorage.getItem('marketUsers')||'{}')}catch(e){return{}}}
 
-function getStores(){ try{ return JSON.parse(localStorage.getItem('marketStores')||'{}'); }catch(e){ return {}; } }
-function setStores(o){ localStorage.setItem('marketStores', JSON.stringify(o)); }
-function getProds(){ try{ return JSON.parse(localStorage.getItem('marketProductsAR')||'[]'); }catch(e){ return []; } }
-function setProds(p){ localStorage.setItem('marketProductsAR', JSON.stringify(p)); }
-function getUsers(){ try{ return JSON.parse(localStorage.getItem('marketUsers')||'{}'); }catch(e){ return {}; } }
-
-// AUTO-REPARACION
-function repararTienda(){
-  var users = getUsers();
-  var stores = getStores();
-  var wsp = localStorage.getItem('currentUser');
-  console.log('Reparando... users:',users,' stores:',stores,' current:',wsp);
-
-  // Si hay usuario logueado pero no hay store, crear store
-  if(wsp && users[wsp] &&!stores[users[wsp].storeId]){
-    var u = users[wsp];
-    var newStore = {
-      id: u.storeId,
-      name: u.storeName||'Mi tienda',
-      wsp: wsp,
-      dir: 'Tres Arroyos',
-      descStore: '',
-      profile: '',
-      cover: '',
-      created: Date.now(),
-      trialStart: Date.now()
-    };
-    stores[u.storeId] = newStore;
-    setStores(stores);
-    alert('¡Tienda reparada! ID: '+u.storeId);
-    location.href='store.html?store='+u.storeId;
-    return;
-  }
-
-  // Si hay stores pero no hay?store=, usar el primero
-  var keys = Object.keys(stores);
-  if(keys.length>0){
-    location.href='store.html?store='+keys[0];
-    return;
-  }
-
-  alert('No hay tiendas guardadas en este celu. Tenés que crear una en panel.html');
-  location.href='panel.html';
-}
-
-function verDebug(){
-  var stores = getStores();
-  var users = getUsers();
-  var prods = getProds();
-  var current = localStorage.getItem('currentUser');
-  var txt = 'currentUser: '+current+'\n\nmarketUsers:\n'+JSON.stringify(users,null,2)+'\n\nmarketStores keys: '+Object.keys(stores).join(', ')+'\n\nmarketStores:\n'+JSON.stringify(stores,null,2).substring(0,1000)+'\n\nProductos: '+prods.length;
-  document.getElementById('debugBox').innerHTML = '<div class="debug">'+txt+'</div><button class="btn btn-gray" style="margin-top:8px" onclick="localStorage.clear();alert(\'Borrado\');location.reload()">Borrar todo y empezar de cero</button>';
-}
-
-(function initId(){
-  var url = new URLSearchParams(location.search);
-  curId = url.get('store');
-  if(!curId){
-    var wsp = localStorage.getItem('currentUser');
-    var users = getUsers();
-    if(wsp && users[wsp] && users[wsp].storeId){
-      curId = users[wsp].storeId;
-      history.replaceState(null,'','store.html?store='+curId);
-    }else{
-      var stores = getStores();
-      var keys = Object.keys(stores);
-      if(keys.length>0){
-        curId = keys[0];
-        history.replaceState(null,'','store.html?store='+curId);
-      }
-    }
-  }
-})();
+(function(){var u=new URLSearchParams(location.search);curId=u.get('store');if(!curId){var w=localStorage.getItem('currentUser');var us=getUsers();if(w&&us[w]&&us[w].storeId){curId=us[w].storeId;history.replaceState(null,'','store.html?store='+curId)}else{var st=getStores();var k=Object.keys(st);if(k.length>0){curId=k[0];history.replaceState(null,'','store.html?store='+curId)}}}})();
 
 function cargar(){
-  var stores = getStores();
-  var s = stores[curId];
-
-  // Intento flexible
-  if(!s && curId){
-    var vals = Object.values(stores);
-    s = vals.find(function(x){ return x.id===curId; });
-    if(s) curId = s.id;
+var stores=getStores();var s=stores[curId];
+if(!s&&curId){var vals=Object.values(stores);s=vals.find(function(x){return x.id===curId});if(s)curId=s.id}
+if(!s){
+  var users=getUsers();var wsp=localStorage.getItem('currentUser');
+  if(wsp&&users[wsp]&&!stores[users[wsp].storeId]){
+    stores[users[wsp].storeId]={id:users[wsp].storeId,name:users[wsp].storeName||'Mi tienda',wsp:wsp,dir:'Tres Arroyos',descStore:'',created:Date.now(),trialStart:Date.now()};
+    setStores(stores);s=stores[users[wsp].storeId];
   }
-
-  // SI NO EXISTE, INTENTAR REPARAR AUTOMATICO
-  if(!s){
-    var users = getUsers();
-    var wsp = localStorage.getItem('currentUser');
-    if(wsp && users[wsp]){
-      var u = users[wsp];
-      // Si el usuario tiene storeId pero el store no existe, crearlo
-      if(u.storeId &&!stores[u.storeId]){
-        console.log('Recreando store perdido para',wsp);
-        stores[u.storeId] = {
-          id: u.storeId,
-          name: u.storeName||'Mi tienda',
-          wsp: wsp,
-          dir: 'Tres Arroyos',
-          descStore: '',
-          profile: '',
-          cover: '',
-          created: u.created||Date.now(),
-          trialStart: Date.now()
-        };
-        setStores(stores);
-        s = stores[u.storeId];
-        curId = u.storeId;
-        history.replaceState(null,'','store.html?store='+curId);
-      }
-    }
-  }
-
-  if(!s){
-    var all = Object.values(stores);
-    var lista = '';
-    for(var i=0;i<all.length;i++){
-      lista += '<div style="padding:10px;border:1px solid #eee;border-radius:10px;margin-top:8px;display:flex;justify-content:space-between;background:#fff"><div><b>'+all[i].name+'</b><div style="font-size:11px;color:#888">'+all[i].id+'</div></div><a href="store.html?store='+all[i].id+'" style="background:#00a650;color:#fff;padding:8px 12px;border-radius:999px;text-decoration:none;font-weight:800">Abrir</a></div>';
-    }
-    document.body.innerHTML = '<div style="padding:20px;max-width:420px;margin:0 auto"><h2>Tienda no encontrada</h2><p style="font-size:13px;color:#777;margin-top:8px">ID: '+(curId||'vacío')+'</p><p style="font-size:12px;color:#888;margin-top:8px">Esto pasa cuando cambiás de celu o borrás datos. Este botón lo repara:</p><button onclick="repararTienda()" style="background:#00a650;color:#fff;padding:14px;width:100%;border:none;border-radius:999px;font-weight:800;margin-top:12px">🔧 REPARAR AUTOMÁTICO</button><div style="margin-top:12px"><a href="panel.html" style="background:#111;color:#fff;padding:12px;width:100%;border-radius:999px;text-decoration:none;font-weight:800;display:block;text-align:center">Ir al panel</a></div><div style="margin-top:20px">'+(all.length?'<b>Tiendas en este celu:</b>'+lista:'<div style="color:#888;background:#fff;padding:16px;border-radius:12px;text-align:center">No hay tiendas guardadas acá. Andá a panel.html y creá una.</div>')+'</div><div style="margin-top:16px;font-size:11px;color:#999">Tip: Panel y Tienda tienen que estar en el MISMO dominio. Si uno está en github.io y otro en netlify.app no se comparten.</div></div>';
-    return;
-  }
-
-  document.getElementById('idShow').textContent = s.id;
-  document.getElementById('pName').textContent = s.name||'Mi tienda';
-  document.getElementById('pDir').textContent = s.dir||'Tres Arroyos';
-  document.getElementById('pDesc').textContent = s.descStore||s.descripcion||'';
-  document.getElementById('sName').textContent = s.name||'-';
-  document.getElementById('sDir').textContent = s.dir||'-';
-  document.getElementById('sWsp').textContent = s.wsp||'-';
-  document.getElementById('sDesc').textContent = s.descStore||s.descripcion||'-';
-  document.getElementById('pImg').src = s.profile||'https://via.placeholder.com/200';
-  if(s.cover){ document.getElementById('cover').style.backgroundImage='url('+s.cover+')'; document.getElementById('coverEmpty').style.display='none'; }
-  var now=Date.now(), start=s.trialStart||s.created||now, left=10-Math.floor((now-start)/86400000);
-  document.getElementById('pStatus').textContent = left>=0?left+' días gratis':'Prueba terminada';
-  document.getElementById('info').textContent = document.getElementById('pStatus').textContent;
-
-  var prods = getProds().filter(function(p){ return p.storeId===curId; }).sort(function(a,b){return b.id-a.id;});
-  document.getElementById('prodCount').textContent = prods.length+' publicaciones';
-  var html='';
-  for(var i=0;i<prods.length;i++){
-    var p=prods[i];
-    var img = p.img||(p.imgs?p.imgs[0]:'');
-    if(p.media && p.media[0]) img = p.media[0].src;
-    html += '<div class="prod"><div class="prod-media"><img src="'+img+'"></div><div class="prod-body"><div style="font-weight:900">$'+(p.price||0).toLocaleString('es-AR')+'</div><div style="font-size:12px">'+p.name+'</div></div></div>';
-  }
-  document.getElementById('feed').innerHTML = html||'<div style="grid-column:1/-1;background:#fff;padding:30px;border-radius:12px;text-align:center;color:#888">Sin publicaciones<br><a href="panel.html" style="color:#00a650;font-weight:800">Crear en panel</a></div>';
 }
-
-function abrirEdit(){
-  var stores=getStores(); var s=stores[curId];
-  if(!s){ alert('No hay tienda'); return; }
-  document.getElementById('eName').value=s.name||'';
-  document.getElementById('eDir').value=s.dir||'';
-  document.getElementById('eWsp').value=s.wsp||'';
-  document.getElementById('eDesc').value=s.descStore||s.descripcion||'';
-  tempPerfil=null; tempPortada=null;
-  document.getElementById('prevPerfil').style.display='none';
-  document.getElementById('prevPortada').style.display='none';
-  document.getElementById('editModal').style.display='flex';
+if(!s){document.body.innerHTML='<div style="padding:40px;text-align:center"><h2>Tienda no encontrada</h2><p>ID: '+(curId||'vacío')+'</p><a href="panel.html" style="background:#00a650;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none;display:inline-block;margin-top:12px">Ir al panel</a></div>';return}
+document.getElementById('idShow').textContent=s.id;
+document.getElementById('pName').textContent=s.name||'Mi tienda';
+document.getElementById('pDir').textContent='📍 '+(s.dir||'Tres Arroyos');
+document.getElementById('pDesc').textContent=s.descStore||s.descripcion||'';
+document.getElementById('pDesc').style.display=(s.descStore||s.descripcion)?'block':'none';
+document.getElementById('sName').textContent=s.name||'-';
+document.getElementById('sDir').textContent=s.dir||'-';
+document.getElementById('sWsp').textContent=s.wsp||'-';
+document.getElementById('sDesc').textContent=s.descStore||s.descripcion||'Sin descripción';
+document.getElementById('pImg').src=s.profile||'https://via.placeholder.com/200?text='+encodeURIComponent(s.name||'3A');
+if(s.cover){document.getElementById('cover').style.backgroundImage='url('+s.cover+')';document.getElementById('coverEmpty').style.display='none'}else{document.getElementById('cover').style.backgroundImage='none';document.getElementById('coverEmpty').style.display='flex'}
+var now=Date.now(),start=s.trialStart||s.created||now,left=10-Math.floor((now-start)/86400000);
+var txt=s.plan==='comision'?'✓ Plan 10%':left>=0?left+' días gratis':'Prueba terminada';
+document.getElementById('pStatus').textContent=txt;document.getElementById('info').textContent=txt;
+var prods=getProds().filter(function(p){return p.storeId===curId}).sort(function(a,b){return b.id-a.id});
+document.getElementById('prodCount').textContent=prods.length;
+var html='';for(var i=0;i<prods.length;i++){var p=prods[i];var img=p.img||(p.imgs?p.imgs[0]:'');if(p.media&&p.media[0])img=p.media[0].src;html+='<div class="prod"><div class="prod-media"><img src="'+img+'" loading="lazy"></div><div class="prod-body"><div class="prod-price">$'+(p.price||0).toLocaleString('es-AR')+'</div><div class="prod-name">'+p.name+'</div></div></div>'}
+document.getElementById('feed').innerHTML=html||'<div style="grid-column:1/-1;background:#fff;padding:40px;border-radius:16px;text-align:center;color:#888;border:1px dashed #ddd">Aún no hay publicaciones<br><span style="font-size:12px">Crealas desde el panel</span><br><a href="panel.html" style="display:inline-block;margin-top:12px;background:#111;color:#fff;padding:10px 18px;border-radius:999px;text-decoration:none;font-weight:800">Ir al panel →</a></div>';
 }
-function cerrarEdit(){ document.getElementById('editModal').style.display='none'; }
-function toBase64(file, cb){ var r=new FileReader(); r.onload=function(e){ cb(e.target.result); }; r.readAsDataURL(file); }
-document.getElementById('filePerfil').addEventListener('change',function(e){
-  var f=e.target.files[0]; if(!f) return;
-  toBase64(f,function(b64){ tempPerfil=b64; var img=document.getElementById('prevPerfil'); img.src=b64; img.style.display='block'; document.getElementById('pImg').src=b64; });
-});
-document.getElementById('filePortada').addEventListener('change',function(e){
-  var f=e.target.files[0]; if(!f) return;
-  toBase64(f,function(b64){ tempPortada=b64; var div=document.getElementById('prevPortada'); div.style.backgroundImage='url('+b64+')'; div.style.display='block'; document.getElementById('cover').style.backgroundImage='url('+b64+')'; document.getElementById('coverEmpty').style.display='none'; });
-});
+function abrirEdit(){var s=getStores()[curId];if(!s)return;document.getElementById('eName').value=s.name||'';document.getElementById('eDir').value=s.dir||'';document.getElementById('eWsp').value=s.wsp||'';document.getElementById('eDesc').value=s.descStore||s.descripcion||'';tempPerfil=null;tempPortada=null;document.getElementById('prevPerfil').style.display='none';document.getElementById('prevPortada').style.display='none';document.getElementById('editModal').style.display='flex'}
+function cerrarEdit(){document.getElementById('editModal').style.display='none'}
+function toBase64(f,cb){var r=new FileReader();r.onload=function(e){cb(e.target.result)};r.readAsDataURL(f)}
+document.getElementById('filePerfil').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;toBase64(f,function(b){tempPerfil=b;var img=document.getElementById('prevPerfil');img.src=b;img.style.display='block';document.getElementById('pImg').src=b})});
+document.getElementById('filePortada').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;toBase64(f,function(b){tempPortada=b;var d=document.getElementById('prevPortada');d.style.backgroundImage='url('+b+')';d.style.display='block';document.getElementById('cover').style.backgroundImage='url('+b+')';document.getElementById('coverEmpty').style.display='none'})});
 function guardar(){
-  var stores=getStores(); var s=stores[curId]; if(!s){ alert('No existe'); return; }
-  var nn=document.getElementById('eName').value.trim(); var nd=document.getElementById('eDir').value.trim(); var nw=document.getElementById('eWsp').value.trim().replace(/\D/g,''); var desc=document.getElementById('eDesc').value.trim();
-  if(!nn){ alert('Poné nombre'); return; }
-  s.name=nn; if(nd) s.dir=nd; if(nw) s.wsp=nw; s.descStore=desc; s.descripcion=desc;
-  if(tempPerfil) s.profile=tempPerfil; if(tempPortada) s.cover=tempPortada;
-  setStores(stores);
-  var users=getUsers(); var curWsp=localStorage.getItem('currentUser');
-  if(curWsp && users[curWsp]){ users[curWsp].storeName=nn; if(nw && nw!==curWsp){ users[nw]=users[curWsp]; delete users[curWsp]; localStorage.setItem('currentUser',nw);} localStorage.setItem('marketUsers',JSON.stringify(users));}
-  var prods=getProds(); for(var i=0;i<prods.length;i++){ if(prods[i].storeId===curId) prods[i].store=nn; } setProds(prods);
-  cerrarEdit(); cargar(); alert('¡Guardado!');
+var stores=getStores();var s=stores[curId];if(!s)return;
+var nn=document.getElementById('eName').value.trim();var nd=document.getElementById('eDir').value.trim();var nw=document.getElementById('eWsp').value.trim().replace(/\D/g,'');var de=document.getElementById('eDesc').value.trim();
+if(!nn){alert('Poné nombre');return}
+s.name=nn;if(nd)s.dir=nd;if(nw)s.wsp=nw;s.descStore=de;s.descripcion=de;if(tempPerfil)s.profile=tempPerfil;if(tempPortada)s.cover=tempPortada;
+setStores(stores);
+var users=getUsers();var cw=localStorage.getItem('currentUser');if(cw&&users[cw]){users[cw].storeName=nn;if(nw&&nw!==cw){users[nw]=users[cw];delete users[cw];localStorage.setItem('currentUser',nw)}localStorage.setItem('marketUsers',JSON.stringify(users))}
+var prods=getProds();for(var i=0;i<prods.length;i++){if(prods[i].storeId===curId)prods[i].store=nn}setProds(prods);
+cerrarEdit();cargar();alert('¡Tienda guardada!');
 }
-function contactar(){ var s=getStores()[curId]; window.open('https://wa.me/54'+(s.wsp||'').replace(/\D/g,'')+'?text='+encodeURIComponent('Hola! Vi tu tienda '+s.name),'_blank'); }
-function compartir(){ if(navigator.share) navigator.share({title:getStores()[curId].name,url:location.href}); else prompt('Copiá link:',location.href); }
-window.onload = cargar;
+function contactar(){var s=getStores()[curId];window.open('https://wa.me/54'+(s.wsp||'').replace(/\D/g,'')+'?text='+encodeURIComponent('Hola! Vi tu tienda '+s.name),'_blank')}
+function compartir(){if(navigator.share)navigator.share({title:getStores()[curId].name,url:location.href});else prompt('Copiá link:',location.href)}
+window.onload=cargar;
 </script>
 </body>
 </html>
