@@ -4,88 +4,97 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Entrar - 3A VENDE</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Proxima Nova,Arial,sans-serif}
-body{background:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
-.box{background:#fff;border-radius:20px;padding:28px;max-width:380px;width:100%;box-shadow:0 8px 24px rgba(0,0,0,.08)}
-h1{font-weight:900;font-size:22px} h1 b{color:#00a650}
-input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #e5e5e5;background:#f9f9f9;margin-top:10px;font-size:14px;outline:none}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f2f3f5;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
+.box{background:#fff;border-radius:20px;padding:28px;max-width:380px;width:100%;box-shadow:0 8px 24px rgba(0,0,0,.08);border:1px solid #eee}
+h1{font-weight:900;font-size:22px;text-align:center} h1 b{color:#00a650}
+input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #ddd;background:#fafafa;margin-top:10px;font-size:14px;outline:none}
 input:focus{border-color:#00a650;background:#fff}
-button{width:100%;padding:13px;border:none;border-radius:999px;font-weight:800;font-size:14px;cursor:pointer;margin-top:14px}
-.btn-green{background:#00a650;color:#fff}.btn-gray{background:#f5f5f5}
-.tab{display:flex;gap:8px;margin-top:16px}.tab div{flex:1;text-align:center;padding:10px;border-radius:999px;font-size:12px;font-weight:800;cursor:pointer;border:1px solid #eee}.tab.on{background:#111;color:#fff;border-color:#111}
-small{font-size:11px;color:#888;display:block;margin-top:12px;line-height:1.4}
+button{width:100%;padding:13px;border:none;border-radius:999px;font-weight:800;font-size:14px;cursor:pointer;margin-top:12px}
+.btn-green{background:#00a650;color:#fff}.btn-black{background:#111;color:#fff}.btn-gray{background:#fff;border:1px solid #ddd}
+.tab{display:flex;gap:8px;margin-top:16px;margin-bottom:8px}.tab div{flex:1;text-align:center;padding:10px;border-radius:999px;font-size:12px;font-weight:800;cursor:pointer;border:1px solid #eee;background:#f9fafb}.tab div.on{background:#111;color:#fff;border-color:#111}
+small{font-size:11px;color:#888;display:block;margin-top:10px;line-height:1.4;text-align:center}
+.eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px}
+.field{position:relative;margin-top:10px}.field input{margin-top:0}
 </style>
 </head>
 <body>
 <div class="box">
-<div style="text-align:center"><h1><b>3A</b> VENDE</h1><p style="font-size:12px;color:#888;margin-top:4px">Vende en Tres Arroyos</p></div>
+<h1><b>3A</b> VENDE</h1>
+<p style="font-size:11px;color:#888;text-align:center;margin-top:4px">Acceso vendedores - Tres Arroyos</p>
 
-<div class="tab"><div id="tLogin" class="on" onclick="modo='login';renderTab()">Entrar</div><div id="tReg" onclick="modo='reg';renderTab()">Registrarme</div></div>
+<div class="tab"><div id="tLogin" class="on" onclick="setModo('login')">Entrar</div><div id="tReg" onclick="setModo('reg')">Registrarme</div></div>
 
 <div id="formLogin">
-<input id="wspLogin" placeholder="WhatsApp ej: 2983555123" type="tel">
+<div class="field"><input id="wspLogin" type="tel" placeholder="WhatsApp ej: 2983555123"></div>
+<div class="field"><input id="passLogin" type="password" placeholder="Contraseña"><span class="eye" onclick="toggle('passLogin')">👁️</span></div>
 <button class="btn-green" onclick="hacerLogin()">Entrar a mi panel →</button>
-<small>Usá el mismo número con el que te registraste. Si no tenés cuenta, tocá Registrarme.</small>
+<small>¿No tenés cuenta? Tocá Registrarme arriba</small>
 </div>
 
 <div id="formReg" style="display:none">
-<input id="wsp" placeholder="WhatsApp ej: 2983555123" type="tel">
-<input id="storeName" placeholder="Nombre de tu tienda ej: Lo de Mari">
+<input id="wsp" type="tel" placeholder="WhatsApp ej: 2983555123">
+<input id="storeName" placeholder="Nombre tienda ej: Lo de Mari">
 <input id="dir" placeholder="Dirección ej: Av Moreno 123">
-<button class="btn-green" onclick="hacerRegistro()">Crear mi tienda gratis</button>
-<small>✓ 10 días gratis ✓ Te guardamos en Sheet automáticamente. Después $4500/mes o 10% por venta.</small>
+<div class="field"><input id="pass" type="password" placeholder="Crear contraseña (mín 4 caracteres)"><span class="eye" onclick="toggle('pass')">👁️</span></div>
+<div class="field"><input id="pass2" type="password" placeholder="Repetir contraseña"><span class="eye" onclick="toggle('pass2')">👁️</span></div>
+<button class="btn-black" onclick="hacerRegistro()">Crear mi tienda gratis</button>
+<small>✓ 10 días gratis ✓ Se guarda en Sheet automáticamente</small>
 </div>
 
 <div style="text-align:center;margin-top:14px"><a href="index.html" style="font-size:12px;color:#888;text-decoration:none">← Volver al marketplace</a></div>
+<div id="msg" style="font-size:12px;color:#ff3b30;text-align:center;margin-top:10px;font-weight:700"></div>
 </div>
 
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbyb_1T-3wAcKsBIYhW6XSissrzcs0nGbFWvY83YN6l9vuNBzNQrhBqdntvKbESh1v52aQ/exec";
 function enviarASheet(d){ try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(d)}); }catch(e){} }
+function getUsers(){try{return JSON.parse(localStorage.getItem('marketUsers')||'{}')}catch(e){return{}}}
+function getStores(){try{return JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){return{}}}
+function setUsers(o){localStorage.setItem('marketUsers',JSON.stringify(o))}
+function setStores(o){localStorage.setItem('marketStores',JSON.stringify(o))}
 
 let modo='login';
-function renderTab(){
- document.getElementById('tLogin').className = modo==='login'?'on':'';
- document.getElementById('tReg').className = modo==='reg'?'on':'';
- document.getElementById('formLogin').style.display = modo==='login'?'block':'none';
- document.getElementById('formReg').style.display = modo==='reg'?'block':'none';
-}
-function getUsers(){ try{return JSON.parse(localStorage.getItem('marketUsers')||'{}')}catch(e){return{}} }
-function getStores(){ try{return JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){return{}} }
+function setModo(m){ modo=m; document.getElementById('tLogin').className=m==='login'?'on':''; document.getElementById('tReg').className=m==='reg'?'on':''; document.getElementById('formLogin').style.display=m==='login'?'block':'none'; document.getElementById('formReg').style.display=m==='reg'?'block':'none'; document.getElementById('msg').textContent=''; }
+function toggle(id){ let i=document.getElementById(id); i.type=i.type==='password'?'text':'password'; }
 
 function hacerLogin(){
- let wsp = document.getElementById('wspLogin').value.replace(/\D/g,'');
- if(wsp.length<10){alert('Poné tu WhatsApp completo');return;}
- let users = getUsers();
- if(!users[wsp]){alert('No existe, registrate primero'); modo='reg'; renderTab(); document.getElementById('wsp').value=wsp; return;}
+ let wsp=document.getElementById('wspLogin').value.replace(/\D/g,'');
+ let pass=document.getElementById('passLogin').value;
+ if(wsp.length<10){ document.getElementById('msg').textContent='WhatsApp incompleto'; return; }
+ if(!pass){ document.getElementById('msg').textContent='Poné contraseña'; return; }
+ let users=getUsers();
+ let u=users[wsp];
+ if(!u){ document.getElementById('msg').textContent='No existe. Registrate.'; setModo('reg'); document.getElementById('wsp').value=wsp; return; }
+ if(u.password && u.password!==pass){ document.getElementById('msg').textContent='Contraseña incorrecta'; return; }
+ // compatibilidad con cuentas viejas sin password: la guarda ahora
+ if(!u.password){ u.password=pass; setUsers(users); }
  localStorage.setItem('currentUser', wsp);
- // guardar login en sheet
- let s = getStores()[users[wsp].storeId];
- if(s){
-   enviarASheet({tipo:'tienda', storeId:s.id, tienda:s.name, whatsapp:s.wsp, direccion:s.dir, descripcion:'LOGIN '+new Date().toLocaleString('es-AR')});
- }
+ let stores=getStores(); let s=stores[u.storeId];
+ if(s) enviarASheet({tipo:'tienda', storeId:s.id, tienda:s.name, whatsapp:s.wsp, direccion:s.dir, descripcion:'LOGIN '+new Date().toLocaleString('es-AR')});
  location.href='panel.html';
 }
 
 function hacerRegistro(){
- let wsp = document.getElementById('wsp').value.replace(/\D/g,'');
- let name = document.getElementById('storeName').value.trim();
- let dir = document.getElementById('dir').value.trim()||'Tres Arroyos';
- if(wsp.length<10){alert('WhatsApp incompleto');return;}
- if(!name){alert('Nombre de tienda');return;}
+ let wsp=document.getElementById('wsp').value.replace(/\D/g,'');
+ let name=document.getElementById('storeName').value.trim();
+ let dir=document.getElementById('dir').value.trim()||'Tres Arroyos';
+ let p1=document.getElementById('pass').value;
+ let p2=document.getElementById('pass2').value;
+ if(wsp.length<10){ document.getElementById('msg').textContent='WhatsApp incompleto'; return; }
+ if(!name){ document.getElementById('msg').textContent='Poné nombre de tienda'; return; }
+ if(p1.length<4){ document.getElementById('msg').textContent='Contraseña mínimo 4 caracteres'; return; }
+ if(p1!==p2){ document.getElementById('msg').textContent='Contraseñas no coinciden'; return; }
  let users=getUsers(); let stores=getStores();
- if(users[wsp]){alert('Ya existe, entrá con ese número'); modo='login'; renderTab(); return;}
+ if(users[wsp]){ document.getElementById('msg').textContent='Ya existe, entrá'; setModo('login'); return; }
  let id='store_'+Date.now();
  stores[id]={id:id, name:name, wsp:wsp, dir:dir, profile:'https://via.placeholder.com/80?text='+encodeURIComponent(name[0]), created:Date.now(), trialStart:Date.now(), plan:'trial'};
- users[wsp]={storeId:id, wsp:wsp, storeName:name};
- localStorage.setItem('marketStores', JSON.stringify(stores));
- localStorage.setItem('marketUsers', JSON.stringify(users));
+ users[wsp]={storeId:id, wsp:wsp, storeName:name, password:p1};
+ setStores(stores); setUsers(users);
  localStorage.setItem('currentUser', wsp);
- // === ESTO ES LO QUE VA AL SHEET ===
  enviarASheet({tipo:'tienda', storeId:id, tienda:name, whatsapp:wsp, direccion:dir, descripcion:'REGISTRO NUEVO '+new Date().toLocaleString('es-AR')});
  location.href='panel.html';
 }
-renderTab();
 </script>
 </body>
 </html>
