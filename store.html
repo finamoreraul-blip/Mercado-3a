@@ -37,14 +37,13 @@ header{background:#fff;padding:12px 16px;display:flex;justify-content:space-betw
 .edit-box{background:#fff;border-radius:18px;padding:22px;max-width:440px;width:100%;max-height:92vh;overflow:auto}
 label{font-size:11px;font-weight:800;display:block;margin-top:14px;margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
 input,textarea{width:100%;padding:11px 12px;border:1px solid #ddd;border-radius:10px;font-size:13px;background:#fafafa;outline:none}
-input:focus,textarea:focus{background:#fff;border-color:#00a650}
 textarea{height:75px;resize:none}
-.upload{border:2px dashed #ccc;border-radius:12px;padding:12px;text-align:center;margin-top:6px;cursor:pointer;background:#fafafa;transition:.2s}
-.upload:hover{border-color:#00a650;background:#f6fdf8}
+.upload{border:2px dashed #ccc;border-radius:12px;padding:12px;text-align:center;margin-top:6px;cursor:pointer;background:#fafafa}
 .upload img{width:72px;height:72px;border-radius:50%;display:none;margin:8px auto 0;object-fit:cover;border:3px solid #fff}
 .upload-cover{height:90px;border-radius:10px;background-size:cover;background-position:center;display:none;margin-top:8px;border:1px solid #eee}
 .hidden{display:none!important}
-@media(max-width:900px){.wrap{grid-template-columns:1fr}.profile-card{flex-direction:column}.p-actions{flex-direction:row;flex-wrap:wrap;min-width:auto;width:100%}.p-actions.btn{flex:1;justify-content:center}}
+.owner-only{display:none}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.profile-card{flex-direction:column}.p-actions{flex-direction:row;flex-wrap:wrap}}
 </style>
 </head>
 <body>
@@ -63,10 +62,10 @@ textarea{height:75px;resize:none}
 <div class="p-dir" id="pDir">📍 Tres Arroyos</div>
 <div class="p-desc" id="pDesc"></div>
 <div class="p-status" id="pStatus">↻ Conectando Sheet...</div>
-<div style="font-size:10px;color:#aaa;margin-top:6px">ID: <span id="idShow"></span> • <span style="color:#00a650">Sheet conectado</span></div>
+<div style="font-size:10px;color:#aaa;margin-top:6px">ID: <span id="idShow"></span> • <span id="ownerTag"></span></div>
 </div>
 <div class="p-actions">
-<button class="btn btn-black" id="btnEdit" onclick="abrirEdit()">✏️ EDITAR TIENDA</button>
+<button class="btn btn-black owner-only" id="btnEdit" onclick="abrirEdit()">✏️ EDITAR TIENDA</button>
 <button class="btn btn-green" onclick="contactar()">💬 WhatsApp</button>
 <button class="btn btn-gray" onclick="compartir()">↗ Compartir</button>
 </div>
@@ -88,36 +87,29 @@ textarea{height:75px;resize:none}
 <div class="side-item"><b>Dirección:</b> <span id="sDir"></span></div>
 <div class="side-item"><b>WhatsApp:</b> <span id="sWsp"></span></div>
 <div class="side-item" style="margin-top:12px"><b>Descripción:</b><div id="sDesc" style="color:#555;margin-top:6px;white-space:pre-wrap;background:#f9fafb;padding:10px;border-radius:10px;line-height:1.4"></div></div>
-<div style="margin-top:16px;padding-top:14px;border-top:1px solid #eee">
-<div style="font-size:11px;color:#888;text-align:center">¿Querés tu tienda así?</div>
-<a href="panel.html" style="display:block;margin-top:8px;background:#f5f5f5;text-align:center;padding:10px;border-radius:999px;text-decoration:none;color:#111;font-weight:800;font-size:12px">Crear mi tienda gratis →</a>
-</div>
 </div>
 </div>
 
 <div class="edit-modal" id="editModal">
 <div class="edit-box">
 <h2 style="font-weight:900;font-size:18px">Editar mi tienda</h2>
-<p style="font-size:11px;color:#777;margin-top:4px">Todo se edita acá y va al Sheet.</p>
-<label>Nombre de la tienda *</label><input id="eName" placeholder="Ej: Makeup Tres Arroyos">
-<label>Descripción</label><textarea id="eDesc" placeholder="Qué vendés, horarios, envíos..."></textarea>
-<label>Dirección</label><input id="eDir" placeholder="Moreno 456, Tres Arroyos">
-<label>WhatsApp *</label><input id="eWsp" placeholder="2983401234">
-<label>Foto de perfil</label>
+<p style="font-size:11px;color:#00a650;margin-top:4px">🔒 Solo el dueño puede editar</p>
+<label>Nombre *</label><input id="eName">
+<label>Descripción</label><textarea id="eDesc"></textarea>
+<label>Dirección</label><input id="eDir">
+<label>WhatsApp *</label><input id="eWsp" disabled style="background:#eee">
+<label>Foto perfil</label>
 <div class="upload" onclick="document.getElementById('filePerfil').click()">
-<div style="font-weight:800;font-size:12px">📸 TOCÁ PARA SUBIR FOTO PERFIL</div><div style="font-size:11px;color:#888">Galería o cámara</div>
-<img id="prevPerfil">
+<div style="font-weight:800;font-size:12px">📸 SUBIR FOTO PERFIL</div><img id="prevPerfil">
 </div>
 <input type="file" id="filePerfil" accept="image/*" class="hidden">
-<label>Foto de portada</label>
+<label>Portada</label>
 <div class="upload" onclick="document.getElementById('filePortada').click()">
-<div style="font-weight:800;font-size:12px">🖼️ TOCÁ PARA SUBIR PORTADA</div><div style="font-size:11px;color:#888">Foto ancha queda mejor</div>
-<div id="prevPortada" class="upload-cover"></div>
+<div style="font-weight:800;font-size:12px">🖼️ SUBIR PORTADA</div><div id="prevPortada" class="upload-cover"></div>
 </div>
 <input type="file" id="filePortada" accept="image/*" class="hidden">
-<button class="btn btn-green" style="width:100%;margin-top:18px;padding:14px" onclick="guardar()">💾 GUARDAR CAMBIOS</button>
+<button class="btn btn-green" style="width:100%;margin-top:18px;padding:14px" onclick="guardar()">💾 GUARDAR</button>
 <button class="btn btn-gray" style="width:100%;margin-top:8px" onclick="cerrarEdit()">Cancelar</button>
-<div style="font-size:10px;color:#00a650;text-align:center;margin-top:8px">✅ Se envía automático al Sheet del Admin</div>
 </div>
 </div>
 
@@ -125,7 +117,7 @@ textarea{height:75px;resize:none}
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbyb_1T-3wAcKsBIYhW6XSissrzcs0nGbFWvY83YN6l9vuNBzNQrhBqdntvKbESh1v52aQ/exec";
 function enviarASheet(d){ try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(d)}); }catch(e){} }
 
-var curId=null,tempPerfil=null,tempPortada=null;
+var curId=null,tempPerfil=null,tempPortada=null, esDueño=false;
 function getStores(){try{return JSON.parse(localStorage.getItem('marketStores')||'{}')}catch(e){return{}}}
 function setStores(o){localStorage.setItem('marketStores',JSON.stringify(o))}
 function getUsers(){try{return JSON.parse(localStorage.getItem('marketUsers')||'{}')}catch(e){return{}}}
@@ -162,26 +154,33 @@ function parseMedia(raw){
 }
 
 async function cargar(){
- if(!curId){document.body.innerHTML='<div style="padding:40px;text-align:center">Falta ID de tienda</div>';return;}
+ if(!curId){document.body.innerHTML='<div style="padding:40px;text-align:center">Falta ID</div>';return;}
  var stores=getStores();var sLocal=stores[curId];
 
- // Traer tienda del Sheet
  let tiendas=await getSheet('tienda');
  let borradasT=await getSheet('borrado_tienda');
  let setBorT=new Set(borradasT.map(x=>String(x.storeId||x.id)));
  let tSheet=tiendas.find(x=>String(x.storeId)===String(curId) &&!setBorT.has(String(x.storeId)));
 
  let s = tSheet? {
-   id:tSheet.storeId, name:tSheet.tienda, wsp:tSheet.whatsapp, dir:tSheet.direccion,
+   id:tSheet.storeId, name:tSheet.tienda, wsp:String(tSheet.whatsapp||''), dir:tSheet.direccion,
    descStore:tSheet.descripcion||'', profile:tSheet.foto||sLocal?.profile||'',
-   cover:tSheet.portada||sLocal?.cover||'', ownerWsp:tSheet.whatsapp
+   cover:tSheet.portada||sLocal?.cover||'', ownerWsp:String(tSheet.whatsapp||'')
  } : sLocal;
 
- if(!s){
-   document.body.innerHTML='<div style="padding:40px;text-align:center"><h2>Tienda no encontrada</h2><p>ID: '+curId+'</p><a href="panel.html" style="background:#00a650;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none;display:inline-block;margin-top:12px">Ir al panel</a></div>';return;
+ if(!s){document.body.innerHTML='<div style="padding:40px;text-align:center">Tienda no encontrada</div>';return;}
+
+ // === VERIFICAR DUEÑO ===
+ let currentWsp = (localStorage.getItem('currentUser')||'').replace(/\D/g,'');
+ esDueño = String(s.wsp||s.ownerWsp||'').replace(/\D/g,'') === currentWsp && currentWsp!=='';
+
+ if(esDueño){
+   document.querySelectorAll('.owner-only').forEach(el=>el.style.display='block');
+   document.getElementById('ownerTag').innerHTML='<span style="background:#00a650;color:#fff;padding:2px 6px;border-radius:999px">SOS DUEÑO - Podés editar</span>';
+ } else {
+   document.getElementById('ownerTag').innerHTML='<span style="background:#eee;color:#888;padding:2px 6px;border-radius:999px">Solo vista</span>';
  }
 
- // Guardar en local por si entra otro
  stores[curId]={...sLocal,...s, id:curId}; setStores(stores);
 
  document.getElementById('idShow').textContent=s.id;
@@ -194,11 +193,11 @@ async function cargar(){
  document.getElementById('sWsp').textContent=s.wsp||'-';
  document.getElementById('sDesc').textContent=s.descStore||'Sin descripción';
  document.getElementById('pImg').src=s.profile||'https://via.placeholder.com/200?text='+encodeURIComponent(s.name||'3A');
- if(s.cover){document.getElementById('cover').style.backgroundImage='url('+s.cover+')';document.getElementById('coverEmpty').style.display='none'}else{document.getElementById('cover').style.backgroundImage='none';document.getElementById('coverEmpty').style.display='flex'}
- document.getElementById('pStatus').textContent='✅ Tienda desde Sheet';
+ if(s.cover){document.getElementById('cover').style.backgroundImage='url('+s.cover+')';document.getElementById('coverEmpty').style.display='none'}
+
+ document.getElementById('pStatus').textContent= esDueño? '✅ Sos el dueño' : '👀 Viendo como cliente';
  document.getElementById('info').textContent='Leyendo productos...';
 
- // PRODUCTOS DESDE SHEET
  let prods=await getSheet('producto');
  let borrados=await getSheet('borrado');
  let setBor=new Set(borrados.map(x=>String(x.id)));
@@ -212,28 +211,31 @@ async function cargar(){
    let media=parseMedia(p.imagen);
    let img=media[0]?.src||'https://via.placeholder.com/300';
    let total=media.length;
-   html+=`<div class="prod" onclick="location.href='index.html'"><div class="prod-media"><img src="${img}" loading="lazy"><div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.7);color:#fff;padding:3px 7px;border-radius:999px;font-size:10px">${total>1? total+' fotos':''}</div></div><div class="prod-body"><div class="prod-price">$${(parseInt(p.precio)||0).toLocaleString('es-AR')}</div><div class="prod-name">${p.producto}</div></div></div>`;
+   html+=`<div class="prod"><div class="prod-media"><img src="${img}" loading="lazy"><div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.7);color:#fff;padding:3px 7px;border-radius:999px;font-size:10px">${total>1? total+' fotos':''}</div></div><div class="prod-body"><div class="prod-price">$${(parseInt(p.precio)||0).toLocaleString('es-AR')}</div><div class="prod-name">${p.producto}</div></div></div>`;
  }
- document.getElementById('feed').innerHTML=html||'<div style="grid-column:1/-1;background:#fff;padding:40px;border-radius:16px;text-align:center;color:#888;border:1px dashed #ddd">Aún no hay publicaciones en Sheet<br><a href="panel.html" style="display:inline-block;margin-top:12px;background:#111;color:#fff;padding:10px 18px;border-radius:999px;text-decoration:none;font-weight:800">Publicar ahora →</a></div>';
+ document.getElementById('feed').innerHTML=html||'<div style="grid-column:1/-1;background:#fff;padding:40px;border-radius:16px;text-align:center;color:#888">Sin publicaciones</div>';
 }
 
-function abrirEdit(){var s=getStores()[curId];if(!s)return;document.getElementById('eName').value=s.name||'';document.getElementById('eDir').value=s.dir||'';document.getElementById('eWsp').value=s.wsp||'';document.getElementById('eDesc').value=s.descStore||'';tempPerfil=null;tempPortada=null;document.getElementById('prevPerfil').style.display='none';document.getElementById('prevPortada').style.display='none';document.getElementById('editModal').style.display='flex'}
+function abrirEdit(){
+ if(!esDueño){ alert('Solo el dueño puede editar esta tienda'); return; }
+ var s=getStores()[curId];document.getElementById('eName').value=s.name||'';document.getElementById('eDir').value=s.dir||'';document.getElementById('eWsp').value=s.wsp||'';document.getElementById('eDesc').value=s.descStore||'';tempPerfil=null;tempPortada=null;document.getElementById('prevPerfil').style.display='none';document.getElementById('prevPortada').style.display='none';document.getElementById('editModal').style.display='flex';
+}
 function cerrarEdit(){document.getElementById('editModal').style.display='none'}
 function toBase64(f,cb){var r=new FileReader();r.onload=function(e){cb(e.target.result)};r.readAsDataURL(f)}
 document.getElementById('filePerfil').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;toBase64(f,function(b){tempPerfil=b;var img=document.getElementById('prevPerfil');img.src=b;img.style.display='block';document.getElementById('pImg').src=b})});
 document.getElementById('filePortada').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;toBase64(f,function(b){tempPortada=b;var d=document.getElementById('prevPortada');d.style.backgroundImage='url('+b+')';d.style.display='block';document.getElementById('cover').style.backgroundImage='url('+b+')';document.getElementById('coverEmpty').style.display='none'})});
 function guardar(){
-var stores=getStores();var s=stores[curId];if(!s)return;
+if(!esDueño){ alert('No sos dueño'); return; }
+var stores=getStores();var s=stores[curId];
 var nn=document.getElementById('eName').value.trim();var nd=document.getElementById('eDir').value.trim();var nw=document.getElementById('eWsp').value.trim().replace(/\D/g,'');var de=document.getElementById('eDesc').value.trim();
-if(!nn){alert('Poné nombre');return}
+if(!nn){alert('Nombre');return}
 s.name=nn;if(nd)s.dir=nd;if(nw)s.wsp=nw;s.descStore=de;if(tempPerfil)s.profile=tempPerfil;if(tempPortada)s.cover=tempPortada;
 setStores(stores);
-var users=getUsers();var cw=localStorage.getItem('currentUser');if(cw&&users[cw]){users[cw].storeName=nn;localStorage.setItem('marketUsers',JSON.stringify(users))}
 enviarASheet({tipo:'tienda',storeId:curId,tienda:nn,whatsapp:nw||s.wsp,direccion:nd,descripcion:de,foto:tempPerfil||'',portada:tempPortada||''});
-cerrarEdit();cargar();alert('¡Guardado en Sheet!');
+cerrarEdit();cargar();alert('Guardado');
 }
 function contactar(){var s=getStores()[curId];window.open('https://wa.me/54'+(s.wsp||'').replace(/\D/g,'')+'?text='+encodeURIComponent('Hola! Vi tu tienda '+s.name),'_blank')}
-function compartir(){if(navigator.share)navigator.share({title:getStores()[curId].name,url:location.href});else prompt('Copiá link:',location.href)}
+function compartir(){if(navigator.share)navigator.share({title:getStores()[curId].name,url:location.href});else prompt('Copiá:',location.href)}
 window.onload=cargar;
 </script>
 </body>
