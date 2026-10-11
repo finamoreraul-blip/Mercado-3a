@@ -82,7 +82,6 @@ header{background:#fff;padding:12px 16px;position:sticky;top:0;z-index:30;box-sh
 </div>
 </div>
 </header>
-
 <div style="max-width:1200px;margin:16px auto;padding:0 16px">
 <div style="background:linear-gradient(135deg,#00a650 0%,#00c853 100%);border-radius:20px;padding:32px 20px;text-align:center;color:#fff;position:relative;overflow:hidden">
 <h1 style="font-size:28px;font-weight:900;letter-spacing:-1px">3A VENDE</h1>
@@ -94,12 +93,10 @@ header{background:#fff;padding:12px 16px;position:sticky;top:0;z-index:30;box-sh
 </div>
 </div>
 </div>
-
 <div class="wrap">
 <div class="sidebar" id="tiendas"><h3>Tiendas en Tres Arroyos</h3><div id="storeList"></div><div style="margin-top:12px;padding-top:12px;border-top:1px solid #eee"><div style="font-size:11px;color:#888">¿Tenés tienda?</div><a href="login.html" style="font-size:12px;color:#00a650;font-weight:700;text-decoration:none">Publicá gratis 10 días →</a><div style="font-size:10px;color:#888;margin-top:6px">Después $4.500/mes o 10% por venta</div></div></div>
 <div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:12px;color:#888"><span id="count">0</span> publicaciones • <span id="countLocal">0</span> locales + <span id="countSheet">0</span> del Sheet</div><div style="display:flex;gap:6px"><button class="btn btn-gray" onclick="syncDesdeSheet()" style="font-size:10px">↻ Forzar sync</button></div></div><div class="feed" id="feed"></div></div>
 </div>
-
 <div class="modal" id="modal" onclick="if(event.target.id==='modal') closeModal()">
 <div class="modal-box">
 <div class="modal-media" id="modalMedia"></div>
@@ -131,7 +128,6 @@ header{background:#fff;padding:12px 16px;position:sticky;top:0;z-index:30;box-sh
 </div>
 </div>
 </div>
-
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbyb_1T-3wAcKsBIYhW6XSissrzcs0nGbFWvY83YN6l9vuNBzNQrhBqdntvKbESh1v52aQ/exec";
 function enviarASheet(d){ try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(d)}); }catch(e){} }
@@ -142,30 +138,8 @@ function getPedidos(){try{return JSON.parse(localStorage.getItem('marketPedidos'
 function setPedidos(p){localStorage.setItem('marketPedidos',JSON.stringify(p))}
 function isStoreActive(id){let s=getStores()[id];if(!s) return true;let now=Date.now();if(s.paid&&s.paidUntil&&now<s.paidUntil) return true;if(s.plan==='comision') return true;let start=s.trialStart||s.created||now;return Math.floor((now-start)/86400000)<=365;}
 let curCat='todos',curProd=null,curIdx=0;
-
-// FIX 1: BOTON PANEL INTELIGENTE
-function irPanel(){
-  var wsp=localStorage.getItem('currentUser');
-  var users=JSON.parse(localStorage.getItem('marketUsers')||'{}');
-  if(!wsp ||!users[wsp]){
-    location.href='login.html';
-  }else{
-    location.href='panel.html';
-  }
-}
-function updatePanelBtn(){
-  var wsp=localStorage.getItem('currentUser');
-  var users=JSON.parse(localStorage.getItem('marketUsers')||'{}');
-  var btn=document.getElementById('btnPanel');
-  if(wsp && users[wsp]){
-    btn.textContent='Mi panel';
-    btn.className='btn btn-black';
-  }else{
-    btn.textContent='Entrar';
-    btn.className='btn btn-green';
-  }
-}
-
+function irPanel(){var wsp=localStorage.getItem('currentUser');var users=JSON.parse(localStorage.getItem('marketUsers')||'{}');if(!wsp ||!users[wsp]){location.href='login.html';}else{location.href='panel.html';}}
+function updatePanelBtn(){var wsp=localStorage.getItem('currentUser');var users=JSON.parse(localStorage.getItem('marketUsers')||'{}');var btn=document.getElementById('btnPanel');if(wsp && users[wsp]){btn.textContent='Mi panel';btn.className='btn btn-black';}else{btn.textContent='Entrar';btn.className='btn btn-green';}}
 function setCat(c,el){curCat=c;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));if(el) el.classList.add('active');render();}
 function render(){
 let all=getProds().slice().sort((a,b)=>b.id-a.id);
@@ -208,7 +182,6 @@ function enviarPedidoWsp(){
  let s=getStores()[curProd.storeId];
  let total=curProd.price*cant;
  let pedidoId=Date.now();
- // Guardar en local para que el vendedor lo vea en su panel
  let pedidos=getPedidos();
  pedidos.push({id:pedidoId,storeId:curProd.storeId,producto:curProd.name,cantidad:cant,total:total,cliente:nombre,clienteWsp:wspCli,entrega:entrega,direccion:dir,pago:pago,nota:nota,fecha:Date.now(),estado:'nuevo'});
  setPedidos(pedidos);
@@ -218,17 +191,15 @@ function enviarPedidoWsp(){
  closeModal();
  alert('✅ Pedido enviado! El vendedor te contacta por WhatsApp');
 }
-
-// FIX 2: SYNC DESDE SHEET - ESTO ES LO QUE TE FALTABA
 async function syncDesdeSheet(){
   try{
     document.getElementById('syncStatus').textContent='↻ Sincronizando...';
-    let r = await fetch(SHEET_URL+"?tipo=producto");
+    let t=Date.now();
+    let r = await fetch(SHEET_URL+"?tipo=producto&t="+t);
     let data = await r.json();
-    let local = getProds();
-    let countLocal = local.length;
-    let ids = new Set(local.map(x=>String(x.id)));
-    let nuevos = data.filter(x=> x.id && x.imagen &&!ids.has(String(x.id))).map(x=>({
+    let rb = await fetch(SHEET_URL+"?tipo=borrado&t="+t).then(x=>x.json()).catch(()=>[]);
+    let borrados = new Set(rb.map(x=>String(x.id)));
+    let delSheet = data.filter(x=> x.id && x.imagen &&!borrados.has(String(x.id))).map(x=>({
       id: parseInt(x.id),
       storeId: x.storeId,
       store: x.tienda,
@@ -239,29 +210,37 @@ async function syncDesdeSheet(){
       desc: x.descripcion||'',
       stock: parseInt(x.stock)||1,
       img: x.imagen,
+      imgs: [x.imagen],
       media: [{type:'img', src: x.imagen}],
       created: Date.now()
     }));
-    if(nuevos.length>0){
-      local = local.concat(nuevos);
-      setProds(local);
-      render();
-    }
-    document.getElementById('countLocal').textContent=countLocal;
-    document.getElementById('countSheet').textContent=data.length;
+    let local = getProds();
+    let countLocalAntes = local.length;
+    local = local.filter(p=>!borrados.has(String(p.id)));
+    let ids = new Set(local.map(x=>String(x.id)));
+    let nuevos = delSheet.filter(x=>!ids.has(String(x.id)));
+    local = local.concat(nuevos);
+    let mapSheet = new Map(delSheet.map(x=>[String(x.id), x]));
+    local = local.map(p=>{
+      let up = mapSheet.get(String(p.id));
+      if(up){ return {...p, name:up.name, price:up.price, img:up.img, imgs:up.imgs, media:up.media, desc:up.desc, category:up.category, store:up.store}; }
+      return p;
+    });
+    setProds(local);
+    render();
+    document.getElementById('countLocal').textContent=countLocalAntes;
+    document.getElementById('countSheet').textContent=data.length + ' (borrados:'+borrados.size+')';
     document.getElementById('syncStatus').textContent='✅ '+nuevos.length+' nuevos • '+local.length+' total';
     setTimeout(()=>{document.getElementById('syncStatus').textContent='✅ Sincronizado';}, 3000);
   }catch(e){
-    document.getElementById('syncStatus').textContent='❌ Error sync';
+    document.getElementById('syncStatus').textContent='❌ Error sync: '+e.message;
   }
 }
-
 (function(){try{var wsp=localStorage.getItem('currentUser');if(!wsp)return;var users=JSON.parse(localStorage.getItem('marketUsers')||'{}');var stores=JSON.parse(localStorage.getItem('marketStores')||'{}');var u=users[wsp];if(!u||!u.storeId)return;var s=stores[u.storeId];if(!s)return;var key='lastSheetLogin_'+u.storeId;var last=parseInt(localStorage.getItem(key)||'0');if(Date.now()-last<86400000)return;localStorage.setItem(key,Date.now().toString());enviarASheet({tipo:'tienda',storeId:s.id,tienda:s.name,whatsapp:s.wsp,direccion:s.dir||'Tres Arroyos',descripcion:'LOGIN '+new Date().toLocaleString('es-AR')});}catch(e){}})();
-
 updatePanelBtn();
 render();
 setTimeout(syncDesdeSheet, 1500);
-setInterval(syncDesdeSheet, 10000);
+setInterval(syncDesdeSheet, 15000);
 </script>
 </body>
-</html>
+                                                                                                                                                                                                                                 </html>
