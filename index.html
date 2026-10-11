@@ -27,11 +27,15 @@ header{background:#fff;padding:12px 16px;position:sticky;top:0;z-index:30;box-sh
 .card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer;transition:.2s;position:relative}
 .card:hover{box-shadow:0 8px 24px rgba(0,0,0,.12);transform:translateY(-4px)}
 .card-media{position:relative;height:320px;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.card-media.track{display:flex;width:100%;height:100%;transition:transform.35s ease}
+.card-media.track.slide{min-width:100%;height:100%;position:relative}
 .card-media img,.card-media video{width:100%;height:100%;object-fit:cover}
-.card-badge{position:absolute;top:10px;left:10px;background:#111;color:#fff;padding:6px 10px;border-radius:999px;font-size:10px;font-weight:800}
+.card-badge{position:absolute;top:10px;left:10px;background:#111;color:#fff;padding:6px 10px;border-radius:999px;font-size:10px;font-weight:800;z-index:2}
 .card-badge.video{background:#00a650}
-.card-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;background:rgba(0,0,0,.5);padding:6px 12px;border-radius:999px}
-.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.6)}.dot.on{background:#fff;width:18px}
+.card-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;background:rgba(0,0,0,.5);padding:6px 12px;border-radius:999px;z-index:2}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.6);transition:.2s}.dot.on{background:#fff;width:18px}
+.card-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.85);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800;z-index:3;border:none}
+.card-arrow.l{left:8px}.card-arrow.r{right:8px}
 .card-body{padding:14px}
 .card-price{font-weight:900;font-size:18px}.card-name{font-size:14px;margin-top:4px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .card-store{font-size:11px;color:#888;margin-top:6px;display:flex;align-items:center;gap:5px}
@@ -104,8 +108,9 @@ function getPedidos(){try{return JSON.parse(localStorage.getItem('marketPedidos'
 function setPedidos(p){localStorage.setItem('marketPedidos',JSON.stringify(p))}
 function isStoreActive(id){let s=getStores()[id];if(!s) return true;let now=Date.now();if(s.paid&&s.paidUntil&&now<s.paidUntil) return true;if(s.plan==='comision') return true;let start=s.trialStart||s.created||now;return Math.floor((now-start)/86400000)<=365;}
 
-let DB = []; // <-- AHORA LA BASE ES SOLO EL SHEET
+let DB = [];
 let curCat='todos',curProd=null,curIdx=0;
+let carIdx={}, carTimers={};
 
 function irPanel(){var wsp=localStorage.getItem('currentUser');var users=JSON.parse(localStorage.getItem('marketUsers')||'{}');if(!wsp ||!users[wsp]){location.href='login.html';}else{location.href='panel.html';}}
 function updatePanelBtn(){var wsp=localStorage.getItem('currentUser');var users=JSON.parse(localStorage.getItem('marketUsers')||'{}');var btn=document.getElementById('btnPanel');if(wsp && users[wsp]){btn.textContent='Mi panel';btn.className='btn btn-black';}else{btn.textContent='Entrar';btn.className='btn btn-green';}}
@@ -118,16 +123,60 @@ all=all.filter(p=>isStoreActive(p.storeId));
 if(curCat!=='todos') all=all.filter(p=>p.category===curCat);
 if(q) all=all.filter(p=>p.name.toLowerCase().includes(q)||p.store.toLowerCase().includes(q));
 document.getElementById('count').textContent=all.length;
+
 document.getElementById('feed').innerHTML=all.map(p=>{
 let st=getStores()[p.storeId];
-let first=p.media?p.media[0]:{type:'img',src:p.img};
-let isVideo=first.type==='video';
-let count=(p.media?p.media.length:1);
-return `<div class="card" onclick="openModal(${p.id})"><div class="card-media">${isVideo?`<video src="${first.src}" muted></video>`:`<img src="${p.imgs?p.imgs[0]:p.img}" loading="lazy">`}<div class="card-badge ${isVideo?'video':''}">${isVideo?'VIDEO':''} ${count>1?'• '+count:''}</div></div><div class="card-body"><div class="card-price">$${p.price.toLocaleString('es-AR')}</div><div class="card-name">${p.name}</div><div class="card-store"><img src="${st?st.profile:'https://via.placeholder.com/40'}">${p.store}</div></div></div>`;
-}).join('')||`<div style="grid-column:1/-1;text-align:center;padding:60px;background:#fff;border-radius:16px;color:#888">✅ Vacío - 0 productos en Sheet<br><small>Si borraste el Sheet, esto queda en 0 en todos los dispositivos</small></div>`;
+let total=p.media.length;
+let dots = total>1? `<div class="card-dots" id="dots-${p.id}">${p.media.map((_,k)=>`<div class="dot ${k==0?'on':''}"></div>`).join('')}</div>` : '';
+let arrows = total>1? `<button class="card-arrow l" onclick="event.stopPropagation();moverCard(${p.id},-1)">‹</button><button class="card-arrow r" onclick="event.stopPropagation();moverCard(${p.id},1)">›</button>` : '';
+let isVideo = p.media[0]?.type==='video';
+return `<div class="card">
+<div class="card-media" id="cm-${p.id}" onclick="openModal(${p.id})" ontouchstart="touchStart(event,${p.id})" ontouchend="touchEnd(event,${p.id})">
+  <div class="track" id="track-${p.id}">
+    ${p.media.map(m=>`<div class="slide">${m.type==='video'?`<video src="${m.src}" muted></video>`:`<img src="${m.src}" loading="lazy">`}</div>`).join('')}
+  </div>
+  <div class="card-badge ${isVideo?'video':''}">${isVideo?'VIDEO':''} ${total>1?'• '+total:''}</div>
+  ${dots}${arrows}
+</div>
+<div class="card-body" onclick="openModal(${p.id})"><div class="card-price">$${p.price.toLocaleString('es-AR')}</div><div class="card-name">${p.name}</div><div class="card-store"><img src="${st?st.profile:'https://via.placeholder.com/40'}">${p.store}</div></div></div>`;
+}).join('')||`<div style="grid-column:1/-1;text-align:center;padding:60px;background:#fff;border-radius:16px;color:#888">✅ Vacío - 0 productos en Sheet</div>`;
+
 let active=Object.entries(getStores()).filter(([id])=>isStoreActive(id));
 document.getElementById('storeList').innerHTML=active.slice(0,12).map(([id,s])=>`<div class="store-mini" onclick="location.href='store.html?store=${id}'"><img src="${s.profile||'https://via.placeholder.com/40'}"><div><b>${s.name}</b><span>${s.dir||'Tres Arroyos'}</span></div></div>`).join('')||'<div style="font-size:11px;color:#999">Sin tiendas</div>';
+
+// iniciar autos
+all.forEach(p=> iniciarAuto(p.id));
 }
+
+function iniciarAuto(id){
+  carIdx[id]=carIdx[id]||0;
+  if(carTimers[id]) clearInterval(carTimers[id]);
+  let p=DB.find(x=>x.id===id);
+  if(!p || p.media.length<=1) return;
+  carTimers[id]=setInterval(()=> moverCard(id,1), 3500);
+}
+
+function moverCard(id,dir){
+  let p=DB.find(x=>x.id===id);
+  if(!p) return;
+  let total=p.media.length;
+  carIdx[id]=((carIdx[id]||0)+dir+total)%total;
+  let track=document.getElementById('track-'+id);
+  if(track) track.style.transform=`translateX(-${carIdx[id]*100}%)`;
+  let dots=document.getElementById('dots-'+id);
+  if(dots) [...dots.children].forEach((d,k)=> d.className=k===carIdx[id]?'dot on':'dot');
+}
+
+let touchX={};
+function touchStart(e,id){ touchX[id]=e.touches[0].clientX; clearInterval(carTimers[id]); }
+function touchEnd(e,id){
+  let start=touchX[id]; if(start==null) return;
+  let end=e.changedTouches[0].clientX;
+  if(end-start>50) moverCard(id,-1);
+  if(start-end>50) moverCard(id,1);
+  iniciarAuto(id);
+}
+
 function openModal(id){let p=DB.find(x=>x.id===id);if(!p) return;curProd=p;curIdx=0;let st=getStores()[p.storeId];document.getElementById('mStore').textContent=p.store;document.getElementById('mStoreImg').src=st?st.profile:'';document.getElementById('mPrice').textContent='$'+p.price.toLocaleString('es-AR');document.getElementById('mName').textContent=p.name;document.getElementById('mDesc').textContent=p.desc||'';showModalMedia();document.getElementById('checkout').classList.add('hidden');document.getElementById('modal').style.display='flex';updateResumen();}
 function showModalMedia(){let media=curProd.media||[{type:'img',src:curProd.img}];let m=media[curIdx];document.getElementById('modalMedia').innerHTML=`${m.type==='video'?`<video src="${m.src}" controls autoplay style="width:100%;height:100%;object-fit:contain"></video>`:`<img src="${m.src}" style="width:100%;height:100%;object-fit:contain">`}${media.length>1?`<div class="arrow l" onclick="event.stopPropagation();curIdx=(curIdx-1+media.length)%media.length;showModalMedia()">‹</div><div class="arrow r" onclick="event.stopPropagation();curIdx=(curIdx+1)%media.length;showModalMedia()">›</div>`:''}`;}
 function closeModal(){document.getElementById('modal').style.display='none';}
@@ -156,7 +205,6 @@ function enviarPedidoWsp(){
  closeModal();
 }
 
-// NUEVO: SOLO SHEET
 async function syncDesdeSheet(){
   try{
     document.getElementById('syncStatus').textContent='↻ Leyendo Sheet...';
@@ -164,21 +212,24 @@ async function syncDesdeSheet(){
     let data = await fetch(SHEET_URL+"?tipo=producto&t="+t).then(r=>r.json());
     let borr = await fetch(SHEET_URL+"?tipo=borrado&t="+t).then(r=>r.json()).catch(()=>[]);
     let borrados = new Set(borr.map(x=>String(x.id)));
-    DB = data.filter(x=> x.id && x.imagen &&!borrados.has(String(x.id))).map(x=>({
-      id: parseInt(x.id),
-      storeId: x.storeId,
-      store: x.tienda,
-      name: x.producto,
-      price: parseInt(x.precio)||0,
-      cost: parseInt(x.costo)||0,
-      category: x.categoria||'Otros',
-      desc: x.descripcion||'',
-      stock: parseInt(x.stock)||1,
-      img: x.imagen,
-      imgs: [x.imagen],
-      media: [{type:'img', src: x.imagen}],
-      created: Date.now()
-    }));
+    DB = data.filter(x=> x.id && x.imagen &&!borrados.has(String(x.id))).map(x=>{
+      // Soporte para varias imagenes separadas por coma en la misma celda
+      let lista = String(x.imagen).split(',').map(s=>s.trim()).filter(Boolean).map(src=> ({type: src.match(/\.mp4|video/i)?'video':'img', src: src}));
+      return {
+        id: parseInt(x.id),
+        storeId: x.storeId,
+        store: x.tienda,
+        name: x.producto,
+        price: parseInt(x.precio)||0,
+        cost: parseInt(x.costo)||0,
+        category: x.categoria||'Otros',
+        desc: x.descripcion||'',
+        stock: parseInt(x.stock)||1,
+        img: lista[0]?.src||x.imagen,
+        media: lista.length? lista : [{type:'img', src: x.imagen}],
+        created: Date.now()
+      };
+    });
     render();
     document.getElementById('syncStatus').textContent = DB.length===0? '✅ Vacío - 0 en Sheet' : '✅ '+DB.length+' del Sheet';
   }catch(e){
@@ -191,4 +242,4 @@ setTimeout(syncDesdeSheet, 800);
 setInterval(syncDesdeSheet, 10000);
 </script>
 </body>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </html>
+</html>
